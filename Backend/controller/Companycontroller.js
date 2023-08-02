@@ -28,6 +28,7 @@ export default {
     },
     EditCompany: async (req, res) => {
         try {
+            console.log(req.body,req.params);
             const { id } = req.params;
             const { companyname, location, person, contact } = req.body;
     
