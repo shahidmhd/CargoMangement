@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { Addservicedata } from '../apicalls/Service';
 
-const Addservice = ({ showModal, setShowModal }) => {
+const Addservice = ({ showModal, setShowModal,render,setrender }) => {
     const {
         handleSubmit,
         control,
@@ -10,30 +11,43 @@ const Addservice = ({ showModal, setShowModal }) => {
     } = useForm();
 
     const [gstValue, setGstValue] = useState('');
- 
+
     const onSubmit = async (data) => {
-        console.log(data);
+        // data.GST=gstValue
+        // Convert numeric fields to numbers
+        data.GST = parseFloat(gstValue);
+        data.SGST = parseFloat(data.SGST);
+        data.CGST = parseFloat(data.CGST);
+        data.UOM = parseInt(data.UOM, 10);
+        data.Rate = parseFloat(data.Rate);
+        const response = await Addservicedata(data)
+        console.log(response,"oji");
+        if(response.success){
+            setShowModal(false)
+            setrender(!render)
+        }
+
     };
 
-  // Update CGST and SGST values based on GST value
-const handleGSTChange = (event) => {
-    const value = event.target.value;
-    setGstValue(value);
+    // Update CGST and SGST values based on GST value
+    const handleGSTChange = (event) => {
+        const value = event.target.value;
+        setGstValue(value);
 
-    if (value === '') {
-        // If GST value is empty, set CGST and SGST to 0
-        setValue('CGST', '0.00');
-        setValue('SGST', '0.00');
-    } else {
-        const gst = parseFloat(value);
-        if (!isNaN(gst)) {
-            const cgst = gst / 2;
-            const sgst = gst / 2;
-            setValue('CGST', cgst.toFixed(2));
-            setValue('SGST', sgst.toFixed(2));
+        if (value === '') {
+            // If GST value is empty, set CGST and SGST to 0
+            setValue('CGST', '0.00');
+            setValue('SGST', '0.00');
+        } else {
+            const gst = parseFloat(value);
+            if (!isNaN(gst)) {
+                const cgst = gst / 2;
+                const sgst = gst / 2;
+                setValue('CGST', cgst.toFixed(2));
+                setValue('SGST', sgst.toFixed(2));
+            }
         }
-    }
-};
+    };
 
     return (
         <>
@@ -80,7 +94,7 @@ const handleGSTChange = (event) => {
                                     <Controller
                                         name='GST'
                                         control={control}
-                                       
+
                                         render={({ field }) => (
                                             <>
                                                 <input
@@ -92,7 +106,7 @@ const handleGSTChange = (event) => {
                                                     onChange={handleGSTChange}
                                                     value={gstValue}
                                                 />
-                                                
+
                                                 {errors.GST && <div className='invalid-feedback'>{errors.GST.message}</div>}
                                             </>
                                         )}
@@ -134,7 +148,7 @@ const handleGSTChange = (event) => {
 
                                 <div className='row mb-4'>
                                     <div className='col'>
-                                       
+
                                         <div className='col'>
                                             <div className='form-outline'>
                                                 <Controller
@@ -154,7 +168,7 @@ const handleGSTChange = (event) => {
                                 </div>
                                 <div className='row mb-4'>
                                     <div className='col'>
-                                       
+
                                         <div className='col'>
                                             <div className='form-outline'>
                                                 <Controller

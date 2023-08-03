@@ -21,11 +21,12 @@ const CompanyCreation = ({ Company, render, setrender }) => {
 
     return (
         <>
+
             <div className='container-fluid p-5'>
-            <div className='row justify-content-center'>
-                    <div className='col-lg-8 col-md-10 col-sm-12'>
-                        <div className='mb-3'>
-                            <button onClick={() => setShowModal(true)} className='btn btn-primary'>
+                <div className='row justify-content-center'>
+                    <div className='col-lg-12 col-md-10 col-sm-12'>
+                        <div className='mb-4 p-2'>
+                            <button onClick={() => setShowModal(true)} className='btn' style={{ backgroundColor: 'lightblue' }}>
                                 Add New Company
                             </button>
                         </div>
@@ -77,7 +78,7 @@ const CompanyCreation = ({ Company, render, setrender }) => {
                                                     </MDBBadge>
                                                 </td>
                                                 <td>
-                                                    <MDBBadge onClick={() =>{
+                                                    <MDBBadge onClick={() => {
                                                         setSelectedid(item._id)
                                                         setShowdeleteModal(true)
                                                     }} color='danger' pill>
@@ -94,8 +95,8 @@ const CompanyCreation = ({ Company, render, setrender }) => {
                 </div>
             </div>
             <Addcompany showModal={showModal} setShowModal={setShowModal} render={render} setrender={setrender} />
-            {Company && <Editcompany showeditModal={showeditModal} setShoweditModal={setShoweditModal} Company={selectedCompany} render={render} setrender={setrender}  />}
-          {showdeleteModal&& <DeleteModal id={selectedId} render={render} setrender={setrender}  showdeleteModal={showdeleteModal} setShowdeleteModal={setShowdeleteModal}/>}
+            {Company && <Editcompany showeditModal={showeditModal} setShoweditModal={setShoweditModal} Company={selectedCompany} render={render} setrender={setrender} />}
+            {showdeleteModal && <DeleteModal id={selectedId} render={render} setrender={setrender} showdeleteModal={showdeleteModal} setShowdeleteModal={setShowdeleteModal} />}
         </>
     );
 };

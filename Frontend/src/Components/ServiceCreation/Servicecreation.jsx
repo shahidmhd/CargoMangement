@@ -1,17 +1,29 @@
 import React, { useState } from 'react'
 import { MDBBadge, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import Addservice from '../../Modal/Addservice';
-function Servicecreation() {
+import EditService from '../../Modal/EditService';
+import service from '../../../../Backend/models/Servicemodel';
+function Servicecreation({Service,render,setrender}) {
+  console.log(Service,"hhhhhhhhdddddddddddddd");
   const [showModal, setShowModal] = useState(false)
-  return (
+  const [showeditModal, setShoweditModal] = useState(false);
+  const [selectedservice, setSelectedservice] = useState(null);
 
+
+
+  const handleEditClick = (item) => {
+    console.log(item);
+    setSelectedservice(item)
+    setShoweditModal(true);
+};
+  return (
     <>
       <div className='container-fluid p-5'>
         <div className='row justify-content-center'>
-          <div className='col-lg-8 col-md-10 col-sm-12'>
+          <div className='col-lg-12 col-md-12 col-sm-12'>
             <div className='mb-3'>
               <button onClick={() => setShowModal(true)} className='btn btn-primary'>
-                Add Service
+                Add Service 
               </button>
             </div>
             <div className='p-3' style={{ height: '400px', overflow: 'auto' }}>
@@ -19,16 +31,25 @@ function Servicecreation() {
                 <MDBTableHead>
                   <tr>
                     <th style={{ backgroundColor: 'lightblue' }} scope='col'>
-                      company Name
+                      Service Name
                     </th>
                     <th style={{ backgroundColor: 'lightblue' }} scope='col'>
-                      Location
+                     HSNcode
                     </th>
                     <th style={{ backgroundColor: 'lightblue' }} scope='col'>
-                      Person
+                      Rate
                     </th>
                     <th style={{ backgroundColor: 'lightblue' }} scope='col'>
-                      Contact No
+                      GST
+                    </th>
+                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                      SGST
+                    </th>
+                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                      CGST
+                    </th>
+                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                      UOM(kg)
                     </th>
                     <th style={{ backgroundColor: 'lightblue' }} scope='col'>
                       Actions
@@ -39,24 +60,36 @@ function Servicecreation() {
                   </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-
-                  <tr >
+                {Service &&
+                                        Service.map((item) => (
+                  <tr key={item._id} >
                     <td>
                       <div className='d-flex align-items-center'>
                         <div className='ms-3'>
-                          <p className='fw-bold mb-1'>fdsfsf</p>
+                          <p className='fw-bold mb-1'>{item?.servicename}</p>
                         </div>
                       </div>
                     </td>
                     <td>
-                      <p className='fw-normal mb-1'>dsfdsf</p>
+                      <p className='fw-normal mb-1'>{item?.HSNCode}</p>
                     </td>
                     <td>
-                      <p className='fw-normal mb-1'>sdds</p>
+                      <p className='fw-normal mb-1'>{item?.Rate}</p>
                     </td>
-                    <td>jnsdk</td>
                     <td>
-                      <MDBBadge style={{ cursor: 'pointer' }} color='primary' pill>
+                      <p className='fw-normal mb-1'>{item?.GST}</p>
+                    </td>
+                    <td>
+                      <p className='fw-normal mb-1'>{item?.SGST}</p>
+                    </td>
+                    <td>
+                      <p className='fw-normal mb-1'>{item?.CGST}</p>
+                    </td>
+                    <td>
+                      <p className='fw-normal mb-1'>{item?.UOM}</p>
+                    </td>
+                    <td>
+                      <MDBBadge onClick={() => handleEditClick(item)} style={{ cursor: 'pointer' }} color='primary' pill>
                         Edit
                       </MDBBadge>
                     </td>
@@ -66,6 +99,7 @@ function Servicecreation() {
                       </MDBBadge>
                     </td>
                   </tr>
+                     ))}
 
                 </MDBTableBody>
 
@@ -75,8 +109,8 @@ function Servicecreation() {
         </div>
       </div>
 
-      <Addservice showModal={showModal} setShowModal={setShowModal} />
-
+      <Addservice showModal={showModal} setShowModal={setShowModal} render={render} setrender={setrender} />
+      {showeditModal && <EditService showeditModal={showeditModal} setShoweditModal={setShoweditModal}/>}
 
     </>
   )
