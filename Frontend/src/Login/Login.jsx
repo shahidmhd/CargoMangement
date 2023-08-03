@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { LoginUser } from '../apicalls/User';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +19,7 @@ const Login = () => {
             const response = await LoginUser(data)
             console.log(response);
             localStorage.setItem('token', JSON.stringify(response.data));
+            navigate('/')
         } catch (err) {
             console.log(err);
         }
@@ -31,11 +32,11 @@ const Login = () => {
         }
         return true;
     };
-    const token =localStorage.getItem('token')
+    // const token =localStorage.getItem('token')
    
-    if(token){
-        return <Navigate to='/'/>
-    }
+    // if(token){
+    //     return <Navigate to='/'/>
+    // }
 
     return (
         <section className="vh-100 gradient-custom" style={{ backgroundImage: `url('https://www.emotrans-global.com/wp-content/uploads/2023/01/01-cargo-vs-freight.jpg')`, backgroundSize: 'cover' }}>
