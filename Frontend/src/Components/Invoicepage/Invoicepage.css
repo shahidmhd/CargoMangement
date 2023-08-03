@@ -1,0 +1,7 @@
+/* Hide the sidebar and other elements , to exclude from the print */
+@media print {
+    
+    .hide-on-print {
+      display: none;
+    }
+  }

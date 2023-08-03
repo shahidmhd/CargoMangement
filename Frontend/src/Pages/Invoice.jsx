@@ -8,7 +8,6 @@ const Invoice = () => {
         <div style={{ display: 'flex'}}>
             <Sidebar />
             <Invoicepage />
-
         </div>
     )
 }
