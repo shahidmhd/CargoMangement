@@ -40,8 +40,8 @@ const Sidebar = () => {
   return (
     <div style={{ height: '100vh',position:'sticky',top:0 }}>
       <CDBSidebar>
-        <CDBSidebarHeader prefix={<i className="fa fa-bars" />}   onClick={handleHomeClick}
-         style={{ cursor: 'pointer' }} >Home</CDBSidebarHeader>
+        <CDBSidebarHeader prefix={<i className="fa fa-bars" />}  
+         style={{ cursor: 'pointer' }} ><span  onClick={handleHomeClick}>Home</span></CDBSidebarHeader>
         <CDBSidebarContent>
       <CDBSidebarMenu>
         {/* Add onClick handlers to each SidebarMenuItem */}
