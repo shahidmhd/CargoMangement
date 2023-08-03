@@ -26,3 +26,12 @@ export const getallServices = async () => {
         return err.message;
     }
 }
+
+export const deleteservice = async (id) => {
+    try {
+        const response = await instance.delete(`/api/users/service/${id}`);
+        return response.data
+    } catch (err) {
+        return err.message;
+    }
+}

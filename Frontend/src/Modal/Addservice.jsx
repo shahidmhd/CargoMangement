@@ -25,6 +25,7 @@ const Addservice = ({ showModal, setShowModal,render,setrender }) => {
         if(response.success){
             setShowModal(false)
             setrender(!render)
+            
         }
 
     };

@@ -1,11 +1,12 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import service from '../../../Backend/models/Servicemodel';
 
-const EditService = ({ showeditModal, setShoweditModal }) => {
+const EditService = ({ showeditModal, setShoweditModal,Service }) => {
+    console.log(Service,"jjjjjjjjj");
   const {
     handleSubmit,
     control,
-    register,
     formState: { errors },
   } = useForm();
 
