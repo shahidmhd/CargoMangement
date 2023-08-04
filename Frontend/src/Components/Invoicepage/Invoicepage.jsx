@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { format } from "date-fns"; 
 import {
   MDBCard,
   MDBCardBody,
@@ -23,6 +24,10 @@ const Invoicepage = () => {
   const [servicedetails, setservicedetails] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [selectedHSNCode, setSelectedHSNCode] = useState("");
+  const [selectedCompanyId, setSelectedCompanyId] = useState(null);
+  const [selectedServiceId, setSelectedServiceId] = useState(null);
+  const [boxNo, setBoxNo] = useState("");
+  const [airwayBillNo, setAirwayBillNo] = useState("");
 
   const [totalWeight, setTotalWeight] = useState(0);
   const [invoiceNumber, setInvoiceNumber] = useState('');
@@ -69,15 +74,16 @@ const Invoicepage = () => {
     console.log(selectedServiceData, "j");
     if (selectedServiceData) {
       setSelectedService(selectedServiceData);
+      setSelectedServiceId(selectedServiceData._id); // Store the selected service _id
       setSelectedHSNCode(selectedServiceData.HSNCode);
       setAmount(selectedServiceData.Rate);
       setTotal(weight * selectedServiceData.Rate);
     } else {
       setSelectedService(null);
+      setSelectedServiceId(null); // Reset the selected service _id
       setSelectedHSNCode("");
     }
   };
-
   const handleAmountChange = (event) => {
     setAmount(event.target.value);
     setTotal(weight * event.target.value);
@@ -145,16 +151,32 @@ const Invoicepage = () => {
   }, [tableRows, weight, amount, selectedService]);
   const totalAmount = subtotal + gst18;
 
+  const handleCompanyChange = (event) => {
+    const selectedCompanyId = event.target.value;
+    setSelectedCompanyId(selectedCompanyId); // Store the selected company _id
+  };
+
+  const handleRowDelete = (rowId) => {
+    const updatedRows = tableRows.filter((row) => row.id !== rowId);
+    setTableRows(updatedRows);
+  };
 
   const handleSaveButtonClick = () => {
-    // Create an object to hold all the data you want to save
+    if (!selectedCompanyId || !selectedServiceId || !boxNo || !airwayBillNo || tableRows.length === 0) {
+      alert("Please fill in all the required fields before saving.");
+      return;
+    }
+    // Prepare the data to be saved
     const dataToSave = {
-      selectedDate,
+      selectedDate: format(selectedDate, "dd/MM/yyyy"),
       companydetails,
       servicedetails,
-      selectedService,
+      selectedCompanyId, // Use the selected company _id
+      selectedServiceId, // Use the selected service _id
       selectedHSNCode,
       invoiceNumber,
+      boxNo, // Include Box No in the data to be saved
+      airwayBillNo, // Include AirwayBill No in the data to be saved
       weight,
       amount,
       total,
@@ -164,11 +186,10 @@ const Invoicepage = () => {
       SGST,
       IGST,
       totalAmount,
+      totalWeight
     };
 
-
-
-
+    // Here you can save the data to your backend or do whatever you need with it
     console.log(dataToSave, "ggggggggggggggggggg");
   };
   return (
@@ -202,7 +223,7 @@ const Invoicepage = () => {
           </div>
 
           <div className='.hide-on-print' style={{ backgroundColor: '#79c8db', height: '30%', width: '16em', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <button
+            {/* <button
               color="#79c8db"
               backgroundColor='#79c8db'
               ripple="dark"
@@ -210,7 +231,7 @@ const Invoicepage = () => {
             >
               <MDBIcon fas icon="print" color="primary" className="me-1" />
               Print
-            </button>
+            </button> */}
           </div>
         </div>
         <MDBCardBody>
@@ -222,16 +243,18 @@ const Invoicepage = () => {
                     <li className="text-muted">
                       {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA",paddingLeft:"20%"}} /> */}
                       <span className="fw-bold ms-1"></span>Company
-                      <select className="select" style={{ border: 'none', background: 'none', color: 'black', padding: '5px' }}>
+                      <select className="select" onChange={handleCompanyChange} style={{ border: 'none', background: 'none', color: 'black', padding: '5px', }}>
+                        <option value="">Select company</option>
                         {companydetails && companydetails.map((item, index) => (
-                          <option key={index} value={item.id}> {item.companyname} </option>
+                          <option key={index} value={item._id}> {item.companyname} </option>
 
                         ))}
                       </select>
                     </li>
                     <li className="text-muted" style={{ paddingLeft: "5%" }}>
                       {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA",paddingLeft:"20%"}} /> */}
-                      <span className="fw-bold ms-1"></span>Box No:<input type='number' style={{ width: "100px" }}></input>
+                      <span className="fw-bold ms-1"></span>Box No:<input type='number' style={{ width: "100px" }} value={boxNo}
+                        onChange={(e) => setBoxNo(e.target.value)}></input>
                     </li>
                     <li className="text-muted" style={{ paddingLeft: "5%" }}>
                       {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA",paddingLeft:"20%"}} /> */}
@@ -247,7 +270,8 @@ const Invoicepage = () => {
                     </li>
                     <li className="text-muted" style={{ paddingLeft: "5%" }}>
                       {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA", paddingLeft:"20%" }} /> */}
-                      <span className="fw-bold ms-1"></span>AirwayBill N.O:<input type='number' style={{ width: "100px" }}></input>
+                      <span className="fw-bold ms-1"></span>AirwayBill N.O:<input type='number' style={{ width: "100px" }} value={airwayBillNo}
+                        onChange={(e) => setAirwayBillNo(e.target.value)}></input>
                     </li>
                   </div>
                 </div>
@@ -277,6 +301,9 @@ const Invoicepage = () => {
                     <th scope="col" style={{ backgroundColor: "#79c8db", color: "white" }}>
                       Total
                     </th>
+                    <th scope="col" style={{ backgroundColor: "#79c8db", color: "white" }}>
+                      option
+                    </th>
                   </tr>
                 </MDBTableHead>
                 <MDBTableBody style={{ justifyItems: "center" }}>
@@ -288,6 +315,11 @@ const Invoicepage = () => {
                       <td>{row.weight}</td>
                       <td>{row.amount}</td>
                       <td>{row.total}</td>
+                      <td>
+                        <button className='btn' size="sm" onClick={() => handleRowDelete(row.id)} >
+                          <MDBIcon style={{ color: 'red' }} fas icon="trash-alt" />
+                        </button>
+                      </td>
                     </tr>
                   ))}
                   <tr>
@@ -320,6 +352,9 @@ const Invoicepage = () => {
                       <input type="number" value={amount} onChange={handleAmountChange} onKeyPress={handleEnterKeyPress} />
                     </td>
                     <td>{total}</td>
+                    <td><button className='btn' size="sm"  >
+                      <MDBIcon style={{ color: 'red' }} fas icon="trash-alt" />
+                    </button></td>
                   </tr>
                 </MDBTableBody>
               </MDBTable>
@@ -357,13 +392,14 @@ const Invoicepage = () => {
               <p>Thank you for your purchase</p>
             </MDBCol>
             <MDBCol xl="2">
-              <MDBBtn
-                className="text-capitalize"
-                style={{ backgroundColor: "#60bdf3" }}
+              <button
+                className="text-capitalize btn"
+                style={{ backgroundColor: "#60bdf3", color: 'white' }}
                 onClick={handleSaveButtonClick}
               >
+                <MDBIcon fas icon="save" className="me-2" />
                 SAVE
-              </MDBBtn>
+              </button>
             </MDBCol>
           </MDBRow>
         </MDBCardBody>
