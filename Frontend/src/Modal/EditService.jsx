@@ -1,18 +1,41 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import service from '../../../Backend/models/Servicemodel';
+import { editservice } from '../apicalls/Service';
 
-const EditService = ({ showeditModal, setShoweditModal,Service }) => {
-    console.log(Service,"jjjjjjjjj");
+const EditService = ({ showeditModal, setShoweditModal, Service,render,setrender }) => {
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm();
+    setValue, // Add the setValue function from useForm
+  } = useForm({
+    defaultValues: Service,
+  });
 
-  const onSubmit = (data) => {
-    console.log(data); // This will log the form data when the form is submitted.
+  // Function to update CGST and SGST based on GST
+  const updateCGSTAndSGST = (gstValue) => {
+    const gst = parseFloat(gstValue);
+    const cgst = gst / 2;
+    const sgst = gst / 2;
+    setValue('CGST', cgst.toFixed(2)); // Set CGST value
+    setValue('SGST', sgst.toFixed(2)); // Set SGST value
+  };
+
+  const onSubmit = async(data) => {
+    console.log(data);
     // Your logic to handle the form data and update the service should go here.
+    data.GST = parseFloat(data.GST);
+    data.SGST = parseFloat(data.SGST);
+    data.CGST = parseFloat(data.CGST);
+    data.UOM = parseInt(data.UOM, 10);
+    data.Rate = parseFloat(data.Rate);
+    const response = await editservice(data)
+    if(response.success){
+      setShoweditModal(false)
+      setrender(!render)
+    }
+    
   };
 
   return (
@@ -62,7 +85,16 @@ const EditService = ({ showeditModal, setShoweditModal,Service }) => {
                     control={control}
                     render={({ field }) => (
                       <>
-                        <input {...field} type='text' className={`form-control ${errors.GST ? 'is-invalid' : ''}`} placeholder='GST%' />
+                        <input
+                          {...field}
+                          type='text'
+                          className={`form-control ${errors.GST ? 'is-invalid' : ''}`}
+                          placeholder='GST%'
+                          onChange={(e) => {
+                            field.onChange(e); // Trigger the default onChange function
+                            updateCGSTAndSGST(e.target.value); // Update CGST and SGST based on GST
+                          }}
+                        />
                         {errors.GST && <div className='invalid-feedback'>{errors.GST.message}</div>}
                       </>
                     )}

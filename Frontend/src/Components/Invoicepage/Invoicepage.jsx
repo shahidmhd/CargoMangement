@@ -23,6 +23,9 @@ const Invoicepage = () => {
   const [servicedetails, setservicedetails] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [selectedHSNCode, setSelectedHSNCode] = useState("");
+
+  const [totalWeight, setTotalWeight] = useState(0);
+  const [invoiceNumber, setInvoiceNumber] = useState('');
   const [weight, setWeight] = useState(0);
   const [amount, setAmount] = useState(0);
   const [total, setTotal] = useState(0);
@@ -54,6 +57,10 @@ const Invoicepage = () => {
   useEffect(() => {
     getcomapanydata()
     getServicedata()
+    const timestamp = Date.now(); // Get the current timestamp
+    const randomNum = Math.floor(Math.random() * 1000); // Generate a random number between 0 and 999
+    const newInvoiceNumber = `B2C${timestamp}${randomNum}`;
+    setInvoiceNumber(newInvoiceNumber);
   }, [])
 
   const handleServiceChange = (event) => {
@@ -95,6 +102,8 @@ const Invoicepage = () => {
     setTotal(0);
   };
 
+
+
   const handleEnterKeyPress = (event) => {
     if (event.charCode === 13) {
       addTableRow();
@@ -115,6 +124,10 @@ const Invoicepage = () => {
     const calculatedSubtotal = tableRows.reduce((acc, row) => acc + row.total, 0);
     setSubtotal(calculatedSubtotal);
 
+    const calculatedTotalWeight = tableRows.reduce((acc, row) => acc + parseFloat(row.weight), 0);
+    setTotalWeight(calculatedTotalWeight);
+
+
     const calculatedGst18 = calculatedSubtotal * 0.18;
     const gstRounded = parseFloat(calculatedGst18.toFixed(2)); // Round GST to two decimal places
     setGst18(gstRounded);
@@ -126,9 +139,38 @@ const Invoicepage = () => {
     const cgst = gstRounded / 2;
     const cgstRounded = parseFloat(cgst.toFixed(2)); // Round CGST to two decimal places
     setIGST(cgstRounded);
+
+
     calculateTotal();
   }, [tableRows, weight, amount, selectedService]);
   const totalAmount = subtotal + gst18;
+
+
+  const handleSaveButtonClick = () => {
+    // Create an object to hold all the data you want to save
+    const dataToSave = {
+      selectedDate,
+      companydetails,
+      servicedetails,
+      selectedService,
+      selectedHSNCode,
+      invoiceNumber,
+      weight,
+      amount,
+      total,
+      tableRows,
+      subtotal,
+      gst18,
+      SGST,
+      IGST,
+      totalAmount,
+    };
+
+
+
+
+    console.log(dataToSave, "ggggggggggggggggggg");
+  };
   return (
     <MDBContainer className="py-5" >
       <MDBCard style={{ border: '3px solid black' }}>
@@ -154,7 +196,7 @@ const Invoicepage = () => {
               </p>
               <p className='date-input'>
                 <DatePicker selected={selectedDate} onChange={handleDateChange} dateFormat="dd/MM/yyyy" placeholderText="Select a date" className='datepicker' /><br />
-                <b> Invoice NO:B2C01</b>
+                <b> Invoice NO:{invoiceNumber ? invoiceNumber : 'B2C01'}</b>
               </p>
             </div>
           </div>
@@ -201,7 +243,7 @@ const Invoicepage = () => {
                           display: "inline-block",
                           padding: "5px"
                         }}
-                      >100</div>
+                      >{totalWeight ? totalWeight : '0'}</div>
                     </li>
                     <li className="text-muted" style={{ paddingLeft: "5%" }}>
                       {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA", paddingLeft:"20%" }} /> */}
@@ -318,6 +360,7 @@ const Invoicepage = () => {
               <MDBBtn
                 className="text-capitalize"
                 style={{ backgroundColor: "#60bdf3" }}
+                onClick={handleSaveButtonClick}
               >
                 SAVE
               </MDBBtn>

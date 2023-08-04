@@ -115,7 +115,7 @@ function Servicecreation({ Service, render, setrender }) {
       </div>
 
       <Addservice showModal={showModal} setShowModal={setShowModal} render={render} setrender={setrender} />
-      {showeditModal && <EditService Service={selectedservice} showeditModal={showeditModal} setShoweditModal={setShoweditModal} />}
+      {showeditModal && <EditService Service={selectedservice} showeditModal={showeditModal} setShoweditModal={setShoweditModal} render={render} setrender={setrender} />}
       {showdeleteModal && <DeleteserviceModal render={render} setrender={setrender} id={selectedId} showdeleteModal={showdeleteModal} setShowdeleteModal={setShowdeleteModal}/>}
     </>
   )
