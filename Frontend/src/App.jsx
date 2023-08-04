@@ -6,6 +6,7 @@ import Invoice from './Pages/Invoice';
 import Login from './Login/Login';
 import Home from './Pages/Home';
 import Notfound from './Pages/Notfound';
+import Print from './Pages/Print';
 
 function App() {
 
@@ -34,6 +35,11 @@ function App() {
             path='/Service'
             element={token ? <Service /> : <Navigate to='/login' />}
           />
+          <Route
+            path='/print'
+            element={<Print/>}
+          />
+          
           <Route path="*" element={<Notfound/>} />
           {/* <Route exact path='/invoice' element={<Invoice />} /> */}
           {/* <Route exact path='/login' element={<Login />} /> */}

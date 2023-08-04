@@ -1,6 +1,7 @@
 
 import React  from 'react'
 import Sidebar from '../Components/Sidebar/Sidebar'
+import Homepages from '../Components/Homepage/Homepages'
 
 
 const Home = () => {
@@ -9,7 +10,7 @@ const Home = () => {
   return (
     <div style={{ display: 'flex'}}>
             <Sidebar />
-            <h1>home page</h1>
+            <Homepages/>
 
         </div>
   )
