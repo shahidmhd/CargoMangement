@@ -7,6 +7,7 @@ import Login from './Login/Login';
 import Home from './Pages/Home';
 import Notfound from './Pages/Notfound';
 import Print from './Pages/Print';
+import Invoicetable from './Pages/Invoicetable';
 
 function App() {
 
@@ -36,8 +37,12 @@ function App() {
             element={token ? <Service /> : <Navigate to='/login' />}
           />
           <Route
-            path='/print'
+            path='/print/:id'
             element={<Print/>}
+          />
+           <Route
+            path='/table'
+            element={<Invoicetable/>}
           />
           
           <Route path="*" element={<Notfound/>} />

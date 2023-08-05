@@ -18,7 +18,7 @@ const Addservice = ({ showModal, setShowModal,render,setrender }) => {
         data.GST = parseFloat(gstValue);
         data.SGST = parseFloat(data.SGST);
         data.CGST = parseFloat(data.CGST);
-        data.UOM = parseInt(data.UOM, 10);
+        // data.UOM = parseInt(data.UOM, 10);
         data.Rate = parseFloat(data.Rate);
         const response = await Addservicedata(data)
         console.log(response,"oji");
@@ -89,6 +89,26 @@ const Addservice = ({ showModal, setShowModal,render,setrender }) => {
                                             </>
                                         )}
                                     />
+                                </div>
+                                <div className='row mb-4'>
+                                    <div className='col'>
+
+                                        <div className='col'>
+                                            <div className='form-outline'>
+                                                <Controller
+                                                    name='Rate'
+                                                    control={control}
+                                                    rules={{ required: 'Rate  is required' }}
+                                                    render={({ field }) => (
+                                                        <>
+                                                            <input {...field} type='text' id='form6Example2' className={`form-control ${errors.Rate ? 'is-invalid' : ''}`} placeholder='Rate' />
+                                                            {errors.Rate && <div className='invalid-feedback'>{errors.Rate.message}</div>}
+                                                        </>
+                                                    )}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div className='form-outline mb-4'>
@@ -167,26 +187,7 @@ const Addservice = ({ showModal, setShowModal,render,setrender }) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='row mb-4'>
-                                    <div className='col'>
-
-                                        <div className='col'>
-                                            <div className='form-outline'>
-                                                <Controller
-                                                    name='Rate'
-                                                    control={control}
-                                                    rules={{ required: 'Rate  is required' }}
-                                                    render={({ field }) => (
-                                                        <>
-                                                            <input {...field} type='text' id='form6Example2' className={`form-control ${errors.Rate ? 'is-invalid' : ''}`} placeholder='Rate' />
-                                                            {errors.Rate && <div className='invalid-feedback'>{errors.Rate.message}</div>}
-                                                        </>
-                                                    )}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                               
                                 <div className=''>
                                     <button type='submit' className='btn btn-primary btn-block mb-4'>
                                         Add service

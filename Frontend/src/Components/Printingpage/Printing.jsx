@@ -16,9 +16,13 @@ import {
 } from 'mdb-react-ui-kit';
 
 
-const Printing = () => {
-  
- 
+const Printing = ({invoiceData}) => {
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString("en-US");
+    return formattedDate;
+  }
+ console.log(invoiceData,"nkonokknkmnk");
   
   return (
     <MDBContainer className="py-5" style={{width:"50%"}} >
@@ -42,7 +46,7 @@ const Printing = () => {
                 <p>GSTIN:32AAGCI3195M1ZA</p>
               </p>
               <p className='date-input'>
-                 <div style={{border:"solid 2px",textAlign:"center"}}>16/07/2003</div>
+                 <div style={{border:"solid 2px",textAlign:"center"}}>{formatDate(invoiceData?.selectedDate)}</div>
                 <b> Invoice NO:FG51212D</b>
               </p>
             </div>
@@ -59,21 +63,21 @@ const Printing = () => {
                       {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA",paddingLeft:"20%"}} /> */}
                       <span className="fw-bold ms-1"></span>Company
   
-                        <option>company </option>
+                       <option>{invoiceData?.selectedCompanyId.companyname}</option>
 
                        
                     </li>
                     <li className="text-muted" style={{ paddingLeft: "5%" }}>
                       {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA",paddingLeft:"20%"}} /> */}
-                      <span className="fw-bold ms-1"></span>Box No:4520
+                      <span className="fw-bold ms-1"></span>Box No:{invoiceData?.boxNo}
                     </li>
                     <li className="text-muted" style={{ paddingLeft: "5%" }}>
                       {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA",paddingLeft:"20%"}} /> */}
-                      <span className="fw-bold ms-1"></span>Total weight:56
+                      <span className="fw-bold ms-1"></span>Total weight:{invoiceData?.totalWeight}
                     </li>
                     <li className="text-muted" style={{ paddingLeft: "5%" }}>
                       {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA", paddingLeft:"20%" }} /> */}
-                      <span className="fw-bold ms-1"></span>AirwayBill N.O:SAE4851
+                      <span className="fw-bold ms-1"></span>AirwayBill N.O:{invoiceData?.airwayBillNo}
                     </li>
                   </div>
                 </div>
@@ -109,30 +113,16 @@ const Printing = () => {
                  
                    
                   
-                  <tr>
-                    <td>1</td>
-                    <td>superfast delivery</td>
-                    <td>DS1230</td>
-                    <td>15</td>
-                    <td>1542</td>
-                    <td>45120</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>superfast delivery</td>
-                    <td>DS1230</td>
-                    <td>15</td>
-                    <td>1542</td>
-                    <td>45120</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>superfast delivery</td>
-                    <td>DS1230</td>
-                    <td>15</td>
-                    <td>1542</td>
-                    <td>45120</td>
-                  </tr>
+                {invoiceData?.tableRows && invoiceData?.tableRows.map((row) => (
+                    <tr key={row.id}>
+                      <td>1</td>
+                      <td>{row.serviceName}</td>
+                      <td>{row.HSNCode}</td>
+                      <td>{row.weight}</td>
+                      <td>{row.amount}</td>
+                      <td>{row.total}</td>
+                    </tr>
+                  ))}
                 </MDBTableBody>
               </MDBTable>
             </MDBCol>
@@ -144,21 +134,21 @@ const Printing = () => {
             <MDBCol xl="3">
               <MDBTypography listUnStyled>
                 <li className="text-muted ms-3">
-                  <span className="text-black me-4">SubTotal</span>₹120
+                  <span className="text-black me-4">SubTotal</span>₹{invoiceData?.subtotal}
                 </li>
                 <li className="text-muted ms-3 mt-2">
-                  <span className="text-black me-4">GST 18%</span>₹150
+                  <span className="text-black me-4">GST 18%</span>₹{invoiceData?.gst18}
                 </li>
                 <li className="text-muted ms-3 mt-2">
-                  <span className="text-black me-4">SGST 9%</span>₹210
+                  <span className="text-black me-4">SGST 9%</span>₹{invoiceData?.SGST}
                 </li>
                 <li className="text-muted ms-3 mt-2">
-                  <span className="text-black me-4">IGST 9%</span>₹210
+                  <span className="text-black me-4">CGST 9%</span>₹{invoiceData?.CGST}
                 </li>
               </MDBTypography>
               <p className="text-black float-start">
                 <span className="text-black me-3">Total Amount</span>
-                <span style={{ fontSize: "25px" }}>₹780</span>
+                <span style={{ fontSize: "25px" }}>₹{invoiceData?.totalAmount}</span>
               </p>
             </MDBCol>
           </MDBRow>

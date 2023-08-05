@@ -23,12 +23,12 @@ const EditService = ({ showeditModal, setShoweditModal, Service,render,setrender
   };
 
   const onSubmit = async(data) => {
-    console.log(data);
+    console.log(data,"ser");
     // Your logic to handle the form data and update the service should go here.
     data.GST = parseFloat(data.GST);
     data.SGST = parseFloat(data.SGST);
     data.CGST = parseFloat(data.CGST);
-    data.UOM = parseInt(data.UOM, 10);
+    // data.UOM = parseInt(data.UOM, 10);
     data.Rate = parseFloat(data.Rate);
     const response = await editservice(data)
     if(response.success){
@@ -78,7 +78,23 @@ const EditService = ({ showeditModal, setShoweditModal, Service,render,setrender
                     )}
                   />
                 </div>
-
+                <div className='row mb-4'>
+                  <div className='col'>
+                    <div className='form-outline'>
+                      <Controller
+                        name='Rate'
+                        control={control}
+                        rules={{ required: 'Rate is required' }}
+                        render={({ field }) => (
+                          <>
+                            <input {...field} type='text' className={`form-control ${errors.Rate ? 'is-invalid' : ''}`} placeholder='Rate' />
+                            {errors.Rate && <div className='invalid-feedback'>{errors.Rate.message}</div>}
+                          </>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </div>
                 <div className='form-outline mb-4'>
                   <Controller
                     name='GST'
@@ -152,23 +168,7 @@ const EditService = ({ showeditModal, setShoweditModal, Service,render,setrender
                   </div>
                 </div>
 
-                <div className='row mb-4'>
-                  <div className='col'>
-                    <div className='form-outline'>
-                      <Controller
-                        name='Rate'
-                        control={control}
-                        rules={{ required: 'Rate is required' }}
-                        render={({ field }) => (
-                          <>
-                            <input {...field} type='text' className={`form-control ${errors.Rate ? 'is-invalid' : ''}`} placeholder='Rate' />
-                            {errors.Rate && <div className='invalid-feedback'>{errors.Rate.message}</div>}
-                          </>
-                        )}
-                      />
-                    </div>
-                  </div>
-                </div>
+               
                 <div className=''>
                   <button type='submit' className='btn btn-primary btn-block mb-4'>
                     Edit service

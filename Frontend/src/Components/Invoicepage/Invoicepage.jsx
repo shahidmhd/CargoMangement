@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { format } from "date-fns"; 
+import { format } from "date-fns";
 import {
   MDBCard,
   MDBCardBody,
@@ -17,6 +17,8 @@ import {
 } from 'mdb-react-ui-kit';
 import { getallcompanies } from '../../apicalls/Company';
 import { getallServices } from '../../apicalls/Service';
+import { toast } from 'react-toastify';
+import { AddINVOICEdata } from '../../apicalls/Invoice';
 
 const Invoicepage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -89,6 +91,11 @@ const Invoicepage = () => {
     setTotal(weight * event.target.value);
   };
 
+const handleweightchange=(e)=>{
+   setWeight(e.target.value)
+}
+
+
   const addTableRow = () => {
     const newRow = {
       id: tableRows.length + 1,
@@ -121,7 +128,7 @@ const Invoicepage = () => {
   const [subtotal, setSubtotal] = useState(0);
   const [gst18, setGst18] = useState(0);
   const [SGST, setSGST] = useState(0);
-  const [IGST, setIGST] = useState(0);
+  const [CGST, setCGST] = useState(0);
 
   // ... (previous code)
 
@@ -144,7 +151,7 @@ const Invoicepage = () => {
 
     const cgst = gstRounded / 2;
     const cgstRounded = parseFloat(cgst.toFixed(2)); // Round CGST to two decimal places
-    setIGST(cgstRounded);
+    setCGST(cgstRounded);
 
 
     calculateTotal();
@@ -161,36 +168,73 @@ const Invoicepage = () => {
     setTableRows(updatedRows);
   };
 
-  const handleSaveButtonClick = () => {
-    if (!selectedCompanyId || !selectedServiceId || !boxNo || !airwayBillNo || tableRows.length === 0) {
-      alert("Please fill in all the required fields before saving.");
+  const handleSaveButtonClick = async() => {
+    if (!selectedCompanyId) {
+      toast.error("Please select a company", {
+        hideProgressBar: true,
+      });
       return;
     }
+
+    if (!selectedServiceId) {
+      toast.error("Please select a service", {
+        hideProgressBar: true,
+      });
+      return;
+    }
+
+    if (!boxNo || boxNo.trim() === "") {
+      toast.error("Please enter a valid box number", {
+        hideProgressBar: true,
+      });
+      return;
+    }
+
+    if (!airwayBillNo || airwayBillNo.trim() === "") {
+      toast.error("Please enter a valid airway bill number", {
+        hideProgressBar: true,
+      });
+      return;
+    }
+
+    if (tableRows.length === 0) {
+      toast.error("Please add at least one row", {
+        hideProgressBar: true,
+      });
+      return;
+    }
+    // if (weight <= 0 || isNaN(weight)) {
+    //   toast.error("Please enter a valid weight", { hideProgressBar: true });
+    //   return;
+    // }
+
+    // if (amount <= 0 || isNaN(amount)) {
+    //   toast.error("Please enter a valid amount", { hideProgressBar: true });
+    //   return;
+    // }
     // Prepare the data to be saved
     const dataToSave = {
       selectedDate: format(selectedDate, "dd/MM/yyyy"),
-      companydetails,
-      servicedetails,
       selectedCompanyId, // Use the selected company _id
-      selectedServiceId, // Use the selected service _id
-      selectedHSNCode,
       invoiceNumber,
       boxNo, // Include Box No in the data to be saved
       airwayBillNo, // Include AirwayBill No in the data to be saved
-      weight,
-      amount,
-      total,
       tableRows,
       subtotal,
       gst18,
       SGST,
-      IGST,
+      CGST,
       totalAmount,
       totalWeight
     };
 
     // Here you can save the data to your backend or do whatever you need with it
-    console.log(dataToSave, "ggggggggggggggggggg");
+    const response=await AddINVOICEdata(dataToSave)
+ if(response.success){
+  toast.success('Invoice saved successfully!', {
+    hideProgressBar: true,
+  });
+ }
   };
   return (
     <MDBContainer className="py-5" >
@@ -346,7 +390,7 @@ const Invoicepage = () => {
                     </td>
                     <td>{selectedHSNCode}</td>
                     <td>
-                      <input type="number" value={weight} onChange={(e) => setWeight(e.target.value)} onKeyPress={handleEnterKeyPress} />
+                      <input type="number" value={weight} onChange={handleweightchange} onKeyPress={handleEnterKeyPress} />
                     </td>
                     <td>
                       <input type="number" value={amount} onChange={handleAmountChange} onKeyPress={handleEnterKeyPress} />
@@ -376,7 +420,7 @@ const Invoicepage = () => {
                   <span className="text-black me-4">SGST 9%</span>₹{SGST}
                 </li>
                 <li className="text-muted ms-3 mt-2">
-                  <span className="text-black me-4">IGST 9%</span>₹{IGST}
+                  <span className="text-black me-4">CGST 9%</span>₹{CGST}
                 </li>
               </MDBTypography>
               <p className="text-black float-start">

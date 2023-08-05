@@ -31,7 +31,7 @@ const Servicechema=new mongoose.Schema({
         required: true
     },
     UOM: {
-        type:Number,
+        type:String,
         required: true
     }
 },{

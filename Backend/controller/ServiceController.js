@@ -32,7 +32,7 @@ export default {
     Editservice: async (req, res) => {
         try {
             const { id } = req.params;
-            const { servicename,HSNcode,GST,SGST,CGST,Rate } = req.body;
+            const { servicename,HSNCode,GST,SGST,CGST,Rate,UOM } = req.body;
     
             // Find the company with the given ID
             const Service = await service.findById(id);
@@ -48,7 +48,7 @@ export default {
             // Update the company with the new data
             await service.findByIdAndUpdate(
                 { _id: id },
-                {servicename,HSNcode,GST,SGST,CGST,Rate},
+                {servicename,HSNCode,GST,SGST,CGST,Rate,UOM},
                 { new: true }
             );
     

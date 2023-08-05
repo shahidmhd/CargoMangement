@@ -76,16 +76,16 @@ function Servicecreation({ Service, render, setrender }) {
                           <p className='fw-normal mb-1'>{item?.HSNCode}</p>
                         </td>
                         <td>
-                          <p className='fw-normal mb-1'>{item?.Rate}</p>
+                          <p className='fw-normal mb-1'>₹ {item?.Rate}</p>
                         </td>
                         <td>
-                          <p className='fw-normal mb-1'>{item?.GST}</p>
+                          <p className='fw-normal mb-1'>{item?.GST}%</p>
                         </td>
                         <td>
-                          <p className='fw-normal mb-1'>{item?.SGST}</p>
+                          <p className='fw-normal mb-1'>{item?.SGST}%</p>
                         </td>
                         <td>
-                          <p className='fw-normal mb-1'>{item?.CGST}</p>
+                          <p className='fw-normal mb-1'>{item?.CGST}%</p>
                         </td>
                         <td>
                           <p className='fw-normal mb-1'>{item?.UOM}</p>
