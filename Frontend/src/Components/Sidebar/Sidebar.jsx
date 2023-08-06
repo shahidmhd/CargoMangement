@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import {useDispatch}from 'react-redux'
 import {
   CDBSidebar,
   CDBSidebarContent,
@@ -8,13 +9,16 @@ import {
   CDBSidebarMenuItem,
   CDBSidebarFooter,
 } from 'cdbreact';
+import { setLogout } from '../../Redux/Authslice';
 
 
 const Sidebar = () => {
+  const dispatch=useDispatch()
   const navigate = useNavigate()
   const handlelogout = () => {
-    localStorage.removeItem('token')
-    navigate('/login')
+    // localStorage.removeItem('token')
+    dispatch(setLogout())
+    // navigate('/login')
   }
 
   const handleHomeClick = () => {
@@ -39,6 +43,10 @@ const Sidebar = () => {
     navigate('/table')
   }
 
+  const handledetailclick=()=>{
+    navigate('/detail')
+  }
+
 
 
   return (
@@ -60,6 +68,9 @@ const Sidebar = () => {
             </CDBSidebarMenuItem>
             <CDBSidebarMenuItem icon="th-large" onClick={handleInvoictableclick}>
               Invoice Table
+            </CDBSidebarMenuItem>
+            <CDBSidebarMenuItem icon="th-large" onClick={handledetailclick}>
+              Detail
             </CDBSidebarMenuItem>
           </CDBSidebarMenu>
         </CDBSidebarContent>

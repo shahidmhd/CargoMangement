@@ -1,57 +1,61 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import Company from './Pages/Company';
 import Service from './Pages/Service';
 import Invoice from './Pages/Invoice';
-import Login from './Login/Login';
+// import Login from './Login/Login';
 import Home from './Pages/Home';
 import Notfound from './Pages/Notfound';
 import Print from './Pages/Print';
 import Invoicetable from './Pages/Invoicetable';
+import Detailpage from './Pages/Detailpage';
+import Loginpage from './Pages/Loginpage';
+import { useSelector } from 'react-redux'
 
-function App() {
 
-  const token = localStorage.getItem('token')
+const App = () => {
+  const token = useSelector((state) => state.Authslice.token);
+
   return (
     <>
-      <Router>
+      < BrowserRouter>
         <Routes>
           <Route
             path='/'
-            element={token ? <Home /> : <Navigate to='/login' />}
+            element={token ? <Home /> : <Navigate to={'/login'} />}
           />
           <Route
             path='/login'
-            element={<Login />}
+            element={token ? <Navigate to={'/'} /> : <Loginpage />}
           />
           <Route
             path='/invoice'
-            element={token ? <Invoice /> : <Navigate to='/login' />}
+            element={token ? <Invoice /> : <Navigate to={'/login'} />}
           />
           <Route
             path='/company'
-            element={token ? <Company /> : <Navigate to='/login' />}
+            element={token ? <Company /> : <Navigate to={'/login'} />}
           />
           <Route
             path='/Service'
-            element={token ? <Service /> : <Navigate to='/login' />}
+            element={token ? <Service /> : <Navigate to={'/login'} />}
           />
           <Route
             path='/print/:id'
-            element={<Print/>}
+            element={token ? <Print /> : <Navigate to={'/login'} />}
           />
-           <Route
+          <Route
             path='/table'
-            element={<Invoicetable/>}
+            element={token ? <Invoicetable /> : <Navigate to={'/login'} />}
           />
-          
-          <Route path="*" element={<Notfound/>} />
-          {/* <Route exact path='/invoice' element={<Invoice />} /> */}
-          {/* <Route exact path='/login' element={<Login />} /> */}
-          {/* <Route exact path='/company' element={<Company/>} /> */}
-          {/* <Route exact path='/Service' element={<Service/>} /> */}
+          <Route
+            path='/detail'
+            element={token ? <Detailpage /> : <Navigate to={'/login'} />}
+          />
+
+          <Route path="*" element={<Notfound />} />
         </Routes>
-      </Router>
+      </ BrowserRouter>
     </>
   );
 }

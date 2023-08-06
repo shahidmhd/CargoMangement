@@ -5,6 +5,8 @@ import dotenv from 'dotenv'
 import morgan from 'morgan'
 import UserRouters from './routes/UserRouter.js'
 import mongoose from 'mongoose'
+import errorHandlingMidlleware from "./Middlewear/errorHandlingMidleware.js";
+
 
 dotenv.config()
 
@@ -16,8 +18,8 @@ app.use(morgan('dev'))
 app.use(express.urlencoded({extended:true}))
 
 
-
 app.use('/api/users',UserRouters)
+app.use(errorHandlingMidlleware)
 
 // console.log(process.env.MONGO_URL);
 mongoose.connect(process.env.MONGO_URL).then(() => {
@@ -26,9 +28,6 @@ mongoose.connect(process.env.MONGO_URL).then(() => {
     console.log("\x1b[31m%s\x1b[0m", `Database connection error: ${error}`); // Red color code: \x1b[31m
   });
   
-
-
-
 app.listen(port, () => {
   console.log("\x1b[34m%s\x1b[0m", `Server listening at port ${port}`);
 });

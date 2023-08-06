@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { MDBBadge, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import { useNavigate } from 'react-router-dom';
-// import { getselectedinvioce } from '../../apicalls/Invoice';
+import { getselectedinvioce } from '../../apicalls/Invoice';
 
 
 function Invoicetables({ invoices }) {
@@ -15,7 +15,7 @@ function Invoicetables({ invoices }) {
 
   const handleprintpage = async(item) => {
     console.log(item);
-    // const response=await getselectedinvioce(item._id)
+    const response=await getselectedinvioce(item._id)
     navigate(`/print/${item._id}`);
   };
   return (

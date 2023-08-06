@@ -2,7 +2,7 @@ import instance from "./axiosinstance";
 
 export const AddINVOICEdata = async (payload) => {
     try {
-
+console.log(payload,"lllllllllllllllllll");
         const response = await instance.post('/api/users/invoice', payload);
         console.log(response,"vjj");
         return response.data

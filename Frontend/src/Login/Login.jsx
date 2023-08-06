@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { LoginUser } from '../apicalls/User';
 import { useNavigate } from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { setLogin } from '../Redux/Authslice';
+
 
 
 
 const Login = () => {
-   
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
     const {
         register,
         handleSubmit,
@@ -19,9 +23,15 @@ const Login = () => {
         console.log(data); // You can handle the form submission here
         try {
             const response = await LoginUser(data)
-            console.log(response);
-            localStorage.setItem('token',(response.data));
-            navigate('/')
+            if (response.success) {
+                toast.success(response.message)
+                // localStorage.setItem('token', response.data);
+                dispatch(setLogin({userToken:response.data}))
+
+                navigate('/')
+            } else {
+                toast.error(response.message)
+            }
         } catch (err) {
             console.log(err);
         }
@@ -34,11 +44,6 @@ const Login = () => {
         }
         return true;
     };
-    const token =localStorage.getItem('token')
-   
-    if(token){
-        return <Navigate to='/'/>
-    }
 
     return (
         <section className="vh-100 gradient-custom" style={{ backgroundImage: `url('https://www.emotrans-global.com/wp-content/uploads/2023/01/01-cargo-vs-freight.jpg')`, backgroundSize: 'cover' }}>

@@ -15,15 +15,11 @@ import {
   MDBTableBody,
   MDBBtn,
 } from 'mdb-react-ui-kit';
-import { getallcompanies } from '../../apicalls/Company';
-import { getallServices } from '../../apicalls/Service';
 import { toast } from 'react-toastify';
 import { AddINVOICEdata } from '../../apicalls/Invoice';
 
-const Invoicepage = () => {
+const Invoicepage = ({invoiceNumber,servicedetails,companydetails}) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [companydetails, setcompanydetails] = useState([]);
-  const [servicedetails, setservicedetails] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [selectedHSNCode, setSelectedHSNCode] = useState("");
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
@@ -32,23 +28,10 @@ const Invoicepage = () => {
   const [airwayBillNo, setAirwayBillNo] = useState("");
 
   const [totalWeight, setTotalWeight] = useState(0);
-  const [invoiceNumber, setInvoiceNumber] = useState('');
   const [weight, setWeight] = useState(0);
   const [amount, setAmount] = useState(0);
   const [total, setTotal] = useState(0);
   const [tableRows, setTableRows] = useState([]);
-
-  const getcomapanydata = async () => {
-    const response = await getallcompanies()
-    console.log(response, "hhhhhhhffffffsssssssss");
-    setcompanydetails(response.Data)
-  }
-
-  const getServicedata = async () => {
-    const responseservice = await getallServices()
-    console.log(responseservice, "hhhhhhhffffffsssssssss");
-    setservicedetails(responseservice.Data)
-  }
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -61,15 +44,6 @@ const Invoicepage = () => {
       setTotal(0);
     }
   };
-  useEffect(() => {
-    getcomapanydata()
-    getServicedata()
-    const timestamp = Date.now(); // Get the current timestamp
-    const randomNum = Math.floor(Math.random() * 1000); // Generate a random number between 0 and 999
-    const newInvoiceNumber = `B2C${timestamp}${randomNum}`;
-    setInvoiceNumber(newInvoiceNumber);
-  }, [])
-
   const handleServiceChange = (event) => {
     const selectedServiceId = event.target.value;
     const selectedServiceData = servicedetails.find((service) => service._id === selectedServiceId);
@@ -93,6 +67,8 @@ const Invoicepage = () => {
 
 const handleweightchange=(e)=>{
    setWeight(e.target.value)
+   
+
 }
 
 
@@ -234,6 +210,8 @@ const handleweightchange=(e)=>{
   toast.success('Invoice saved successfully!', {
     hideProgressBar: true,
   });
+ 
+ 
  }
   };
   return (

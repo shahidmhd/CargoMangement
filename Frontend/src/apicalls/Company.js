@@ -5,7 +5,7 @@ export const AddCompanydata = async (payload) => {
         const response = await instance.post('/api/users/company', payload);
         return response.data
     } catch (err) {
-        return err.message;
+        return err.response.data
     }
 }
 
@@ -24,7 +24,7 @@ export const editcompany = async (payload) => {
         const response = await instance.patch(`/api/users/company/${payload._id}`, payload);
         return response.data
     } catch (err) {
-        return err.message;
+        return err.response.data;
     }
 }
 

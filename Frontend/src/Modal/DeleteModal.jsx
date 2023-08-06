@@ -1,12 +1,19 @@
 import React from 'react'
 import { deletecompany } from '../apicalls/Company'
+import { toast } from 'react-toastify'
 
 const DeleteModal = ({ showdeleteModal, setShowdeleteModal,id,render,setrender }) => {
 
     const handledelete=async()=>{
-       await deletecompany(id)
-       setShowdeleteModal(false)
-       setrender(!render)
+    const res=   await deletecompany(id)
+    if(res.success){
+        toast.success(res.message)
+        setShowdeleteModal(false)
+        setrender(!render)
+    }else{
+        toast.error(res.message)
+    }
+      
        
     }
     return (

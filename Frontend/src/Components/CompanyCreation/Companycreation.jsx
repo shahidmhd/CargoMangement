@@ -35,6 +35,9 @@ const CompanyCreation = ({ Company, render, setrender }) => {
                                 <MDBTableHead>
                                     <tr>
                                         <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                                            NO
+                                        </th>
+                                        <th style={{ backgroundColor: 'lightblue' }} scope='col'>
                                             company Name
                                         </th>
                                         <th style={{ backgroundColor: 'lightblue' }} scope='col'>
@@ -56,8 +59,11 @@ const CompanyCreation = ({ Company, render, setrender }) => {
                                 </MDBTableHead>
                                 <MDBTableBody>
                                     {Company &&
-                                        Company.map((item) => (
-                                            <tr key={item._id}>
+                                        Company.map((item, index) => (
+                                            <tr key={item._id}><td>
+                                                <p className='fw-normal mb-1'>{index+1}</p>
+                                            </td>
+
                                                 <td>
                                                     <div className='d-flex align-items-center'>
                                                         <div className='ms-3'>

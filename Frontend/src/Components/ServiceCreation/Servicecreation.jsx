@@ -32,6 +32,9 @@ function Servicecreation({ Service, render, setrender }) {
               <MDBTable align='middle'>
                 <MDBTableHead>
                   <tr>
+                  <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                      No
+                    </th>
                     <th style={{ backgroundColor: 'lightblue' }} scope='col'>
                       Service Name
                     </th>
@@ -63,8 +66,11 @@ function Servicecreation({ Service, render, setrender }) {
                 </MDBTableHead>
                 <MDBTableBody>
                   {Service &&
-                    Service.map((item) => (
+                    Service.map((item,index) => (
                       <tr key={item._id} >
+                        <td>
+                          <p className='fw-normal mb-1'>{index+1}</p>
+                        </td>
                         <td>
                           <div className='d-flex align-items-center'>
                             <div className='ms-3'>

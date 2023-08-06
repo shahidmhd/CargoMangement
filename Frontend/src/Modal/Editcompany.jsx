@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { editcompany } from '../apicalls/Company';
+import { toast } from 'react-toastify';
 
 const Editcompany = ({ showeditModal, setShoweditModal, Company,render,setrender }) => {
   const {
@@ -19,10 +20,16 @@ const Editcompany = ({ showeditModal, setShoweditModal, Company,render,setrender
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
     const response=await editcompany(data)
+   if(response.success){
+    toast.success(response.message)
     setShoweditModal(false)
     setrender(!render)
+   }else{
+    toast.error(response.message)
+    setShoweditModal(false)
+    setrender(!render)
+   }
   
    
   };

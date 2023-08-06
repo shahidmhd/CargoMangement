@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { AddCompanydata } from '../apicalls/Company';
+import { toast } from 'react-toastify';
 
 const AddCompany = ({ showModal, setShowModal,render,setrender }) => {
     const {
@@ -10,10 +11,18 @@ const AddCompany = ({ showModal, setShowModal,render,setrender }) => {
     } = useForm();
 
     const onSubmit = async (data) => {
-        console.log(data);
-        await AddCompanydata(data)
+    const response= await AddCompanydata(data)
+    if(response.success){
+        toast.success(response.message)
         setShowModal(false)
         setrender(!render)
+    
+    }else{
+        setShowModal(false)
+        setrender(!render)
+        toast.error(response.message)
+    }
+       
     };
 
     return (
