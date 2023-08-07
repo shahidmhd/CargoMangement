@@ -13,12 +13,11 @@ import {
   MDBTable,
   MDBTableHead,
   MDBTableBody,
-  MDBBtn,
 } from 'mdb-react-ui-kit';
 import { toast } from 'react-toastify';
 import { AddINVOICEdata } from '../../apicalls/Invoice';
 
-const Invoicepage = ({invoiceNumber,servicedetails,companydetails}) => {
+const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedService, setSelectedService] = useState(null);
   const [selectedHSNCode, setSelectedHSNCode] = useState("");
@@ -32,6 +31,7 @@ const Invoicepage = ({invoiceNumber,servicedetails,companydetails}) => {
   const [amount, setAmount] = useState(0);
   const [total, setTotal] = useState(0);
   const [tableRows, setTableRows] = useState([]);
+  // const [render, setrender] = useState(false);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -40,20 +40,27 @@ const Invoicepage = ({invoiceNumber,servicedetails,companydetails}) => {
   const calculateTotal = () => {
     if (selectedService) {
       setTotal(weight * amount);
+      // setSubtotal(weight*amount)
     } else {
       setTotal(0);
+      // setSubtotal(0)
     }
   };
   const handleServiceChange = (event) => {
     const selectedServiceId = event.target.value;
+    console.log(event.target.value);
     const selectedServiceData = servicedetails.find((service) => service._id === selectedServiceId);
-    console.log(selectedServiceData, "j");
+    console.log(selectedServiceData,"fffff");
     if (selectedServiceData) {
+         
       setSelectedService(selectedServiceData);
+      console.log(selectedService,"selected service");
       setSelectedServiceId(selectedServiceData._id); // Store the selected service _id
       setSelectedHSNCode(selectedServiceData.HSNCode);
       setAmount(selectedServiceData.Rate);
+      console.log(weight, "weight change");
       setTotal(weight * selectedServiceData.Rate);
+      // setSubtotal(weight*selectedService.Rate)
     } else {
       setSelectedService(null);
       setSelectedServiceId(null); // Reset the selected service _id
@@ -65,11 +72,10 @@ const Invoicepage = ({invoiceNumber,servicedetails,companydetails}) => {
     setTotal(weight * event.target.value);
   };
 
-const handleweightchange=(e)=>{
-   setWeight(e.target.value)
-   
-
-}
+  const handleweightchange = (e) => {
+    console.log(e.target.value, "weight");
+    setWeight(e.target.value)
+  }
 
 
   const addTableRow = () => {
@@ -81,6 +87,7 @@ const handleweightchange=(e)=>{
       amount,
       total: weight * amount,
     };
+    console.log(newRow, "newRow");
 
     setTableRows([...tableRows, newRow]);
 
@@ -107,6 +114,7 @@ const handleweightchange=(e)=>{
   const [CGST, setCGST] = useState(0);
 
   // ... (previous code)
+
 
   useEffect(() => {
     // Calculate the subtotal whenever tableRows or total of any row changes
@@ -144,7 +152,7 @@ const handleweightchange=(e)=>{
     setTableRows(updatedRows);
   };
 
-  const handleSaveButtonClick = async() => {
+  const handleSaveButtonClick = async () => {
     if (!selectedCompanyId) {
       toast.error("Please select a company", {
         hideProgressBar: true,
@@ -179,16 +187,6 @@ const handleweightchange=(e)=>{
       });
       return;
     }
-    // if (weight <= 0 || isNaN(weight)) {
-    //   toast.error("Please enter a valid weight", { hideProgressBar: true });
-    //   return;
-    // }
-
-    // if (amount <= 0 || isNaN(amount)) {
-    //   toast.error("Please enter a valid amount", { hideProgressBar: true });
-    //   return;
-    // }
-    // Prepare the data to be saved
     const dataToSave = {
       selectedDate: format(selectedDate, "dd/MM/yyyy"),
       selectedCompanyId, // Use the selected company _id
@@ -205,14 +203,14 @@ const handleweightchange=(e)=>{
     };
 
     // Here you can save the data to your backend or do whatever you need with it
-    const response=await AddINVOICEdata(dataToSave)
- if(response.success){
-  toast.success('Invoice saved successfully!', {
-    hideProgressBar: true,
-  });
- 
- 
- }
+    const response = await AddINVOICEdata(dataToSave)
+    if (response.success) {
+      toast.success('Invoice saved successfully!', {
+        hideProgressBar: true,
+      });
+
+
+    }
   };
   return (
     <MDBContainer className="py-5" >
@@ -245,15 +243,6 @@ const handleweightchange=(e)=>{
           </div>
 
           <div className='.hide-on-print' style={{ backgroundColor: '#79c8db', height: '30%', width: '16em', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {/* <button
-              color="#79c8db"
-              backgroundColor='#79c8db'
-              ripple="dark"
-              className="text-capitalize border-0"
-            >
-              <MDBIcon fas icon="print" color="primary" className="me-1" />
-              Print
-            </button> */}
           </div>
         </div>
         <MDBCardBody>
