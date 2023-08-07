@@ -40,21 +40,31 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
   const calculateTotal = () => {
     if (selectedService) {
       setTotal(weight * amount);
-      // setSubtotal(weight*amount)
+      setSubtotal(weight * amount)
+      const totalWithoutGST = weight * amount;
+      const gstAmount = (totalWithoutGST * selectedService.GST) / 100;
+      setGst18(gstAmount);
+      setSGST(gstAmount/2)
+      setCGST(gstAmount/2)
+
     } else {
-      setTotal(0);
-      // setSubtotal(0)
+      setTotal(total);
+      setSubtotal(subtotal)
+      setGst18(gst18);
+      setSGST(SGST)
+      setCGST(CGST)
+
+      
+
     }
   };
   const handleServiceChange = (event) => {
     const selectedServiceId = event.target.value;
     console.log(event.target.value);
     const selectedServiceData = servicedetails.find((service) => service._id === selectedServiceId);
-    console.log(selectedServiceData,"fffff");
+    console.log(selectedServiceData, "fffff");
     if (selectedServiceData) {
-         
       setSelectedService(selectedServiceData);
-      console.log(selectedService,"selected service");
       setSelectedServiceId(selectedServiceData._id); // Store the selected service _id
       setSelectedHSNCode(selectedServiceData.HSNCode);
       setAmount(selectedServiceData.Rate);
@@ -90,12 +100,26 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
     console.log(newRow, "newRow");
 
     setTableRows([...tableRows, newRow]);
+  // Calculate the new subtotal by summing up individual row totals
+  const newSubtotal = tableRows.reduce((acc, row) => acc + row.total, 0) + newRow.total;
+  console.log(newSubtotal,"newsubtotal");
+  const calculatedGst18 = newSubtotal * 0.18;
+  const gstRounded = parseFloat(calculatedGst18.toFixed(2));
+  const sgst = gstRounded / 2;
+  const sgstRounded = parseFloat(sgst.toFixed(2));
+  const cgst = gstRounded / 2;
+  const cgstRounded = parseFloat(cgst.toFixed(2));
 
-    setSelectedService(null);
-    setSelectedHSNCode("");
-    setWeight(0);
-    setAmount(0);
-    setTotal(0);
+  setSubtotal(newSubtotal);
+  setGst18(gstRounded);
+  setSGST(sgstRounded);
+  setCGST(cgstRounded);
+
+  setSelectedService(null);
+  setSelectedHSNCode("");
+  setWeight(0);
+  setAmount(0);
+  setTotal(0);
   };
 
 
@@ -364,7 +388,7 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
                     </td>
                     <td>{total}</td>
                     <td><button className='btn' size="sm"  >
-                      <MDBIcon style={{ color: 'red' }} fas icon="trash-alt" />
+                      <MDBIcon style={{ color: 'red' }}  fas icon="trash-alt" />
                     </button></td>
                   </tr>
                 </MDBTableBody>
