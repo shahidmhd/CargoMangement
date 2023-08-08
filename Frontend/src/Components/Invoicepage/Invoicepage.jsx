@@ -18,6 +18,7 @@ import { toast } from 'react-toastify';
 import { AddINVOICEdata } from '../../apicalls/Invoice';
 
 const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
+  const [servicetable,setserviceTable]=useState([])
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedService, setSelectedService] = useState(null);
   const [selectedHSNCode, setSelectedHSNCode] = useState("");
@@ -37,7 +38,7 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
   const [SGST, setSGST] = useState(0);
   const [CGST, setCGST] = useState(0);
 
-  const[serviceDetails,setServiceDetails] = useState([])
+  const [serviceDetails, setServiceDetails] = useState([])
 
 
   const handleDateChange = (date) => {
@@ -45,49 +46,40 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
   };
 
 
-  console.log(serviceDetails,'details');
   let sub = serviceDetails.reduce((acc, item) => acc + item.subtotal, 0);
-  useEffect(()=>{
-  setSubtotal(sub)
-  const calculatedGst = (sub * 18) / 100;
-  setGst18(calculatedGst);
-  setSGST(calculatedGst/2)
-  setCGST(calculatedGst/2)
-  },[sub])
-  const calculateTotal = () => {  
+  useEffect(() => {
+    setSubtotal(sub)
+    const calculatedGst = (sub * 18) / 100;
+    setGst18(calculatedGst);
+    setSGST(calculatedGst / 2)
+    setCGST(calculatedGst / 2)
+  }, [sub])
+  const calculateTotal = () => {
     if (selectedService) {
-      console.log(weight,"hiiiii");
       setTotal(weight * amount);
-      console.log(amount,weight);
       // setSubtotal(weight * amount)
 
-      const isServiceExist = serviceDetails.find((item)=>item?.serviceId === selectedService._id)
-      console.log(isServiceExist,'isexist');
-      if(isServiceExist){
+      const isServiceExist = serviceDetails.find((item) => item?.serviceId === selectedService._id)
+      if (isServiceExist) {
         setServiceDetails(
-          serviceDetails.map((item) =>{
-            console.log(selectedService._id);
-            if(item.serviceId == selectedService._id.toString()){
-              console.log(weight*amount),'sub';
+          serviceDetails.map((item) => {
+            if (item.serviceId == selectedService._id.toString()) {
               const subtotal = weight * amount;
-              return {...item,serviceId: selectedService._id,subtotal:subtotal};
+              return { ...item, serviceId: selectedService._id, subtotal: subtotal };
             }
             return item
-          }) 
+          })
         )
-      }else {
-        console.log(selectedService._id,'service id');
-        // setServiceDetails([...serviceDetails,{serviceId:selectedService._id,subtotal}])
-        serviceDetails.push({serviceId:selectedService._id,subtotal:weight*amount})
+      } else {
+        serviceDetails.push({ serviceId: selectedService._id, subtotal: weight * amount })
       }
-      console.log(serviceDetails,'service details');
-      
-      const totalWithoutGST =subtotal+ weight * amount;
+
+      const totalWithoutGST = subtotal + weight * amount;
       const gstAmount = (totalWithoutGST * selectedService.GST) / 100;
       setGst18(gstAmount);
-      setSGST(gstAmount/2)
-      setCGST(gstAmount/2)
-      setTotalWeight(totalWeight+weight-totalWeight)
+      setSGST(gstAmount / 2)
+      setCGST(gstAmount / 2)
+      setTotalWeight(totalWeight + weight - totalWeight)
 
     } else {
       setTotal(total);
@@ -98,13 +90,12 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
     }
   };
- 
+
   const handleServiceChange = (event) => {
     const selectedServiceId = event.target.value;
-    console.log(event.target.value);
     const selectedServiceData = servicedetails.find((service) => service._id === selectedServiceId);
-    console.log(selectedServiceData, "fffff");
     if (selectedServiceData) {
+      console.log(selectedServiceData._id,"hgggggggggddd");
       setSelectedService(selectedServiceData);
       setSelectedServiceId(selectedServiceData._id); // Store the selected service _id
       setSelectedHSNCode(selectedServiceData.HSNCode);
@@ -130,88 +121,93 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
 
   const handleweightchange = (e) => {
-    console.log(e.target.value);
     setWeight(Number(e.target.value))
+
+
   }
 
 
   const addTableRow = () => {
-
+    servicetable.push(selectedService)
+    console.log(servicetable,"eeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+    console.log(selectedService,"jjjjjjjjjjjjjjjjjjjj");
     const newRow = {
       id: tableRows.length + 1,
+      serviceId:selectedService._id,
       serviceName: selectedService.servicename,
       HSNCode: selectedHSNCode,
       weight,
       amount,
       total: weight * amount,
     };
-    console.log(newRow, "newRow");
 
     setTableRows([...tableRows, newRow]);
-  // Calculate the new subtotal by summing up individual row totals
-  const newSubtotal = tableRows.reduce((acc, row) => acc + row.total, 0) + newRow.total;
-  console.log(newSubtotal,"newsubtotal");
-  const calculatedGst18 = newSubtotal * 0.18;
-  const gstRounded = parseFloat(calculatedGst18.toFixed(2));
-  const sgst = gstRounded / 2;
-  const sgstRounded = parseFloat(sgst.toFixed(2));
-  const cgst = gstRounded / 2;
-  const cgstRounded = parseFloat(cgst.toFixed(2));
 
-  setSubtotal(newSubtotal);
-  setGst18(gstRounded);
-  setSGST(sgstRounded);
-  setCGST(cgstRounded);
 
-  setSelectedService(null);
-  setSelectedHSNCode("");
-  setWeight(0);
-  setAmount(0);
-  setTotal(0);
+
+
+    // Automatically select the first service in the dropdown
+    if (servicedetails.length > 0) {
+      const firstService = servicedetails[0];
+      setSelectedService(firstService);
+      setSelectedServiceId(firstService._id);
+      setSelectedHSNCode(firstService.HSNCode);
+      setAmount(firstService.Rate);
+      setTotal(weight * firstService.Rate);
+    }
+
+    // Calculate the new subtotal by summing up individual row totals
+    const newSubtotal = tableRows.reduce((acc, row) => acc + row.total, 0) + newRow.total;
+    const calculatedGst18 = newSubtotal * 0.18;
+    const gstRounded = parseFloat(calculatedGst18.toFixed(2));
+    const sgst = gstRounded / 2;
+    const sgstRounded = parseFloat(sgst.toFixed(2));
+    const cgst = gstRounded / 2;
+    const cgstRounded = parseFloat(cgst.toFixed(2));
+
+    setSubtotal(newSubtotal);
+    setGst18(gstRounded);
+    setSGST(sgstRounded);
+    setCGST(cgstRounded);
+
+    setSelectedHSNCode("");
+    setWeight(0);
+    setAmount(0);
+    setTotal(0);
+
+
+
+
+  // Calculate and update the new total weight
+  const newTotalWeight = tableRows.reduce((acc, row) => acc + row.weight, 0) + weight;
+  setTotalWeight(newTotalWeight);
   };
 
 
 
   const handleEnterKeyPress = (event) => {
-    if (event.charCode === 13) {
-      addTableRow();
+    if (weight <= 0) {
+      toast.success("select  weight")
+    } else {
+      if (event.charCode === 13) {
+        addTableRow();
+
+      // Calculate the new total weight by summing up all the weights in tableRows
+      const newTotalWeight = tableRows.reduce((acc, row) => acc + row.weight, 0);
+      setTotalWeight(newTotalWeight);
+      }
     }
+
   };
 
 
-
-  
   // ... (previous code)
 
 
   useEffect(() => {
 
-    
-    // Calculate the subtotal whenever tableRows or total of any row changes
-    const calculatedSubtotal = tableRows.reduce((acc, row) => acc + row.total, 0);
-    console.log(calculatedSubtotal,"subtotal");
-    setSubtotal(calculatedSubtotal);
-
-    const calculatedTotalWeight = tableRows.reduce((acc, row) => acc + parseFloat(row.weight), 0);
-    console.log(calculatedTotalWeight,"totalweight");
-    setTotalWeight(calculatedTotalWeight);
-
-
-    const calculatedGst18 = calculatedSubtotal * 0.18;
-    const gstRounded = parseFloat(calculatedGst18.toFixed(2)); // Round GST to two decimal places
-    setGst18(gstRounded);
-
-    const sgst = gstRounded / 2;
-    const sgstRounded = parseFloat(sgst.toFixed(2)); // Round SGST to two decimal places
-    setSGST(sgstRounded);
-
-    const cgst = gstRounded / 2;
-    const cgstRounded = parseFloat(cgst.toFixed(2)); // Round CGST to two decimal places
-    setCGST(cgstRounded);
-
-
     calculateTotal();
-    
+
   }, [tableRows, weight, amount, selectedService]);
   const totalAmount = subtotal + gst18;
 
@@ -219,60 +215,77 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
     const selectedCompanyId = event.target.value;
     setSelectedCompanyId(selectedCompanyId); // Store the selected company _id
   };
-
   const handleRowDelete = (rowId) => {
+    
+    // Find the deleted row and get its serviceId
+    const deletedRow = tableRows.find((row) => row.id === rowId);
+    const deletedServiceId = deletedRow?.serviceId;
+
+    // Calculate the new subtotal by subtracting the deleted row's total
+    const newSubtotal = subtotal - deletedRow.total;
+
+    // Remove the deleted row from tableRows
     const updatedRows = tableRows.filter((row) => row.id !== rowId);
     setTableRows(updatedRows);
-  
-    // Recalculate the subtotal, GST, and other related values
-    const newSubtotal = updatedRows.reduce((acc, row) => acc + row.total, 0);
+
+    // Remove the corresponding service from serviceDetails
+    if (deletedServiceId) {
+      setServiceDetails((prevServiceDetails) =>
+        prevServiceDetails.filter((item) => item.serviceId !== deletedServiceId)
+      );
+    }
+
+
+    // Recalculate the GST and other related values based on the new subtotal
     const calculatedGst18 = newSubtotal * 0.18;
     const gstRounded = parseFloat(calculatedGst18.toFixed(2));
     const sgst = gstRounded / 2;
     const sgstRounded = parseFloat(sgst.toFixed(2));
     const cgst = gstRounded / 2;
     const cgstRounded = parseFloat(cgst.toFixed(2));
-  
+
     setSubtotal(newSubtotal);
     setGst18(gstRounded);
     setSGST(sgstRounded);
     setCGST(cgstRounded);
   };
 
+
   const handleSaveButtonClick = async () => {
+    console.log(subtotal, gst18, CGST, SGST, totalAmount);
     if (!selectedCompanyId) {
       toast.error("Please select a company", {
         hideProgressBar: true,
       });
       return;
     }
-  
+
     if (!boxNo || boxNo.trim() === "") {
       toast.error("Please enter a valid box number", {
         hideProgressBar: true,
       });
       return;
     }
-  
+
     if (!airwayBillNo || airwayBillNo.trim() === "") {
       toast.error("Please enter a valid airway bill number", {
         hideProgressBar: true,
       });
       return;
     }
-  
+
     // Map the tableRows to include the serviceId in each row
     const updatedTableRows = tableRows.map(row => ({
       ...row,
       serviceId: selectedServiceId, // or row.serviceId if you have a serviceId per row
     }));
-  
+
     // Get all the selected service IDs from both the selectedServiceId and serviceDetails
     const allSelectedServiceIds = [
       selectedServiceId,
       ...serviceDetails.map(item => item.serviceId)
     ];
-  
+
     const dataToSave = {
       selectedDate: format(selectedDate, "dd/MM/yyyy"),
       selectedCompanyId,
@@ -288,9 +301,9 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
       totalWeight,
       serviceIds: allSelectedServiceIds,
     };
-  
+
     console.log(dataToSave, "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
-  
+
     // Here you can save the data to your backend or do whatever you need with it
     const response = await AddINVOICEdata(dataToSave);
     if (response.success) {
@@ -299,8 +312,8 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
       });
     }
   };
-  
-  
+
+
   return (
     <MDBContainer className="py-5" >
       <MDBCard style={{ border: '3px solid black' }}>
@@ -439,8 +452,8 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
                         <option value="">Select Service Name</option>
 
                         {/* Mapping through servicedetails */}
-                        {servicedetails && servicedetails.map((item, index) => (
-                          <option key={index} value={item._id}>{item.servicename}</option>
+                        {servicedetails && servicedetails.map((item) => (
+                          <option key={item._id} value={item._id}>{item.servicename}</option>
                         ))}
                       </select>
                     </td>
@@ -453,7 +466,7 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
                     </td>
                     <td>{total}</td>
                     <td><button className='btn' size="sm"  >
-                      <MDBIcon style={{ color: 'red' }}  fas icon="trash-alt" />
+                      <MDBIcon style={{ color: 'red' }} fas icon="trash-alt" />
                     </button></td>
                   </tr>
                 </MDBTableBody>
