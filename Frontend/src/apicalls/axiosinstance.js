@@ -9,7 +9,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   config => {
     // Add the Bearer token to the request headers
-    config.headers['Authorization'] = `Bearer ${bearerToken}`;
+    config.headers['authorization'] = `Bearer ${bearerToken}`;
     return config;
   },
   error => {

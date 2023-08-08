@@ -48,7 +48,7 @@ const Details = ({ companydetails, servicedetails }) => {
         Setservice(selectedService);
         setHSNCode(selectedService.HSNCode);
         setRate(selectedService.Rate);
-        setTotal(selectedService.Rate);
+        setTotal(weight*selectedService.Rate);
         setsubtotal(selectedService.Rate);
 
         // Calculate the GST amount
@@ -83,7 +83,7 @@ const Details = ({ companydetails, servicedetails }) => {
         } else {
             const defaultValue = Service.Rate;
             setRate(defaultValue);
-            setTotal(Service.Rate);
+            setTotal(weight*Service.Rate);
             setsubtotal(Service.Rate);
             const gstAmount = (Service.Rate * Service.GST) / 100;
             setgst(gstAmount);
