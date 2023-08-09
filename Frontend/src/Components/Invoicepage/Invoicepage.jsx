@@ -18,7 +18,6 @@ import { toast } from 'react-toastify';
 import { AddINVOICEdata } from '../../apicalls/Invoice';
 
 const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
-  const [servicetable,setserviceTable]=useState([])
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedService, setSelectedService] = useState(null);
   const [selectedHSNCode, setSelectedHSNCode] = useState("");
@@ -128,8 +127,6 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
 
   const addTableRow = () => {
-    servicetable.push(selectedService)
-    console.log(servicetable,"eeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
     console.log(selectedService,"jjjjjjjjjjjjjjjjjjjj");
     const newRow = {
       id: tableRows.length + 1,
@@ -177,10 +174,6 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
 
 
-
-  // Calculate and update the new total weight
-  const newTotalWeight = tableRows.reduce((acc, row) => acc + row.weight, 0) + weight;
-  setTotalWeight(newTotalWeight);
   };
 
 
@@ -192,9 +185,6 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
       if (event.charCode === 13) {
         addTableRow();
 
-      // Calculate the new total weight by summing up all the weights in tableRows
-      const newTotalWeight = tableRows.reduce((acc, row) => acc + row.weight, 0);
-      setTotalWeight(newTotalWeight);
       }
     }
 
@@ -216,7 +206,6 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
     setSelectedCompanyId(selectedCompanyId); // Store the selected company _id
   };
   const handleRowDelete = (rowId) => {
-    
     // Find the deleted row and get its serviceId
     const deletedRow = tableRows.find((row) => row.id === rowId);
     const deletedServiceId = deletedRow?.serviceId;
@@ -252,6 +241,21 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
 
   const handleSaveButtonClick = async () => {
+     const newRow = {
+    id: tableRows.length + 1,
+    serviceId: selectedServiceId,
+    serviceName: selectedService.servicename,
+    HSNCode: selectedHSNCode,
+    weight,
+    amount,
+    total: weight * amount,
+  };
+
+  // Add the new row to the tableRows
+  const updatedRows = [...tableRows, newRow];
+  setTableRows(updatedRows);
+
+  console.log(tableRows);
     console.log(subtotal, gst18, CGST, SGST, totalAmount);
     if (!selectedCompanyId) {
       toast.error("Please select a company", {
@@ -452,8 +456,8 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
                         <option value="">Select Service Name</option>
 
                         {/* Mapping through servicedetails */}
-                        {servicedetails && servicedetails.map((item) => (
-                          <option key={item._id} value={item._id}>{item.servicename}</option>
+                        {servicedetails && servicedetails.map((item,index) => (
+                          <option key={index} value={item._id}>{item.servicename}</option>
                         ))}
                       </select>
                     </td>
