@@ -20,6 +20,14 @@ function Invoicetables({ invoices }) {
   return (
     <>
       <div className='container-fluid p-5'>
+        {/* Invoice Heading */}
+        <div className='mb-4'>
+          <h1 className='text-center mb-3'>Invoice Management</h1>
+          <p className='text-center text-muted'>
+            Welcome to the invoice management page. Below is a list of invoices.
+          </p>
+        </div>
+        {/*  */}
         <div className='row justify-content-center'>
           <div className='col-lg-12 col-md-12 col-sm-12'>
             <div className='mb-3'>
@@ -28,25 +36,25 @@ function Invoicetables({ invoices }) {
               <MDBTable align='middle'>
                 <MDBTableHead>
                   <tr>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       Invoice Number
                     </th>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       box no
                     </th>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       bill no
                     </th>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       company name
                     </th>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       total weight
                     </th>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       Date
                     </th>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       Actions
                     </th>
                   </tr>
