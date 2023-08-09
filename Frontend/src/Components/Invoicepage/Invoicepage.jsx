@@ -23,6 +23,8 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
   const [selectedHSNCode, setSelectedHSNCode] = useState("");
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [selectedServiceId, setSelectedServiceId] = useState(null);
+  const [selectedServiceIds, setSelectedServiceIds] = useState([]);
+  const [enter, setrenter] = useState(false)
   const [boxNo, setBoxNo] = useState("");
   const [airwayBillNo, setAirwayBillNo] = useState("");
 
@@ -78,8 +80,9 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
       setGst18(gstAmount);
       setSGST(gstAmount / 2)
       setCGST(gstAmount / 2)
-      setTotalWeight(totalWeight + weight - totalWeight)
-
+      // Calculate totalWeight based on the weights in tableRows and the current weight
+      const newTotalWeight = tableRows.reduce((acc, row) => acc + row.weight, 0) + weight;
+      setTotalWeight(newTotalWeight);
     } else {
       setTotal(total);
       setSubtotal(subtotal)
@@ -94,13 +97,12 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
     const selectedServiceId = event.target.value;
     const selectedServiceData = servicedetails.find((service) => service._id === selectedServiceId);
     if (selectedServiceData) {
-      console.log(selectedServiceData._id,"hgggggggggddd");
+      console.log(selectedServiceData._id, "hgggggggggddd");
       setSelectedService(selectedServiceData);
-      setSelectedServiceId(selectedServiceData._id); // Store the selected service _id
+      setSelectedServiceId(selectedServiceData._id);
       setSelectedHSNCode(selectedServiceData.HSNCode);
       setAmount(selectedServiceData.Rate);
       setTotal(weight * selectedServiceData.Rate);
-      // setSubtotal(weight*selectedService.Rate)
     } else {
       setSelectedService(null);
       setSelectedServiceId(null); // Reset the selected service _id
@@ -127,10 +129,8 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
 
   const addTableRow = () => {
-    console.log(selectedService,"jjjjjjjjjjjjjjjjjjjj");
     const newRow = {
       id: tableRows.length + 1,
-      serviceId:selectedService._id,
       serviceName: selectedService.servicename,
       HSNCode: selectedHSNCode,
       weight,
@@ -184,15 +184,10 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
     } else {
       if (event.charCode === 13) {
         addTableRow();
-
       }
     }
 
   };
-
-
-  // ... (previous code)
-
 
   useEffect(() => {
 
@@ -225,6 +220,7 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
     }
 
 
+
     // Recalculate the GST and other related values based on the new subtotal
     const calculatedGst18 = newSubtotal * 0.18;
     const gstRounded = parseFloat(calculatedGst18.toFixed(2));
@@ -240,29 +236,8 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
   };
 
 
+
   const handleSaveButtonClick = async () => {
-     const newRow = {
-    id: tableRows.length + 1,
-    serviceId: selectedServiceId,
-    serviceName: selectedService.servicename,
-    HSNCode: selectedHSNCode,
-    weight,
-    amount,
-    total: weight * amount,
-  };
-
-  // Add the new row to the tableRows
-  const updatedRows = [...tableRows, newRow];
-  setTableRows(updatedRows);
-
-  console.log(tableRows);
-    console.log(subtotal, gst18, CGST, SGST, totalAmount);
-    if (!selectedCompanyId) {
-      toast.error("Please select a company", {
-        hideProgressBar: true,
-      });
-      return;
-    }
 
     if (!boxNo || boxNo.trim() === "") {
       toast.error("Please enter a valid box number", {
@@ -456,7 +431,7 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
                         <option value="">Select Service Name</option>
 
                         {/* Mapping through servicedetails */}
-                        {servicedetails && servicedetails.map((item,index) => (
+                        {servicedetails && servicedetails.map((item, index) => (
                           <option key={index} value={item._id}>{item.servicename}</option>
                         ))}
                       </select>
