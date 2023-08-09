@@ -23,8 +23,6 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
   const [selectedHSNCode, setSelectedHSNCode] = useState("");
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
   const [selectedServiceId, setSelectedServiceId] = useState(null);
-  const [selectedServiceIds, setSelectedServiceIds] = useState([]);
-  const [enter, setrenter] = useState(false)
   const [boxNo, setBoxNo] = useState("");
   const [airwayBillNo, setAirwayBillNo] = useState("");
 
@@ -123,13 +121,22 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
   const handleweightchange = (e) => {
     setWeight(Number(e.target.value))
-
-
   }
 
 
   const addTableRow = () => {
+    if (!selectedService) {
+      toast.error("Please select a service before adding a row", {
+        hideProgressBar: true,
+      });
+      return;
+    }
+
+
+  
+
     const newRow = {
+
       id: tableRows.length + 1,
       serviceName: selectedService.servicename,
       HSNCode: selectedHSNCode,
@@ -167,13 +174,11 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
     setSGST(sgstRounded);
     setCGST(cgstRounded);
 
+
     setSelectedHSNCode("");
     setWeight(0);
     setAmount(0);
     setTotal(0);
-
-
-
   };
 
 
@@ -239,6 +244,9 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
   const handleSaveButtonClick = async () => {
 
+
+
+
     if (!boxNo || boxNo.trim() === "") {
       toast.error("Please enter a valid box number", {
         hideProgressBar: true,
@@ -253,11 +261,42 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
       return;
     }
 
+    console.log(tableRows,"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
     // Map the tableRows to include the serviceId in each row
     const updatedTableRows = tableRows.map(row => ({
+     
       ...row,
-      serviceId: selectedServiceId, // or row.serviceId if you have a serviceId per row
+      serviceId: selectedServiceId, 
+      
+      // or row.serviceId if you have a serviceId per row
     }));
+
+    // new addition -------------------------------------------------------------------------------
+
+    // Create an array to hold the selected service details
+    const selectedServiceDetails = [];
+
+    // If a service is selected, add its details to the array
+    if (selectedService) {
+      console.log(selectedService, "hhhhhhhhhhhh");
+      selectedServiceDetails.push({
+        id: tableRows.length+1,
+        serviceName: selectedService.servicename,
+        HSNCode: selectedService.HSNCode,
+        amount: selectedService.Rate,
+        total: selectedService.Rate * weight,
+        weight: weight,
+      });
+    }
+
+
+
+    // Concatenate the selected service details with the updated tableRows
+    const allDetails = [...updatedTableRows,...selectedServiceDetails];
+
+    // ... (remaining code)
+
+    //  --------------------------------new addition------------------------------------------------------------
 
     // Get all the selected service IDs from both the selectedServiceId and serviceDetails
     const allSelectedServiceIds = [
@@ -282,7 +321,7 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
     };
 
     console.log(dataToSave, "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
-
+    console.log(allDetails);
     // Here you can save the data to your backend or do whatever you need with it
     const response = await AddINVOICEdata(dataToSave);
     if (response.success) {

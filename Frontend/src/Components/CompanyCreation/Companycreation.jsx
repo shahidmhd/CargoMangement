@@ -26,33 +26,33 @@ const CompanyCreation = ({ Company, render, setrender }) => {
                 <div className='row justify-content-center'>
                     <div className='col-lg-12 col-md-10 col-sm-12'>
                         <div className='mb-4 p-2'>
-                            <button onClick={() => setShowModal(true)} className='btn' style={{ backgroundColor: 'lightblue' }}>
+                            <button onClick={() => setShowModal(true)} className='btn' style={{ backgroundColor: 'black', color: 'white' }}>
                                 Add New Company
                             </button>
                         </div>
-                        <div className='p-3' style={{ height: '400px', overflow: 'auto' }}>
+                        <div className='p-3' style={{ height: '700px', overflow: 'auto' }}>
                             <MDBTable align='middle'>
                                 <MDBTableHead>
                                     <tr>
-                                        <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                                        <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                                             NO
                                         </th>
-                                        <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                                        <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                                             company Name
                                         </th>
-                                        <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                                        <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                                             Location
                                         </th>
-                                        <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                                        <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                                             Person
                                         </th>
-                                        <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                                        <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                                             Contact No
                                         </th>
-                                        <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                                        <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                                             Actions
                                         </th>
-                                        <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                                        <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                                             Actions
                                         </th>
                                     </tr>
@@ -61,7 +61,7 @@ const CompanyCreation = ({ Company, render, setrender }) => {
                                     {Company &&
                                         Company.map((item, index) => (
                                             <tr key={item._id}><td>
-                                                <p className='fw-normal mb-1'>{index+1}</p>
+                                                <p className='fw-normal mb-1'>{index + 1}</p>
                                             </td>
 
                                                 <td>
@@ -84,7 +84,7 @@ const CompanyCreation = ({ Company, render, setrender }) => {
                                                     </MDBBadge>
                                                 </td>
                                                 <td>
-                                                    <MDBBadge onClick={() => {
+                                                    <MDBBadge style={{ cursor: 'pointer' }} onClick={() => {
                                                         setSelectedid(item._id)
                                                         setShowdeleteModal(true)
                                                     }} color='danger' pill>

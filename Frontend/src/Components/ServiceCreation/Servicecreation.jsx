@@ -24,42 +24,42 @@ function Servicecreation({ Service, render, setrender }) {
         <div className='row justify-content-center'>
           <div className='col-lg-12 col-md-12 col-sm-12'>
             <div className='mb-3'>
-              <button onClick={() => setShowModal(true)} className='btn btn-primary'>
+              <button onClick={() => setShowModal(true)} className='btn ' style={{ backgroundColor: 'black', color: 'white' }}>
                 Add Service
               </button>
             </div>
-            <div className='p-3' style={{ height: '400px', overflow: 'auto' }}>
+            <div className='p-3' style={{ height: '700px', overflow: 'auto' }}>
               <MDBTable align='middle'>
                 <MDBTableHead>
                   <tr>
-                  <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                  <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       No
                     </th>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       Service Name
                     </th>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       HSNcode
                     </th>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       Rate
                     </th>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       GST
                     </th>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       SGST
                     </th>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       CGST
                     </th>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       UOM(kg)
                     </th>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       Actions
                     </th>
-                    <th style={{ backgroundColor: 'lightblue' }} scope='col'>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       Actions
                     </th>
                   </tr>

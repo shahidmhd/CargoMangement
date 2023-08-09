@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { editcompany } from '../apicalls/Company';
 import { toast } from 'react-toastify';
 
-const Editcompany = ({ showeditModal, setShoweditModal, Company,render,setrender }) => {
+const Editcompany = ({ showeditModal, setShoweditModal, Company, render, setrender }) => {
   const {
     handleSubmit,
     control,
@@ -15,28 +15,28 @@ const Editcompany = ({ showeditModal, setShoweditModal, Company,render,setrender
       location: Company?.location || '',
       person: Company?.person || '',
       contactNo: Company?.contactNo || '',
-      _id:Company?._id || '',
+      _id: Company?._id || '',
     },
   });
 
   const onSubmit = async (data) => {
-    const response=await editcompany(data)
-   if(response.success){
-    toast.success(response.message)
-    setShoweditModal(false)
-    setrender(!render)
-   }else{
-    toast.error(response.message)
-    setShoweditModal(false)
-    setrender(!render)
-   }
-  
-   
+    const response = await editcompany(data)
+    if (response.success) {
+      toast.success(response.message)
+      setShoweditModal(false)
+      setrender(!render)
+    } else {
+      toast.error(response.message)
+      setShoweditModal(false)
+      setrender(!render)
+    }
+
+
   };
 
   // Set form field values when the Company prop changes
   useEffect(() => {
-    setValue('_id',Company?._id || '');
+    setValue('_id', Company?._id || '');
     setValue('companyname', Company?.companyname || '');
     setValue('location', Company?.location || '');
     setValue('person', Company?.person || '');
@@ -47,11 +47,11 @@ const Editcompany = ({ showeditModal, setShoweditModal, Company,render,setrender
     <div className={`modal ${showeditModal ? 'show' : ''}`} tabIndex='-1' style={{ display: showeditModal ? 'block' : 'none' }}>
       <div className='modal-dialog'>
         <div className='modal-content'>
-          <div className='modal-header' style={{ backgroundColor: 'lightblue' }}>
-            <h5 className='modal-title' id='staticBackdropLabel'>
+          <div className='modal-header' style={{ backgroundColor: 'black' }}>
+            <h5 className='modal-title' id='staticBackdropLabel' style={{ color: 'white' }}>
               Edit Company
             </h5>
-            <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' onClick={() => setShoweditModal(false)}></button>
+            <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' style={{ color: 'white', borderColor: 'white' }} onClick={() => setShoweditModal(false)}><i className='fas fa-times'></i></button>
           </div>
           <div className='modal-body'>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -114,16 +114,39 @@ const Editcompany = ({ showeditModal, setShoweditModal, Company,render,setrender
                 />
               </div>
 
-              <div className=''>
-                <button type='submit' className='btn btn-primary btn-block mb-4'>
-                  Edit company
-                </button>
-              </div>
-            </form>
+              <div className='w-100 text-center'>
+              <button
+                type='submit'
+                className='btn btn-primary btn-block mb-4'
+                style={{
+                  display: 'inline-block',
+                  padding: '10px 20px',
+                  fontSize: '16px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  textAlign: 'center',
+                  textDecoration: 'none',
+                  borderRadius: '5px',
+                  transition: 'background-color 0.3s ease',
+                  backgroundColor: 'black'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = 'lightblue';
+                  e.target.style.color = 'black'; // Change text color on hover
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = 'black';
+                  e.target.style.color = 'white'; // Revert text color back to white
+                }}
+              >
+                Edit company
+              </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
+      </div >
+    </div >
   );
 };
 

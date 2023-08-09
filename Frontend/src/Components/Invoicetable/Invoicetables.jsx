@@ -6,7 +6,6 @@ import { getselectedinvioce } from '../../apicalls/Invoice';
 
 function Invoicetables({ invoices }) {
   const navigate = useNavigate()
-  console.log(invoices, "hfdssss");
   function formatDate(dateString) {
     const date = new Date(dateString);
     const formattedDate = date.toLocaleDateString("en-US");

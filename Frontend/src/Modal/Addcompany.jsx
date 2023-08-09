@@ -3,7 +3,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { AddCompanydata } from '../apicalls/Company';
 import { toast } from 'react-toastify';
 
-const AddCompany = ({ showModal, setShowModal,render,setrender }) => {
+
+const AddCompany = ({ showModal, setShowModal, render, setrender }) => {
     const {
         handleSubmit,
         control,
@@ -11,30 +12,38 @@ const AddCompany = ({ showModal, setShowModal,render,setrender }) => {
     } = useForm();
 
     const onSubmit = async (data) => {
-    const response= await AddCompanydata(data)
-    if(response.success){
-        toast.success(response.message)
-        setShowModal(false)
-        setrender(!render)
-    
-    }else{
-        setShowModal(false)
-        setrender(!render)
-        toast.error(response.message)
-    }
-       
+        const response = await AddCompanydata(data)
+        if (response.success) {
+            toast.success(response.message)
+            setShowModal(false)
+            setrender(!render)
+
+        } else {
+            setShowModal(false)
+            setrender(!render)
+            toast.error(response.message)
+        }
+
     };
 
     return (
         <div className={`modal ${showModal ? 'show' : ''}`} tabIndex='-1' style={{ display: showModal ? 'block' : 'none' }}>
             <div className='modal-dialog'>
                 <div className='modal-content'>
-                    <div className='modal-header' style={{ backgroundColor: 'lightblue' }}>
-                        <h5 className='modal-title' id='staticBackdropLabel'>
+                    <div className='modal-header' style={{ backgroundColor: 'black' }}>
+                        <h5 className='modal-title' id='staticBackdropLabel' style={{ color: 'white' }}>
                             Add New Company
                         </h5>
-                        <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' onClick={() => setShowModal(false)}></button>
+                        <button
+                            type='button'
+                            className='btn-close'
+                            data-bs-dismiss='modal'
+                            aria-label='Close'
+                            onClick={() => setShowModal(false)}
+                            style={{ color: 'white', borderColor: 'white' }}
+                        ><i className='fas fa-times'></i></button>
                     </div>
+
                     <div className='modal-body'>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className='form-outline mb-4'>
@@ -96,11 +105,35 @@ const AddCompany = ({ showModal, setShowModal,render,setrender }) => {
                                 />
                             </div>
 
-                            <div className=''>
-                                <button type='submit' className='btn btn-primary btn-block mb-4'>
+                            <div className='w-100 text-center'>
+                                <button
+                                    type='submit'
+                                    className='btn btn-primary btn-block mb-4'
+                                    style={{
+                                        display: 'inline-block',
+                                        padding: '10px 20px',
+                                        fontSize: '16px',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        textAlign: 'center',
+                                        textDecoration: 'none',
+                                        borderRadius: '5px',
+                                        transition: 'background-color 0.3s ease',
+                                        backgroundColor: 'black'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.target.style.backgroundColor = 'lightblue';
+                                        e.target.style.color = 'black'; // Change text color on hover
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.target.style.backgroundColor = 'black';
+                                        e.target.style.color = 'white'; // Revert text color back to white
+                                    }}
+                                >
                                     Add company
                                 </button>
                             </div>
+
                         </form>
                     </div>
                 </div>

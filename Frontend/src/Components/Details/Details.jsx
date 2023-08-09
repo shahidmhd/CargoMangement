@@ -16,6 +16,7 @@ import {
 } from 'mdb-react-ui-kit';
 
 const Details = ({ companydetails, servicedetails }) => {
+    const [detailsArray, setDetailsArray] = useState([]); 
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [Service, Setservice] = useState(null);
     const [HSNCode, setHSNCode] = useState('');
@@ -28,19 +29,30 @@ const Details = ({ companydetails, servicedetails }) => {
     const [CGST, setCGST] = useState(0);
     const [count, setcount] = useState(1);
     const [weight, setweight] = useState(0);
-    const [tableRows, setTableRows] = useState([
-        {
-            id: 1,
-            serviceName: '',
-            HSNCode: '',
-            weight: 0,
-            amount: 0,
-            total: 0,
-        },
-    ]);
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
+    };
+
+    console.log(detailsArray);
+    const handleSave = () => {
+        // Create a new detail object based on user inputs
+        const newDetail = {
+            Service,
+            HSNCode,
+            weight,
+            Rate,
+            subtotal,
+            Total,
+        };
+
+        // Add the new detail to the detailsArray
+        setDetailsArray([...detailsArray, newDetail]);
+
+        // Reset form fields or perform other necessary actions
+        // ...
+
+        
     };
 
     const handleServiceChange = (serviceId) => {
@@ -247,7 +259,7 @@ const Details = ({ companydetails, servicedetails }) => {
                                         <td>
 
 
-                                            <MDBIcon style={{ color: 'green', cursor: 'pointer' }} fas icon="plus" />
+                                            <MDBIcon  onClick={handleSave} style={{ color: 'green', cursor: 'pointer' }} fas icon="plus" />
 
 
 
