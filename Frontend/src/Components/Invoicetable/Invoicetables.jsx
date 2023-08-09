@@ -24,7 +24,7 @@ function Invoicetables({ invoices }) {
           <div className='col-lg-12 col-md-12 col-sm-12'>
             <div className='mb-3'>
             </div>
-            <div className='p-3' style={{ height: '400px', overflow: 'auto' }}>
+            <div className='p-3' style={{ height: '700px', overflow: 'auto' }}>
               <MDBTable align='middle'>
                 <MDBTableHead>
                   <tr>

@@ -55,11 +55,11 @@ const Addservice = ({ showModal, setShowModal,render,setrender }) => {
             <div className={`modal ${showModal ? 'show' : ''}`} tabIndex='-1' style={{ display: showModal ? 'block' : 'none' }}>
                 <div className='modal-dialog'>
                     <div className='modal-content'>
-                        <div className='modal-header' style={{ backgroundColor: 'lightblue' }}>
-                            <h5 className='modal-title' id='staticBackdropLabel'>
+                        <div className='modal-header' style={{ backgroundColor: 'black' }}>
+                            <h5 className='modal-title' id='staticBackdropLabel' style={{color:'white'}}>
                                 Add Service
                             </h5>
-                            <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' onClick={() => setShowModal(false)}></button>
+                            <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' style={{ color: 'white', borderColor: 'white' }} onClick={() => setShowModal(false)}><i className='fas fa-times'></i></button>
                         </div>
                         <div className='modal-body'>
                             <form onSubmit={handleSubmit(onSubmit)}>
@@ -188,11 +188,34 @@ const Addservice = ({ showModal, setShowModal,render,setrender }) => {
                                     </div>
                                 </div>
                                
-                                <div className=''>
-                                    <button type='submit' className='btn btn-primary btn-block mb-4'>
-                                        Add service
-                                    </button>
-                                </div>
+                                <div className='w-100 text-center'>
+                                <button
+                                    type='submit'
+                                    className='btn btn-primary btn-block mb-4'
+                                    style={{
+                                        display: 'inline-block',
+                                        padding: '10px 20px',
+                                        fontSize: '16px',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        textAlign: 'center',
+                                        textDecoration: 'none',
+                                        borderRadius: '5px',
+                                        transition: 'background-color 0.3s ease',
+                                        backgroundColor: 'black'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.target.style.backgroundColor = 'lightblue';
+                                        e.target.style.color = 'black'; // Change text color on hover
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.target.style.backgroundColor = 'black';
+                                        e.target.style.color = 'white'; // Revert text color back to white
+                                    }}
+                                >
+                                    Add Service
+                                </button>
+                            </div>
                             </form>
                         </div>
                     </div>

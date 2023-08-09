@@ -310,7 +310,7 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
       invoiceNumber,
       boxNo,
       airwayBillNo,
-      tableRows: updatedTableRows, // Use the updated tableRows
+      tableRows: allDetails, // Use the updated tableRows
       subtotal,
       gst18,
       SGST,

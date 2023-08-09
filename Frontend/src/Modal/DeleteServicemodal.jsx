@@ -15,11 +15,11 @@ const DeleteserviceModal = ({setShowdeleteModal,render,setrender,id}) => {
             <div className='modal show' tabIndex='-1' style={{ display: 'block' }}>
                 <div className='modal-dialog'>
                     <div className='modal-content'>
-                        <div className='modal-header' style={{ backgroundColor: 'lightblue' }}>
-                            <h5 className='modal-title' id='staticBackdropLabel'>
-                                Delete Company
+                        <div className='modal-header' style={{ backgroundColor: 'black' }}>
+                            <h5 className='modal-title' id='staticBackdropLabel' style={{color:'white'}}>
+                                Delete Service
                             </h5>
-                            <button onClick={() => setShowdeleteModal(false)} type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' ></button>
+                            <button onClick={() => setShowdeleteModal(false)} type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' style={{ color: 'white', borderColor: 'white',cursor:'pointer' }}  ><i className='fas fa-times'></i></button>
                         </div>
                         <div className='modal-body'>
                             <p>Are you sure you want to delete this company?</p>

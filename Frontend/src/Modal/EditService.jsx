@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import service from '../../../Backend/models/Servicemodel';
 import { editservice } from '../apicalls/Service';
 
-const EditService = ({ showeditModal, setShoweditModal, Service,render,setrender }) => {
+const EditService = ({ showeditModal, setShoweditModal, Service, render, setrender }) => {
   const {
     handleSubmit,
     control,
@@ -22,8 +22,8 @@ const EditService = ({ showeditModal, setShoweditModal, Service,render,setrender
     setValue('SGST', sgst.toFixed(2)); // Set SGST value
   };
 
-  const onSubmit = async(data) => {
-    console.log(data,"ser");
+  const onSubmit = async (data) => {
+    console.log(data, "ser");
     // Your logic to handle the form data and update the service should go here.
     data.GST = parseFloat(data.GST);
     data.SGST = parseFloat(data.SGST);
@@ -31,11 +31,11 @@ const EditService = ({ showeditModal, setShoweditModal, Service,render,setrender
     // data.UOM = parseInt(data.UOM, 10);
     data.Rate = parseFloat(data.Rate);
     const response = await editservice(data)
-    if(response.success){
+    if (response.success) {
       setShoweditModal(false)
       setrender(!render)
     }
-    
+
   };
 
   return (
@@ -43,11 +43,11 @@ const EditService = ({ showeditModal, setShoweditModal, Service,render,setrender
       <div className={`modal ${showeditModal ? 'show' : ''}`} tabIndex='-1' style={{ display: showeditModal ? 'block' : 'none' }}>
         <div className='modal-dialog'>
           <div className='modal-content'>
-            <div className='modal-header' style={{ backgroundColor: 'lightblue' }}>
-              <h5 className='modal-title' id='staticBackdropLabel'>
+            <div className='modal-header' style={{ backgroundColor: 'black' }}>
+              <h5 className='modal-title' id='staticBackdropLabel' style={{ color: 'white' }}>
                 Edit Service
               </h5>
-              <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' onClick={() => setShoweditModal(false)}></button>
+              <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' style={{ color: 'white', borderColor: 'white' }} onClick={() => setShoweditModal(false)}><i className='fas fa-times'></i></button>
             </div>
             <div className='modal-body'>
               <form onSubmit={handleSubmit(onSubmit)}>
@@ -168,10 +168,33 @@ const EditService = ({ showeditModal, setShoweditModal, Service,render,setrender
                   </div>
                 </div>
 
-               
-                <div className=''>
-                  <button type='submit' className='btn btn-primary btn-block mb-4'>
-                    Edit service
+
+                <div className='w-100 text-center'>
+                  <button
+                    type='submit'
+                    className='btn btn-primary btn-block mb-4'
+                    style={{
+                      display: 'inline-block',
+                      padding: '10px 20px',
+                      fontSize: '16px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      textAlign: 'center',
+                      textDecoration: 'none',
+                      borderRadius: '5px',
+                      transition: 'background-color 0.3s ease',
+                      backgroundColor: 'black'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = 'lightblue';
+                      e.target.style.color = 'black'; // Change text color on hover
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = 'black';
+                      e.target.style.color = 'white'; // Revert text color back to white
+                    }}
+                  >
+                    Edit company
                   </button>
                 </div>
               </form>
