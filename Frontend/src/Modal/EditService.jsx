@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import service from '../../../Backend/models/Servicemodel';
 import { editservice } from '../apicalls/Service';
+import { toast } from 'react-toastify';
 
 const EditService = ({ showeditModal, setShoweditModal, Service, render, setrender }) => {
   const {
@@ -34,6 +34,7 @@ const EditService = ({ showeditModal, setShoweditModal, Service, render, setrend
     if (response.success) {
       setShoweditModal(false)
       setrender(!render)
+      toast.success("service edited successfully")
     }
 
   };

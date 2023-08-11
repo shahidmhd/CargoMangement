@@ -25,7 +25,7 @@ const corsOptions = {
   preflightContinue: true, // Allow preflight requests to pass through
 };
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use(morgan('dev'))
 app.use(express.urlencoded({ extended: true }))

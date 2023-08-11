@@ -65,7 +65,7 @@ const Sidebar = () => {
               Invoice
             </CDBSidebarMenuItem>
             <CDBSidebarMenuItem icon="th-large" onClick={handleInvoictableclick}>
-              Invoice Table
+              Invoice Details
             </CDBSidebarMenuItem>
           </CDBSidebarMenu>
         </CDBSidebarContent>
@@ -74,7 +74,6 @@ const Sidebar = () => {
           <div className="sidebar-btn-wrapper" style={{ padding: '20px 5px' }}>
             <CDBSidebarMenu>
               <CDBSidebarMenuItem icon="credit-card" iconType="solid" onClick={handlelogout} >
-                <i className="fa fa-sign-out" aria-hidden="true" /> {/* Font Awesome logout icon */}
                 logout
               </CDBSidebarMenuItem>
             </CDBSidebarMenu>

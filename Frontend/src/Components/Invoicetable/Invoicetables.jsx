@@ -100,7 +100,7 @@ function Invoicetables({ invoices, render, setrender }) {
                           <p className='fw-normal mb-1'>{item.airwayBillNo}</p>
                         </td>
                         <td>
-                          <p className='fw-normal mb-1'>{item.selectedCompanyId.companyname}</p>
+                          <p className='fw-normal mb-1'>{item.selectedCompanyId.companyname?item.selectedCompanyId.companyname:''}</p>
                         </td>
                         <td>
                           <p className='fw-normal mb-1'>{item.totalWeight}</p>

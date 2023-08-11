@@ -16,7 +16,7 @@ import {
 } from 'mdb-react-ui-kit';
 
 const Details = ({ companydetails, servicedetails, invoiceData }) => {
-    console.log(invoiceData);
+    console.log(invoiceData,"ggggggggggggggggggggggggggggggggggggggggg");
     const [selectedDate, setSelectedDate] = useState(new Date());
    
 
@@ -152,9 +152,6 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
                                         <th scope="col" style={{ backgroundColor: "#79c8db", color: "white" }}>
                                             Total
                                         </th>
-                                        <th scope="col" style={{ backgroundColor: "#79c8db", color: "white" }}>
-                                            option
-                                        </th>
                                     </tr>
                                 </MDBTableHead>
                                 <MDBTableBody style={{ justifyItems: "center" }}>
@@ -199,10 +196,7 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
                                                 />
                                             </td>
                                             <td>{row.total || 0}</td>
-                                            <td>
-                                                {/* <MDBIcon onClick={handleSave} style={{ color: 'green', cursor: 'pointer' }} fas icon="plus" /> */}
-                                                <MDBIcon onClick={() => handleDeleteRow(index)} style={{ color: 'red',cursor:'pointer' }} fas icon="trash-alt" />
-                                            </td>
+                                          
                                         </tr>
                                     ))}
 
