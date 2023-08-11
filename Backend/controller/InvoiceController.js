@@ -61,6 +61,21 @@ export default {
                 message: err.message
             });
         }
+    },
+    Deleteinvoice:async(req,res)=>{
+        try {
+            const { id } = req.params
+            await invoice.findByIdAndDelete({ _id: id });
+            res.json({
+                success: true,
+                message: "invoice deleted successfully",
+            })
+        } catch (err) {
+            res.json({
+                success: false,
+                message: err.message
+            })
+        }
     }
    
    

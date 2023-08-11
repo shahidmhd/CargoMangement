@@ -6,6 +6,7 @@ import { getallinvoices } from '../apicalls/Invoice'
 
 const Invoicetable = () => {
     const [invoices,setallinvoices]=useState([])
+    const [render,setrender]=useState(false)
 const  getallinvoice=async()=>{
    const response=await getallinvoices()
    console.log(response.Data);
@@ -13,12 +14,12 @@ const  getallinvoice=async()=>{
 }
    useEffect(()=>{
     getallinvoice()
-   },[])
+   },[render])
   return (
    <>
      <div style={{ display: 'flex'}}>
             <Sidebar />
-            <Invoicetables invoices={invoices} />
+            <Invoicetables render={render} setrender={setrender} invoices={invoices} />
         </div>
    </>
   )

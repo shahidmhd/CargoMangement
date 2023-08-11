@@ -15,94 +15,34 @@ import {
     MDBBtn,
 } from 'mdb-react-ui-kit';
 
-const Details = ({ companydetails, servicedetails }) => {
-    const [detailsArray, setDetailsArray] = useState([]); 
+const Details = ({ companydetails, servicedetails, invoiceData }) => {
+    console.log(invoiceData);
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [Service, Setservice] = useState(null);
-    const [HSNCode, setHSNCode] = useState('');
-    const [Rate, setRate] = useState(0);
-    const [Total, setTotal] = useState(0);
-    const [subtotal, setsubtotal] = useState(0);
-    const [Totalamount, setTotalamount] = useState(0);
-    const [gst, setgst] = useState(0);
-    const [SGST, setSGST] = useState(0);
-    const [CGST, setCGST] = useState(0);
-    const [count, setcount] = useState(1);
-    const [weight, setweight] = useState(0);
+   
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
     };
 
-    console.log(detailsArray);
+    
     const handleSave = () => {
-        // Create a new detail object based on user inputs
-        const newDetail = {
-            Service,
-            HSNCode,
-            weight,
-            Rate,
-            subtotal,
-            Total,
-        };
+      
 
-        // Add the new detail to the detailsArray
-        setDetailsArray([...detailsArray, newDetail]);
 
-        // Reset form fields or perform other necessary actions
-        // ...
-
-        
     };
 
     const handleServiceChange = (serviceId) => {
-        const selectedService = servicedetails.find((item) => item._id === serviceId);
-        Setservice(selectedService);
-        setHSNCode(selectedService.HSNCode);
-        setRate(selectedService.Rate);
-        setTotal(weight*selectedService.Rate);
-        setsubtotal(selectedService.Rate);
-
-        // Calculate the GST amount
-        const gstAmount = (selectedService.Rate * selectedService.GST) / 100;
-        setgst(gstAmount);
-        setSGST(gstAmount / 2);
-        setCGST(gstAmount / 2);
-        setTotalamount(selectedService.Rate + gstAmount);
+      
 
     };
 
     const handleamountchange = (amount) => {
-        if (amount) {
-            setRate(amount);
-        } else {
-            setRate(Service.Rate);
-        }
+      
 
     }
 
     const handleweightchange = (weight) => {
-        setweight(weight);
-        if (weight) {
-            setRate(weight * Service.Rate);
-            setTotal(Service.Rate * weight);
-            setsubtotal(Service.Rate * weight);
-            const gstAmount = (Service.Rate * weight * Service.GST) / 100;
-            setgst(gstAmount);
-            setSGST(gstAmount / 2);
-            setCGST(gstAmount / 2);
-            setTotalamount(Service.Rate*weight + gstAmount);
-        } else {
-            const defaultValue = Service.Rate;
-            setRate(defaultValue);
-            setTotal(weight*Service.Rate);
-            setsubtotal(Service.Rate);
-            const gstAmount = (Service.Rate * Service.GST) / 100;
-            setgst(gstAmount);
-            setSGST(gstAmount / 2);
-            setCGST(gstAmount / 2);
-            setTotalamount(Service.Rate + gstAmount);
-        }
+      
     };
 
 
@@ -132,7 +72,7 @@ const Details = ({ companydetails, servicedetails }) => {
                             </p>
                             <p className='date-input'>
                                 <DatePicker selected={selectedDate} onChange={handleDateChange} dateFormat="dd/MM/yyyy" placeholderText="Select a date" className='datepicker' /><br />
-                                <b> Invoice NO:B2C01</b>
+                                <b> Invoice NO:{invoiceData?.invoiceNumber}</b>
                             </p>
                         </div>
                     </div>
@@ -152,8 +92,9 @@ const Details = ({ companydetails, servicedetails }) => {
                                             <select
                                                 className="select"
                                                 style={{ border: 'none', background: 'none', color: 'black', padding: '5px' }}
+
                                             >
-                                                <option value="">Select company</option>
+                                                <option value={invoiceData?.selectedCompanyId._id}>{invoiceData?.selectedCompanyId.companyname}</option>
                                                 {companydetails &&
                                                     companydetails.map((item) => (
                                                         <option key={item._id} value={item._id}>
@@ -164,7 +105,7 @@ const Details = ({ companydetails, servicedetails }) => {
                                         </li>
                                         <li className="text-muted" style={{ paddingLeft: "5%" }}>
                                             {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA",paddingLeft:"20%"}} /> */}
-                                            <span className="fw-bold ms-1"></span>Box No:<input type='number' style={{ width: "100px" }} ></input>
+                                            <span className="fw-bold ms-1"></span>Box No:<input type='number' value={invoiceData?.boxNo} style={{ width: "100px" }} ></input>
                                         </li>
                                         <li className="text-muted" style={{ paddingLeft: "5%" }}>
                                             {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA",paddingLeft:"20%"}} /> */}
@@ -176,11 +117,11 @@ const Details = ({ companydetails, servicedetails }) => {
                                                     display: "inline-block",
                                                     padding: "5px"
                                                 }}
-                                            >rrew</div>
+                                            >{invoiceData?.totalWeight}</div>
                                         </li>
                                         <li className="text-muted" style={{ paddingLeft: "5%" }}>
                                             {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA", paddingLeft:"20%" }} /> */}
-                                            <span className="fw-bold ms-1"></span>AirwayBill N.O:<input type='number' style={{ width: "100px" }}
+                                            <span className="fw-bold ms-1"></span>AirwayBill N.O:<input type='number' value={invoiceData?.airwayBillNo} style={{ width: "100px" }}
                                             ></input>
                                         </li>
                                     </div>
@@ -218,55 +159,53 @@ const Details = ({ companydetails, servicedetails }) => {
                                 </MDBTableHead>
                                 <MDBTableBody style={{ justifyItems: "center" }}>
 
-                                    <tr >
-                                        <td>{count}</td>
-                                        <td>
-                                            <select
-                                                className="select"
-                                                style={{
-                                                    border: 'none',
-                                                    background: 'none',
-                                                    color: 'black',
-                                                    padding: '5px',
-                                                }}
-                                                onChange={(e) => handleServiceChange(e.target.value)}
-                                            >
-                                                <option value="">Select Service Name</option>
-                                                {servicedetails &&
-                                                    servicedetails.map((item) => (
-                                                        <option key={item._id} value={item._id}>
-                                                            {item.servicename}
-                                                        </option>
-                                                    ))}
-                                            </select>
-                                        </td>
-                                        <td>{HSNCode ? HSNCode : ''}</td>
-                                        <td>
-                                            <input
-                                                type="number"
-                                                value={weight}
-                                                onChange={(e) => handleweightchange(e.target.value)}
-                                            />
-                                        </td>
-                                        <td>
-                                            <input
-                                                type="number"
-                                                value={Rate ? Rate : ''}
-                                                onChange={(e) => handleamountchange(e.target.value)}
-                                            />
-                                        </td>
-                                        <td>{Total ? Total : 0}</td>
-                                        <td>
+                                    {invoiceData?.tableRows.map((row, index) => (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td>
+                                                <select
+                                                    className="select"
+                                                    style={{
+                                                        border: 'none',
+                                                        background: 'none',
+                                                        color: 'black',
+                                                        padding: '5px',
+                                                    }}
+                                                    value={row.id} // Assuming 'id' is the property representing service id
+                                                    onChange={(e) => handleServiceChange(index, e.target.value)}
+                                                >
+                                                    <option value="">{row.serviceName}</option>
+                                                    {servicedetails &&
+                                                        servicedetails.map((item) => (
+                                                            <option key={item._id} value={item._id}>
+                                                                {item.servicename}
+                                                            </option>
+                                                        ))}
+                                                </select>
+                                            </td>
+                                            <td>{row.HSNCode}</td>
+                                            <td>
+                                                <input
+                                                    type="number"
+                                                    value={row.weight}
+                                                    onChange={(e) => handleweightchange(index, e.target.value)}
+                                                />
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="number"
+                                                    value={row.amount || defaultRate}
+                                                    onChange={(e) => handleamountchange(index, e.target.value)}
+                                                />
+                                            </td>
+                                            <td>{row.total || 0}</td>
+                                            <td>
+                                                {/* <MDBIcon onClick={handleSave} style={{ color: 'green', cursor: 'pointer' }} fas icon="plus" /> */}
+                                                <MDBIcon onClick={() => handleDeleteRow(index)} style={{ color: 'red',cursor:'pointer' }} fas icon="trash-alt" />
+                                            </td>
+                                        </tr>
+                                    ))}
 
-
-                                            <MDBIcon  onClick={handleSave} style={{ color: 'green', cursor: 'pointer' }} fas icon="plus" />
-
-
-
-                                            {/* <MDBIcon onClick={() => handleDeleteRow(index)} style={{ color: 'red',cursor:'pointer' }} fas icon="trash-alt" /> */}
-
-                                        </td>
-                                    </tr>
 
                                 </MDBTableBody>
 
@@ -280,21 +219,21 @@ const Details = ({ companydetails, servicedetails }) => {
                         <MDBCol xl="3">
                             <MDBTypography listUnStyled>
                                 <li className="text-muted ms-3">
-                                    <span className="text-black me-4">SubTotal</span>₹{subtotal ? subtotal : 0}
+                                    <span className="text-black me-4">SubTotal</span>₹{invoiceData?.subtotal}
                                 </li>
                                 <li className="text-muted ms-3 mt-2">
-                                    <span className="text-black me-4">GST 18%</span>₹{gst ? gst : 0}
+                                    <span className="text-black me-4">GST 18%</span>₹{invoiceData?.gst18}
                                 </li>
                                 <li className="text-muted ms-3 mt-2">
-                                    <span className="text-black me-4">SGST 9%</span>₹{SGST ? SGST : 0}
+                                    <span className="text-black me-4">SGST 9%</span>₹{invoiceData?.SGST}
                                 </li>
                                 <li className="text-muted ms-3 mt-2">
-                                    <span className="text-black me-4">CGST 9%</span>₹{CGST ? CGST : 0}
+                                    <span className="text-black me-4">CGST 9%</span>₹{invoiceData?.CGST}
                                 </li>
                             </MDBTypography>
                             <p className="text-black float-start">
                                 <span className="text-black me-3">Total Amount</span>
-                                <span style={{ fontSize: "25px" }}>₹{Totalamount ? Totalamount : '0'}</span>
+                                <span style={{ fontSize: "25px" }}>₹{invoiceData?.totalAmount}</span>
                             </p>
                         </MDBCol>
                     </MDBRow>

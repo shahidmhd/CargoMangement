@@ -3,6 +3,8 @@ import Sidebar from '../Components/Sidebar/Sidebar'
 import Details from '../Components/Details/Details'
 import { getallcompanies } from '../apicalls/Company'
 import { getallServices } from '../apicalls/Service'
+import { useParams } from 'react-router-dom'
+import { getselectedinvioce } from '../apicalls/Invoice'
 const Detailpage = () => {
     const [companydetails, setcompanydetails] = useState([]);
     const [servicedetails, setservicedetails] = useState([]);
@@ -18,6 +20,22 @@ const Detailpage = () => {
         console.log(responseservice, "servicedetails");
         setservicedetails(responseservice.Data)
       }
+      const { id } = useParams();
+  const [invoiceData, setInvoiceData] = useState(null);
+
+console.log(invoiceData);
+  useEffect(() => {
+      const fetchInvoiceData = async () => {
+          try {
+              const response = await getselectedinvioce(id);
+              setInvoiceData(response.Data);
+          } catch (error) {
+           console.log(error);
+          }
+      };
+
+      fetchInvoiceData();
+  }, [id]);
 
     useEffect(()=>{
         getcomapanydata()
@@ -26,7 +44,7 @@ const Detailpage = () => {
   return (
     <div style={{ display: 'flex'}}>
             <Sidebar />
-            <Details companydetails={companydetails} servicedetails={servicedetails}/>
+            <Details companydetails={companydetails} servicedetails={servicedetails} invoiceData={invoiceData}/>
         </div>
   )
 }

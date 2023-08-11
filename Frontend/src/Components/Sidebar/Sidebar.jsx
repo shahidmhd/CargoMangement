@@ -43,9 +43,7 @@ const Sidebar = () => {
     navigate('/table')
   }
 
-  const handledetailclick=()=>{
-    navigate('/detail')
-  }
+
 
 
 
@@ -68,9 +66,6 @@ const Sidebar = () => {
             </CDBSidebarMenuItem>
             <CDBSidebarMenuItem icon="th-large" onClick={handleInvoictableclick}>
               Invoice Table
-            </CDBSidebarMenuItem>
-            <CDBSidebarMenuItem icon="th-large" onClick={handledetailclick}>
-              Detail
             </CDBSidebarMenuItem>
           </CDBSidebarMenu>
         </CDBSidebarContent>

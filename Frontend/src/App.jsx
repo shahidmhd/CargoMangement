@@ -49,7 +49,7 @@ const App = () => {
             element={token ? <Invoicetable /> : <Navigate to={'/login'} />}
           />
           <Route
-            path='/detail'
+            path='/detail/:id'
             element={token ? <Detailpage /> : <Navigate to={'/login'} />}
           />
 

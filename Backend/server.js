@@ -8,6 +8,7 @@ import mongoose from 'mongoose'
 import errorHandlingMidlleware from "./Middlewear/errorHandlingMidleware.js";
 
 
+
 dotenv.config()
 
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(cors())
 app.use(morgan('dev'))
 app.use(express.urlencoded({extended:true}))
+
 
 
 app.use('/api/users',UserRouters)

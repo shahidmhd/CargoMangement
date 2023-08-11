@@ -23,5 +23,5 @@ router.get('/service',userAuthMid,ServiceController.GetAllservice)
 router.post('/invoice',userAuthMid,Invoicecontroller.AddINVOICE)
 router.get('/invoice',userAuthMid,Invoicecontroller.GetAllinvoice)
 router.get('/invoice/:id',userAuthMid,Invoicecontroller.GetSelectedinvoice)
-
+router.delete('/invoice/:id',userAuthMid,Invoicecontroller.Deleteinvoice)
 export default router;

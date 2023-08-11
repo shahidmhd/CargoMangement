@@ -114,7 +114,6 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
   const handleAmountChange = (event) => {
     setAmount(event.target.value);
-    // setTotal(weight * event.target.value);
   };
 
 
@@ -131,13 +130,9 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
       });
       return;
     }
-
-
-  
-
     const newRow = {
-
       id: tableRows.length + 1,
+      serviceId:selectedService._id,
       serviceName: selectedService.servicename,
       HSNCode: selectedHSNCode,
       weight,

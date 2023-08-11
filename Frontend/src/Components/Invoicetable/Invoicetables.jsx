@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { MDBBadge, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import { useNavigate } from 'react-router-dom';
-import { getselectedinvioce } from '../../apicalls/Invoice';
+import { deleteInvoice, getselectedinvioce } from '../../apicalls/Invoice';
+import { toast } from 'react-toastify';
 
 
-function Invoicetables({ invoices }) {
+function Invoicetables({ invoices, render, setrender }) {
   const navigate = useNavigate()
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -12,11 +13,27 @@ function Invoicetables({ invoices }) {
     return formattedDate;
   }
 
-  const handleprintpage = async(item) => {
+  const handleprintpage = async (item) => {
     console.log(item);
-    const response=await getselectedinvioce(item._id)
+    const response = await getselectedinvioce(item._id)
     navigate(`/print/${item._id}`);
   };
+
+
+  const handledeletepage = async (item) => {
+    console.log(item);
+    const response = await deleteInvoice(item._id)
+    console.log(response);
+    if (response.success) {
+      toast.success("invoice deleted")
+      setrender(!render)
+    }
+  }
+
+  const handleeditpage = (invoiceid) => {
+    navigate(`/detail/${invoiceid}`)
+
+  }
   return (
     <>
       <div className='container-fluid p-5'>
@@ -57,6 +74,12 @@ function Invoicetables({ invoices }) {
                     <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       Actions
                     </th>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
+                      Actions
+                    </th>
+                    <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
+                      Actions
+                    </th>
                   </tr>
                 </MDBTableHead>
                 <MDBTableBody>
@@ -87,8 +110,18 @@ function Invoicetables({ invoices }) {
                         </td>
 
                         <td>
-                          <MDBBadge  onClick={() => handleprintpage(item)} color='black' pill>
+                          <MDBBadge onClick={() => handleprintpage(item)} color='black' pill>
                             deatails
+                          </MDBBadge>
+                        </td>
+                        <td>
+                          <MDBBadge onClick={() => handleeditpage(item._id)} color='primary' pill>
+                            Edit
+                          </MDBBadge>
+                        </td>
+                        <td>
+                          <MDBBadge onClick={() => handledeletepage(item)} color='danger' pill>
+                            delete
                           </MDBBadge>
                         </td>
                       </tr>

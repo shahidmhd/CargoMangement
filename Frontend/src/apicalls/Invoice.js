@@ -2,9 +2,9 @@ import instance from "./axiosinstance";
 
 export const AddINVOICEdata = async (payload) => {
     try {
-console.log(payload,"lllllllllllllllllll");
+        console.log(payload, "lllllllllllllllllll");
         const response = await instance.post('/api/users/invoice', payload);
-        console.log(response,"vjj");
+        console.log(response, "vjj");
         return response.data
     } catch (err) {
         return err.message;
@@ -32,4 +32,11 @@ export const getselectedinvioce = async (invoiceid) => {
 
 
 
-
+export const deleteInvoice = async (invoiceid) => {
+    try {
+        const response = await instance.delete(`/api/users/invoice/${invoiceid}`);;
+        return response.data
+    } catch (err) {
+        return err.message;
+    }
+}
