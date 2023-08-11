@@ -15,7 +15,7 @@ dotenv.config()
 const port = process.env.PORT;
 app.use(express.json());
 const corsOptions = {
-  origin: ['https://cargo-management.onrender.com', 'https://www.cargo-management.onrender.com'],
+  origin: ['https://cargo-management.onrender.com', 'https://www.cargo-management.onrender.com','http://cargo-management.onrender.com'],
   methods: ['GET', 'POST'],
 };
 
