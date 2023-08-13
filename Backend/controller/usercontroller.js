@@ -6,7 +6,6 @@ export default {
     LoginUser: async (req, res) => {
         try {
             const user = await User.findOne({ email: req.body.email }).exec();
-            console.log(user);
             if (user) {
                 const validaPassword = await bcrypt.compare(req.body.password, user.password);
                 if (!validaPassword) {

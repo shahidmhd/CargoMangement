@@ -94,7 +94,7 @@ const AddCompany = ({ showModal, setShowModal, render, setrender }) => {
                                     control={control}
                                     rules={{
                                         required: 'Contact No is required',
-                                        pattern: { value: /^[0-9]+$/, message: 'Invalid contact number' },
+                                        pattern: { value: /^[0-9]{10}$/, message: 'Contact number must be exactly 10 digits' },
                                     }}
                                     render={({ field }) => (
                                         <>
@@ -104,6 +104,7 @@ const AddCompany = ({ showModal, setShowModal, render, setrender }) => {
                                     )}
                                 />
                             </div>
+
 
                             <div className='w-100 text-center'>
                                 <button

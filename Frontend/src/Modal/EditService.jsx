@@ -195,7 +195,7 @@ const EditService = ({ showeditModal, setShoweditModal, Service, render, setrend
                       e.target.style.color = 'white'; // Revert text color back to white
                     }}
                   >
-                    Edit company
+                    Edit Service
                   </button>
                 </div>
               </form>
