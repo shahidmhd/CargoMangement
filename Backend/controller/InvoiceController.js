@@ -3,18 +3,18 @@ import invoice from '../models/Invoicemodel.js'
 export default {
     AddINVOICE: async (req, res) => {
         try {
-           console.log(req.body);
-           // Create a new Company instance with the extracted data
-          const newservice = new invoice(req.body);
-  
-          // Save the new company to the database
-          await newservice.save();
-  
+            console.log(req.body);
+            // Create a new Company instance with the extracted data
+            const newservice = new invoice(req.body);
+            // Save the new company to the database
+            await newservice.save();
+
             res.status(200).json({
                 success: true,
                 message: "invoice added successfully.",
             });
         } catch (err) {
+            console.log(err, "error");
             // If an error occurs, respond with an error message
             res.status(500).json({
                 success: false,
@@ -28,11 +28,11 @@ export default {
             const response = await invoice.find().sort({ createdAt: -1 }).populate('selectedCompanyId');
             if (response) {
                 res.json({
-                    success:true,
-                    message:"getting all invoice",
-                    Data:response
+                    success: true,
+                    message: "getting all invoice",
+                    Data: response
                 })
-            }else{
+            } else {
                 throw new Error(" invoice not found !!");
             }
         } catch (err) {
@@ -62,7 +62,7 @@ export default {
             });
         }
     },
-    Deleteinvoice:async(req,res)=>{
+    Deleteinvoice: async (req, res) => {
         try {
             const { id } = req.params
             await invoice.findByIdAndDelete({ _id: id });
@@ -76,9 +76,61 @@ export default {
                 message: err.message
             })
         }
-    }
-   
-   
+    },
+    EditINVOICE: async (req, res) => {
+        try {
+            const { id } = req.params;
+            console.log(id, "iddddddddddddddddddddddddddddddddddddddddddddddddd");
+            console.log(req.body);
+
+            const Invoice = await invoice.findById(id);
+            if (!Invoice) {
+                // If the company with the given ID is not found, throw an error
+                throw new Error("invoice not found.");
+            } else {
+
+
+                const invoiceNumber = req.body.invoiceNumber;
+                const airwayBillNo = req.body.airwayBillNo;
+                console.log(invoiceNumber, airwayBillNo);
+                // Check if a document with the same invoiceNumber or airwayBillNo already exists
+                const existingInvoice = await invoice.findOne({
+                    $or: [
+                        { invoiceNumber: invoiceNumber },
+                        { airwayBillNo: airwayBillNo }
+                    ]
+                });
+
+                if (existingInvoice) {
+                    // If an invoice with the same invoiceNumber or airwayBillNo exists, respond with an error message
+                    return res.status(400).json({
+                        success: false,
+                        message: "The same invoice number or airway bill number already exists.",
+                    });
+                } else {
+
+
+                    // Create a new Company instance with the extracted data
+                    const newservice = new invoice(req.body);
+                    // Save the new company to the database
+                    await newservice.save();
+
+                    res.status(200).json({
+                        success: true,
+                        message: "invoice added successfully.",
+                    });
+                }
+            }
+        } catch (err) {
+            console.log(err, "error");
+            // If an error occurs, respond with an error message
+            res.status(500).json({
+                success: false,
+                message: "Failed to edit invoice.",
+                error: err.message,
+            });
+        }
+    },
 
 
 }

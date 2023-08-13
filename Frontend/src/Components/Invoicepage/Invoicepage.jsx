@@ -303,7 +303,7 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
     ];
 
     const dataToSave = {
-      selectedDate: format(selectedDate, "dd/MM/yyyy"),
+      selectedDate,
       selectedCompanyId,
       invoiceNumber,
       boxNo,

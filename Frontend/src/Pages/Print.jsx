@@ -4,6 +4,7 @@ import Printing from '../Components/Printingpage/Printing';
 import { useParams } from 'react-router-dom';
 import { getselectedinvioce } from '../apicalls/Invoice';
 import Skeleton from 'react-loading-skeleton';
+import Loading from './Loading';
 
 const Print = () => {
   const { id } = useParams();
@@ -29,10 +30,7 @@ const Print = () => {
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
       {isLoading ? '' : <Sidebar />}
       {isLoading ? ( // Display loading indicator if isLoading is true
-        <div style={styles.loadingContainer}>
-          <div className="loading-spinner"></div>
-          <p className='text-bold font-weight-500'>Loading...........</p>
-        </div>
+       <Loading/>
       ) : (
         <Printing invoiceData={invoiceData} />
       )}

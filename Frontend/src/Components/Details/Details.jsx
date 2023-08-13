@@ -13,7 +13,6 @@ import {
     MDBTable,
     MDBTableHead,
     MDBTableBody,
-    MDBBtn,
 } from 'mdb-react-ui-kit';
 
 const Details = ({ companydetails, servicedetails, invoiceData }) => {
@@ -116,6 +115,28 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
         updatedRows.splice(index, 1);
         settableRows(updatedRows,);
     };
+
+    const handleSave = () => {
+        const savedData = {
+            CGST: invoiceDatas.CGST,
+            SGST: invoiceDatas.SGST,
+            airwayBillNo: Airwaybillno,
+            boxNo: boxNo,
+            gst18: invoiceDatas.gst18,
+            invoiceNumber: invoiceData.invoiceNumber,
+            selectedCompanyId: selctedCompantId,
+            selectedDate: selectedDate,
+            subtotal: invoiceDatas.subtotal,
+            tableRows: tableRows,
+            totalAmount: invoiceDatas.totalAmount,
+            totalWeight: invoiceDatas.totalWeight
+        };
+
+        console.log(savedData);
+        // You can perform further actions with the savedData, such as sending it to an API, etc.
+        
+    };
+
 
     return (
         <MDBContainer className="py-5">
@@ -322,6 +343,7 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
                         <MDBCol xl="2">
                             <button className="text-capitalize btn"
                                 style={{ backgroundColor: "#60bdf3", color: 'white' }}
+                                onClick={handleSave}
                             >
                                 <MDBIcon fas icon="save" className="me-2" />
                                 SAVE

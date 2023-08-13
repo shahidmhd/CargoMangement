@@ -40,3 +40,14 @@ export const deleteInvoice = async (invoiceid) => {
         return err.message;
     }
 }
+
+
+export const EditINVOICEdata=async(payload)=>{
+    try {
+        console.log(payload,"edit");
+        // const response = await instance.patch(`/api/users/invoice/${invoiceid}`);
+        // return response.data
+    } catch (err) {
+        return err.message;
+    }
+}
