@@ -13,6 +13,7 @@ import {
     MDBTable,
     MDBTableHead,
     MDBTableBody,
+    MDBBtn,
 } from 'mdb-react-ui-kit';
 
 const Details = ({ companydetails, servicedetails, invoiceData }) => {
@@ -29,6 +30,8 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
     const [HSNCode, setHSNCode] = useState(null)
     const [invoiceDatas, setinvoiceDatas] = useState(invoiceData)
     const [tableRows, settableRows] = useState(invoiceData?.tableRows)
+    console.log(invoiceDatas, "invoivvvv");
+    console.log(tableRows, "tablerows");
 
 
     const handleCompanyChange = (e) => {
@@ -59,7 +62,7 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
                 serviceName: selectedServiceData.servicename,
                 HSNCode: selectedServiceData.HSNCode,
                 amount: selectedServiceData.Rate,
-                total: selectedServiceData.Rate
+                total: selectedServiceData.Rate*tableRows[index].weight
             };
 
             settableRows(updatedTableRows); // Update the tableRows state
@@ -74,26 +77,24 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
     const handleWeightChange = (index, newWeight) => {
         const updatedTableRows = [...tableRows];
         updatedTableRows[index].weight = Number(newWeight);
-        const rowTotal = newWeight * updatedTableRows[index].amount;
-        updatedTableRows[index].total = rowTotal;
-
+        console.log(updatedTableRows,"jjjjjjjjjjjjjjjgggg");
         settableRows(updatedTableRows);
 
+        // Calculate row total based on new weight and amount
+        const rowTotal = newWeight * updatedTableRows[index].amount;
+        updatedTableRows[index].total = rowTotal;
     };
-
 
     useEffect(() => {
         const subtotal = tableRows.reduce((total, row) => {
-            const rowSubtotal = row.amount || 0;
+            const rowSubtotal = row.total || 0;
             return total + rowSubtotal;
         }, 0);
 
-
-
-        const gst18 = subtotal * 0.18;
-        const CGST = gst18 / 2
-        const SGST = gst18 / 2
-        const totalAmount = subtotal + gst18
+        const gst18 = subtotal * 0.18; 
+        const CGST=gst18 /2
+        const SGST=gst18/2
+        const totalAmount=subtotal+gst18
 
         const updatedInvoiceData = {
             ...invoiceData,
@@ -103,7 +104,6 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
             SGST,
             totalAmount
         };
-        console.log(updatedInvoiceData,"updated");
 
         setinvoiceDatas(updatedInvoiceData);
     }, [tableRows]);
@@ -113,30 +113,8 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
     const handleDeleteRow = (index) => {
         const updatedRows = [...tableRows];
         updatedRows.splice(index, 1);
-        settableRows(updatedRows,);
+        settableRows(updatedRows);
     };
-
-    const handleSave = () => {
-        const savedData = {
-            CGST: invoiceDatas.CGST,
-            SGST: invoiceDatas.SGST,
-            airwayBillNo: Airwaybillno,
-            boxNo: boxNo,
-            gst18: invoiceDatas.gst18,
-            invoiceNumber: invoiceData.invoiceNumber,
-            selectedCompanyId: selctedCompantId,
-            selectedDate: selectedDate,
-            subtotal: invoiceDatas.subtotal,
-            tableRows: tableRows,
-            totalAmount: invoiceDatas.totalAmount,
-            totalWeight: invoiceDatas.totalWeight
-        };
-
-        console.log(savedData);
-        // You can perform further actions with the savedData, such as sending it to an API, etc.
-        
-    };
-
 
     return (
         <MDBContainer className="py-5">
@@ -343,7 +321,6 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
                         <MDBCol xl="2">
                             <button className="text-capitalize btn"
                                 style={{ backgroundColor: "#60bdf3", color: 'white' }}
-                                onClick={handleSave}
                             >
                                 <MDBIcon fas icon="save" className="me-2" />
                                 SAVE
