@@ -175,10 +175,10 @@ const Companycreation = ({ Company, render, setrender }) => {
             ],
             rows: Company.map((item, index) => ({
                 No: index + 1,
-                companyname: item.companyname,
-                contactNo: item.contactNo,
-                location: item.location,
-                person: item.person,
+                companyname: item?.companyname,
+                contactNo: item?.contactNo,
+                location: item?.location,
+                person: item?.person,
                 editButton: (
                     <button
                         onClick={() => handleEditClick(item)}

@@ -38,13 +38,4 @@ const Print = () => {
   );
 }
 
-const styles = {
-  loadingContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    color: 'black'
-  },
-};
-
 export default Print;

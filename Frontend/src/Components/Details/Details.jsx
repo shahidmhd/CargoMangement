@@ -33,7 +33,7 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
     const [HSNCode, setHSNCode] = useState(null)
     const [invoiceDatas, setinvoiceDatas] = useState(invoiceData)
     const [tableRows, settableRows] = useState(invoiceData?.tableRows)
-    const navigate=useNavigate()
+    const navigate = useNavigate()
 
 
     const handleCompanyChange = (e) => {
@@ -112,12 +112,12 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
 
         const updatedInvoiceData = {
             ...invoiceData,
-            subtotal,
-            gst18,
-            CGST,
-            SGST,
-            totalAmount,
-            totalWeight,
+            subtotal: parseFloat(subtotal.toFixed(2)),
+            gst18: parseFloat(gst18.toFixed(2)),
+            CGST: parseFloat(CGST.toFixed(2)),
+            SGST: parseFloat(SGST.toFixed(2)),
+            totalAmount: parseFloat(totalAmount.toFixed(2)),
+            totalWeight: parseFloat(totalWeight.toFixed(2)),
         };
 
         setinvoiceDatas(updatedInvoiceData);
