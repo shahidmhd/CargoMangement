@@ -53,20 +53,23 @@ function Invoicetables({ invoices, render, setrender }) {
               <MDBTable align='middle'>
                 <MDBTableHead>
                   <tr>
+                  <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
+                      No
+                    </th>
                     <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       Invoice Number
                     </th>
                     <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
-                      box no
+                      Box no
                     </th>
                     <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
-                      bill no
+                      Airwaybill no
                     </th>
                     <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
-                      company name
+                      Company name
                     </th>
                     <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
-                      total weight
+                      Total Weight
                     </th>
                     <th style={{ backgroundColor: 'black', color: 'white' }} scope='col'>
                       Date
@@ -84,8 +87,11 @@ function Invoicetables({ invoices, render, setrender }) {
                 </MDBTableHead>
                 <MDBTableBody>
                   {invoices &&
-                    invoices.map((item) => (
+                    invoices.map((item,index) => (
                       <tr key={item._id}>
+                        <td>
+                          <p className='fw-normal mb-1'>{index+1}</p>
+                        </td>
                         <td>
                           <div className='d-flex align-items-center'>
                             <div className='ms-3'>
@@ -100,7 +106,8 @@ function Invoicetables({ invoices, render, setrender }) {
                           <p className='fw-normal mb-1'>{item.airwayBillNo}</p>
                         </td>
                         <td>
-                          <p className='fw-normal mb-1'>{item.selectedCompanyId.companyname?item.selectedCompanyId.companyname:''}</p>
+                          <p className='fw-normal mb-1'>{item.selectedCompanyId && item.selectedCompanyId.companyname ? item.selectedCompanyId.companyname : 'company Deleted'}</p>
+
                         </td>
                         <td>
                           <p className='fw-normal mb-1'>{item.totalWeight}</p>
@@ -110,17 +117,17 @@ function Invoicetables({ invoices, render, setrender }) {
                         </td>
 
                         <td>
-                          <MDBBadge onClick={() => handleprintpage(item)} color='black' pill>
+                          <MDBBadge onClick={() => handleprintpage(item)} color='black' pill style={{cursor:'pointer'}}>
                             deatails
                           </MDBBadge>
                         </td>
                         <td>
-                          <MDBBadge onClick={() => handleeditpage(item._id)} color='primary' pill>
+                          <MDBBadge onClick={() => handleeditpage(item._id)} color='primary' pill style={{cursor:'pointer'}}>
                             Edit
                           </MDBBadge>
                         </td>
                         <td>
-                          <MDBBadge onClick={() => handledeletepage(item)} color='danger' pill>
+                          <MDBBadge onClick={() => handledeletepage(item)} color='danger' pill style={{cursor:'pointer'}}>
                             delete
                           </MDBBadge>
                         </td>

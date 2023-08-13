@@ -3,6 +3,7 @@ import Sidebar from '../Components/Sidebar/Sidebar';
 import Invoicepage from '../Components/Invoicepage/Invoicepage';
 import { getallcompanies } from '../apicalls/Company';
 import { getallServices } from '../apicalls/Service';
+import Loading from './Loading';
 
 const Invoice = () => {
   const [invoiceNumber, setInvoiceNumber] = useState('');
@@ -12,13 +13,11 @@ const Invoice = () => {
 
   const getCompanyData = async () => {
     const response = await getallcompanies();
-    console.log(response, "Company Data");
     setCompanydetails(response.Data);
   };
 
   const getServiceData = async () => {
     const responseService = await getallServices();
-    console.log(responseService, "Service Data");
     setServicedetails(responseService.Data);
   };
 
@@ -37,10 +36,10 @@ const Invoice = () => {
   }, []);
 
   return (
-    <div style={{ display: 'flex',justifyContent: 'center', alignItems: 'center', height: '100vh'  }}>
-     {loading?'':<Sidebar />}
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      {loading ? '' : <Sidebar />}
       {loading ? (
-        <div>Loading...</div>
+        <Loading />
       ) : (
         <Invoicepage invoiceNumber={invoiceNumber} servicedetails={servicedetails} companydetails={companydetails} />
       )}

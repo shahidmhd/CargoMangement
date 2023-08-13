@@ -19,7 +19,8 @@ import { AddINVOICEdata } from '../../apicalls/Invoice';
 import { useNavigate } from 'react-router-dom';
 
 const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
-  const navigate=useNavigate()
+
+  const navigate = useNavigate()
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedService, setSelectedService] = useState(null);
   const [selectedHSNCode, setSelectedHSNCode] = useState("");
@@ -27,18 +28,15 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
   const [selectedServiceId, setSelectedServiceId] = useState(null);
   const [boxNo, setBoxNo] = useState("");
   const [airwayBillNo, setAirwayBillNo] = useState("");
-
   const [totalWeight, setTotalWeight] = useState(0);
   const [weight, setWeight] = useState(0);
   const [amount, setAmount] = useState(0);
   const [total, setTotal] = useState(0);
   const [tableRows, setTableRows] = useState([]);
-  // const [render, setrender] = useState(false);
   const [subtotal, setSubtotal] = useState(0);
   const [gst18, setGst18] = useState(0);
   const [SGST, setSGST] = useState(0);
   const [CGST, setCGST] = useState(0);
-
   const [serviceDetails, setServiceDetails] = useState([])
 
 
@@ -47,12 +45,12 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
   };
 
 
-  let sub = serviceDetails.reduce((acc, item) => acc + item.subtotal,0);
+
+  let sub = serviceDetails.reduce((acc, item) => acc + item.subtotal, 0);
   useEffect(() => {
     setSubtotal(sub)
-    console.log(sub,"llllllllllllnnnnnnnnnnnnnnnnnn");
     const calculatedGst = (sub * 18) / 100;
-    console.log(calculatedGst,"calc gst");
+    console.log(calculatedGst, "calc gst");
     setGst18(calculatedGst);
     setSGST(calculatedGst / 2)
     setCGST(calculatedGst / 2)
@@ -70,13 +68,12 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
               const subtotal = weight * amount;
               return { ...item, serviceId: selectedService._id, subtotal: subtotal };
             }
-            console.log(subtotal,"bbbbbbbbbbbbbbbbbbbbbbbbbb");
             return item
           })
         )
       } else {
         serviceDetails.push({ serviceId: selectedService._id, subtotal: weight * amount })
-        console.log(subtotal,"vvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+
       }
 
       const totalWithoutGST = subtotal + weight * amount;
@@ -90,7 +87,6 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
     } else {
       setTotal(total);
       setSubtotal(subtotal)
-      console.log(subtotal,"zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
       setGst18(gst18);
       setSGST(SGST)
       setCGST(CGST)
@@ -130,7 +126,7 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
 
   const addTableRow = () => {
-    console.log(subtotal,"iiiiiiiiiiiiiiiii");
+    console.log(subtotal, "iiiiiiiiiiiiiiiii");
     if (!selectedService) {
       toast.error("Please select a service before adding a row", {
         hideProgressBar: true,
@@ -154,7 +150,7 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
     // Automatically select the first service in the dropdown
     if (servicedetails.length > 0) {
-      
+
       setSelectedService('');
       setSelectedServiceId('');
       setSelectedHSNCode('');
@@ -172,13 +168,11 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
     const cgstRounded = parseFloat(cgst.toFixed(2));
 
     setSubtotal(newSubtotal);
-    console.log(subtotal,"jgggggggggggggggggggggggggggg");
     setGst18(gstRounded);
     setSGST(sgstRounded);
     setCGST(cgstRounded);
 
-    console.log(subtotal)
-    console.log(gstRounded);
+
     setSelectedHSNCode("");
     setWeight(0);
     setAmount(0);
@@ -193,7 +187,6 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
     } else {
       if (event.charCode === 13) {
         addTableRow();
-        console.log(subtotal,"kkkkkkkkkkkkkkkkkkkkkkkk");
       }
     }
 
@@ -325,8 +318,7 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
       serviceIds: allSelectedServiceIds,
     };
 
-    console.log(dataToSave, "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
-    console.log(allDetails);
+    
     // Here you can save the data to your backend or do whatever you need with it
     const response = await AddINVOICEdata(dataToSave);
     if (response.success) {

@@ -3,9 +3,9 @@ import Login from '../Login/Login'
 
 const Loginpage = () => {
   return (
-   <>
-   <Login/>
-   </>
+    <>
+      <Login />
+    </>
   )
 }
 
