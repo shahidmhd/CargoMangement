@@ -1,10 +1,11 @@
-import React from 'react';
+import React from "react";
 
-const Homepages = () => {
+ const Homepage=()=> {
   return (
-    <h1>home</h1>
+   <>
+   hiiiiii
+   </>
   );
-};
+}
 
-export default Homepages;
-
+export default Homepage;

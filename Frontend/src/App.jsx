@@ -52,7 +52,7 @@ const App = () => {
             path='/detail/:id'
             element={token ? <Detailpage /> : <Navigate to={'/login'} />}
           />
-
+      
           <Route path="*" element={<Notfound />} />
         </Routes>
       </ BrowserRouter>

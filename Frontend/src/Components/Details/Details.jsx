@@ -14,7 +14,6 @@ import {
     MDBTable,
     MDBTableHead,
     MDBTableBody,
-    MDBBtn,
 } from 'mdb-react-ui-kit';
 import { EditINVOICEdata } from '../../apicalls/Invoice';
 import { toast } from 'react-toastify';
@@ -41,18 +40,12 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
         setselectedCompanyId(selectedCompanyId);
     };
 
-
-
     const handleDateChange = (date) => {
         setSelectedDate(date);
     };
 
-
-
-
-
+    
     const handleServiceChange = (index, serviceId) => {
-        console.log(index, serviceId);
         const selectedServiceId = serviceId;
         const selectedServiceData = servicedetails.find((service) => service._id === selectedServiceId);
         console.log(selectedServiceData, "selected data");
@@ -72,6 +65,7 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
             setSelectedServiceId(selectedServiceData._id);
         } else {
             // Handle the case when the selected service is not found
+            console.log("service is not in there");
         }
     };
 
