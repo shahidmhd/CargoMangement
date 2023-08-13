@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { parseISO } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 import {
     MDBCard,
     MDBCardBody,
@@ -15,6 +16,8 @@ import {
     MDBTableBody,
     MDBBtn,
 } from 'mdb-react-ui-kit';
+import { EditINVOICEdata } from '../../apicalls/Invoice';
+import { toast } from 'react-toastify';
 
 const Details = ({ companydetails, servicedetails, invoiceData }) => {
     console.log(servicedetails, "servicedetails");
@@ -30,8 +33,7 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
     const [HSNCode, setHSNCode] = useState(null)
     const [invoiceDatas, setinvoiceDatas] = useState(invoiceData)
     const [tableRows, settableRows] = useState(invoiceData?.tableRows)
-    console.log(invoiceDatas, "invoivvvv");
-    console.log(tableRows, "tablerows");
+    const navigate=useNavigate()
 
 
     const handleCompanyChange = (e) => {
@@ -62,7 +64,7 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
                 serviceName: selectedServiceData.servicename,
                 HSNCode: selectedServiceData.HSNCode,
                 amount: selectedServiceData.Rate,
-                total: selectedServiceData.Rate*tableRows[index].weight
+                total: selectedServiceData.Rate * tableRows[index].weight
             };
 
             settableRows(updatedTableRows); // Update the tableRows state
@@ -73,11 +75,20 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
         }
     };
 
+    const handleamountChange = (index, newamount) => {
+        const updatedTableRows = [...tableRows];
+        updatedTableRows[index].amount = Number(newamount);
+        settableRows(updatedTableRows);
+
+        // Calculate row total based on new weight and amount
+        const rowTotal = newamount * updatedTableRows[index].weight;
+        updatedTableRows[index].total = rowTotal;
+    }
+
 
     const handleWeightChange = (index, newWeight) => {
         const updatedTableRows = [...tableRows];
         updatedTableRows[index].weight = Number(newWeight);
-        console.log(updatedTableRows,"jjjjjjjjjjjjjjjgggg");
         settableRows(updatedTableRows);
 
         // Calculate row total based on new weight and amount
@@ -90,11 +101,14 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
             const rowSubtotal = row.total || 0;
             return total + rowSubtotal;
         }, 0);
+        const totalWeight = tableRows.reduce((totalWeight, row) => {
+            return totalWeight + (row.weight || 0);
+        }, 0);
 
-        const gst18 = subtotal * 0.18; 
-        const CGST=gst18 /2
-        const SGST=gst18/2
-        const totalAmount=subtotal+gst18
+        const gst18 = subtotal * 0.18;
+        const CGST = gst18 / 2
+        const SGST = gst18 / 2
+        const totalAmount = subtotal + gst18
 
         const updatedInvoiceData = {
             ...invoiceData,
@@ -102,7 +116,8 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
             gst18,
             CGST,
             SGST,
-            totalAmount
+            totalAmount,
+            totalWeight,
         };
 
         setinvoiceDatas(updatedInvoiceData);
@@ -116,6 +131,34 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
         settableRows(updatedRows);
     };
 
+
+    const handlesave = async () => {
+        const savedData = {
+            _id: invoiceData._id,
+            CGST: invoiceDatas.CGST,
+            SGST: invoiceDatas.SGST,
+            airwayBillNo: Airwaybillno,
+            boxNo: boxNo,
+            gst18: invoiceDatas.gst18,
+            invoiceNumber: invoiceData.invoiceNumber,
+            selectedCompanyId: selctedCompantId,
+            selectedDate: selectedDate,
+            subtotal: invoiceDatas.subtotal,
+            tableRows: tableRows,
+            totalAmount: invoiceDatas.totalAmount,
+            totalWeight: invoiceDatas.totalWeight
+        };
+
+        console.log(savedData);
+        // You can perform further actions with the savedData, such as sending it to an API, etc.
+        const response = await EditINVOICEdata(savedData);
+        if (response.success) {
+            toast.success('Invoice edited successfully!', {
+                hideProgressBar: true,
+            });
+            navigate('/table')
+        }
+    }
     return (
         <MDBContainer className="py-5">
             <MDBCard style={{ border: '3px solid black' }}>
@@ -266,7 +309,8 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
                                             <td>
                                                 <input
                                                     type="number"
-                                                    value={row.amount || defaultRate}
+                                                    value={row.amount}
+                                                    onChange={(e) => handleamountChange(index, e.target.value)}
 
                                                 />
                                             </td>
@@ -321,6 +365,7 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
                         <MDBCol xl="2">
                             <button className="text-capitalize btn"
                                 style={{ backgroundColor: "#60bdf3", color: 'white' }}
+                                onClick={handlesave}
                             >
                                 <MDBIcon fas icon="save" className="me-2" />
                                 SAVE

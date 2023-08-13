@@ -80,47 +80,47 @@ export default {
     EditINVOICE: async (req, res) => {
         try {
             const { id } = req.params;
+            const { invoiceNumber, airwayBillNo } = req.body;
             console.log(id, "iddddddddddddddddddddddddddddddddddddddddddddddddd");
             console.log(req.body);
 
             const Invoice = await invoice.findById(id);
             if (!Invoice) {
+
                 // If the company with the given ID is not found, throw an error
                 throw new Error("invoice not found.");
-            } else {
+            } 
 
+                // Check if the 'invoiceNumber' already exists for a different invoice
+                const existingInvoiceNumber = await invoice.findOne({ invoiceNumber: invoiceNumber });
 
-                const invoiceNumber = req.body.invoiceNumber;
-                const airwayBillNo = req.body.airwayBillNo;
-                console.log(invoiceNumber, airwayBillNo);
-                // Check if a document with the same invoiceNumber or airwayBillNo already exists
-                const existingInvoice = await invoice.findOne({
-                    $or: [
-                        { invoiceNumber: invoiceNumber },
-                        { airwayBillNo: airwayBillNo }
-                    ]
+                if (existingInvoiceNumber && id !== existingInvoiceNumber._id.toString()) {
+                    // If the invoiceNumber already exists for a different invoice, throw an error
+                    throw new
+                        AppError('Invoice number already exists', 403);
+                }
+
+                // Check if the 'airwayBillNo' already exists for a different invoice
+                const existingAirwayBillNo = await invoice.findOne({ airwayBillNo: airwayBillNo });
+
+                if (existingAirwayBillNo && id !== existingAirwayBillNo._id.toString()) {
+                    // If the airwayBillNo already exists for a different invoice, throw an error
+                    throw new AppError('Airway bill number already exists', 403);
+                }
+
+                // Update the invoice with the new data
+                await invoice.findByIdAndUpdate(
+                    { _id: id },
+                    { invoiceNumber, airwayBillNo,...req.body },
+                    { new: true }
+                );
+
+                res.status(200).json({
+                    success: true,
+                    message: "invoice added successfully.",
                 });
 
-                if (existingInvoice) {
-                    // If an invoice with the same invoiceNumber or airwayBillNo exists, respond with an error message
-                    return res.status(400).json({
-                        success: false,
-                        message: "The same invoice number or airway bill number already exists.",
-                    });
-                } else {
-
-
-                    // Create a new Company instance with the extracted data
-                    const newservice = new invoice(req.body);
-                    // Save the new company to the database
-                    await newservice.save();
-
-                    res.status(200).json({
-                        success: true,
-                        message: "invoice added successfully.",
-                    });
-                }
-            }
+            
         } catch (err) {
             console.log(err, "error");
             // If an error occurs, respond with an error message

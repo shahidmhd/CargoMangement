@@ -42,11 +42,15 @@ export const deleteInvoice = async (invoiceid) => {
 }
 
 
-export const EditINVOICEdata=async(payload)=>{
+export const EditINVOICEdata = async (payload) => {
     try {
-        console.log(payload,"edit");
-        const Invoiceid=payload._id
-        const response = await instance.patch(`/api/users/invoice/${Invoiceid}`,payload);
+        console.log(payload, "edit");
+        const Invoiceid = payload._id
+        console.log(Invoiceid);
+        // Create a new object without the _id field
+        const payloadWithoutId = { ...payload };
+        delete payloadWithoutId._id;
+        const response = await instance.patch(`/api/users/invoice/${Invoiceid}`, payloadWithoutId);
         return response.data
     } catch (err) {
         return err.message;
