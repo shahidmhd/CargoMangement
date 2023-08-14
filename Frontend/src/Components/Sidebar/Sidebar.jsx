@@ -43,6 +43,9 @@ const Sidebar = () => {
     navigate('/table')
   }
 
+  const handleReportclick=()=>{
+    navigate('/Report')
+  }
 
 
 
@@ -62,10 +65,13 @@ const Sidebar = () => {
               Services
             </CDBSidebarMenuItem>
             <CDBSidebarMenuItem icon="th-large" onClick={handleInvoiceClick}>
-              Invoice
+             Create Invoice
             </CDBSidebarMenuItem>
             <CDBSidebarMenuItem icon="th-large" onClick={handleInvoictableclick}>
               Invoice Details
+            </CDBSidebarMenuItem>
+            <CDBSidebarMenuItem icon="th-large" onClick={handleReportclick}>
+              Report
             </CDBSidebarMenuItem>
           </CDBSidebarMenu>
         </CDBSidebarContent>
