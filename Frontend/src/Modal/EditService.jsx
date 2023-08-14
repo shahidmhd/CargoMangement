@@ -23,7 +23,6 @@ const EditService = ({ showeditModal, setShoweditModal, Service, render, setrend
   };
 
   const onSubmit = async (data) => {
-    console.log(data, "ser");
     // Your logic to handle the form data and update the service should go here.
     data.GST = parseFloat(data.GST);
     data.SGST = parseFloat(data.SGST);

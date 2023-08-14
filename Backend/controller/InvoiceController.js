@@ -92,13 +92,13 @@ export default {
             } 
 
                 // Check if the 'invoiceNumber' already exists for a different invoice
-                const existingInvoiceNumber = await invoice.findOne({ invoiceNumber: invoiceNumber });
+                // const existingInvoiceNumber = await invoice.findOne({ invoiceNumber: invoiceNumber });
 
-                if (existingInvoiceNumber && id !== existingInvoiceNumber._id.toString()) {
-                    // If the invoiceNumber already exists for a different invoice, throw an error
-                    throw new
-                        AppError('Invoice number already exists', 403);
-                }
+                // if (existingInvoiceNumber && id !== existingInvoiceNumber._id.toString()) {
+                //     // If the invoiceNumber already exists for a different invoice, throw an error
+                //     throw new
+                //         AppError('Invoice number already exists', 403);
+                // }
 
                 // Check if the 'airwayBillNo' already exists for a different invoice
                 const existingAirwayBillNo = await invoice.findOne({ airwayBillNo: airwayBillNo });

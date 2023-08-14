@@ -4,6 +4,8 @@ import Invoicepage from '../Components/Invoicepage/Invoicepage';
 import { getallcompanies } from '../apicalls/Company';
 import { getallServices } from '../apicalls/Service';
 import Loading from './Loading';
+import { getallinvoices } from '../apicalls/Invoice';
+import { toast } from 'react-toastify';
 
 const Invoice = () => {
   const [invoiceNumber, setInvoiceNumber] = useState('');
@@ -21,15 +23,26 @@ const Invoice = () => {
     setServicedetails(responseService.Data);
   };
 
+  const getallInvoices = async () => {
+    const response = await getallinvoices()
+    if (response.success) {
+      const invoiceCounter = response.Data.length + 1;
+      const formattedCounter = invoiceCounter.toString().padStart(2, '0');
+      const newInvoiceNumber = `B2CO${formattedCounter}`;
+      setInvoiceNumber(newInvoiceNumber);
+    } else {
+      toast.error("invoices is not getting")
+    }
+
+
+
+  }
+
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      await Promise.all([getCompanyData(), getServiceData()]);
+      await Promise.all([getCompanyData(), getServiceData(), getallInvoices()]);
       setLoading(false);
-      const timestamp = Date.now(); // Get the current timestamp
-      const randomNum = Math.floor(Math.random() * 1000); // Generate a random number between 0 and 999
-      const newInvoiceNumber = `B2C${timestamp}${randomNum}`;
-      setInvoiceNumber(newInvoiceNumber);
     }
 
     fetchData();

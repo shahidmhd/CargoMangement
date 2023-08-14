@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Addservicedata } from '../apicalls/Service';
 
-const Addservice = ({ showModal, setShowModal,render,setrender }) => {
+const Addservice = ({ showModal, setShowModal, render, setrender }) => {
     const {
         handleSubmit,
         control,
@@ -21,11 +21,11 @@ const Addservice = ({ showModal, setShowModal,render,setrender }) => {
         // data.UOM = parseInt(data.UOM, 10);
         data.Rate = parseFloat(data.Rate);
         const response = await Addservicedata(data)
-        console.log(response,"oji");
-        if(response.success){
+        console.log(response, "oji");
+        if (response.success) {
             setShowModal(false)
             setrender(!render)
-            
+
         }
 
     };
@@ -56,7 +56,7 @@ const Addservice = ({ showModal, setShowModal,render,setrender }) => {
                 <div className='modal-dialog'>
                     <div className='modal-content'>
                         <div className='modal-header' style={{ backgroundColor: 'black' }}>
-                            <h5 className='modal-title' id='staticBackdropLabel' style={{color:'white'}}>
+                            <h5 className='modal-title' id='staticBackdropLabel' style={{ color: 'white' }}>
                                 Add Service
                             </h5>
                             <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' style={{ color: 'white', borderColor: 'white' }} onClick={() => setShowModal(false)}><i className='fas fa-times'></i></button>
@@ -90,18 +90,31 @@ const Addservice = ({ showModal, setShowModal,render,setrender }) => {
                                         )}
                                     />
                                 </div>
+
+
                                 <div className='row mb-4'>
                                     <div className='col'>
-
                                         <div className='col'>
                                             <div className='form-outline'>
                                                 <Controller
                                                     name='Rate'
                                                     control={control}
-                                                    rules={{ required: 'Rate  is required' }}
+                                                    rules={{
+                                                        required: 'Rate is required',
+                                                        pattern: {
+                                                            value: /^[0-9]*$/, // Regular expression to allow only numbers
+                                                            message: 'Please enter a valid number'
+                                                        }
+                                                    }}
                                                     render={({ field }) => (
                                                         <>
-                                                            <input {...field} type='text' id='form6Example2' className={`form-control ${errors.Rate ? 'is-invalid' : ''}`} placeholder='Rate' />
+                                                            <input
+                                                                {...field}
+                                                                type='text'
+                                                                id='form6Example2'
+                                                                className={`form-control ${errors.Rate ? 'is-invalid' : ''}`}
+                                                                placeholder='Rate'
+                                                            />
                                                             {errors.Rate && <div className='invalid-feedback'>{errors.Rate.message}</div>}
                                                         </>
                                                     )}
@@ -111,11 +124,11 @@ const Addservice = ({ showModal, setShowModal,render,setrender }) => {
                                     </div>
                                 </div>
 
+
                                 <div className='form-outline mb-4'>
                                     <Controller
                                         name='GST'
                                         control={control}
-
                                         render={({ field }) => (
                                             <>
                                                 <input
@@ -125,7 +138,8 @@ const Addservice = ({ showModal, setShowModal,render,setrender }) => {
                                                     className={`form-control ${errors.GST ? 'is-invalid' : ''}`}
                                                     placeholder='GST%'
                                                     onChange={handleGSTChange}
-                                                    value={gstValue}
+                                                    value={gstValue}                                                  
+                                                    pattern='[0-9]*' // Use a regular expression pattern to allow only numbers
                                                 />
 
                                                 {errors.GST && <div className='invalid-feedback'>{errors.GST.message}</div>}
@@ -133,6 +147,7 @@ const Addservice = ({ showModal, setShowModal,render,setrender }) => {
                                         )}
                                     />
                                 </div>
+
 
                                 <div className='row mb-4'>
                                     <div className='col'>
@@ -187,35 +202,35 @@ const Addservice = ({ showModal, setShowModal,render,setrender }) => {
                                         </div>
                                     </div>
                                 </div>
-                               
+
                                 <div className='w-100 text-center'>
-                                <button
-                                    type='submit'
-                                    className='btn btn-primary btn-block mb-4'
-                                    style={{
-                                        display: 'inline-block',
-                                        padding: '10px 20px',
-                                        fontSize: '16px',
-                                        border: 'none',
-                                        cursor: 'pointer',
-                                        textAlign: 'center',
-                                        textDecoration: 'none',
-                                        borderRadius: '5px',
-                                        transition: 'background-color 0.3s ease',
-                                        backgroundColor: 'black'
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.target.style.backgroundColor = 'lightblue';
-                                        e.target.style.color = 'black'; // Change text color on hover
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.target.style.backgroundColor = 'black';
-                                        e.target.style.color = 'white'; // Revert text color back to white
-                                    }}
-                                >
-                                    Add Service
-                                </button>
-                            </div>
+                                    <button
+                                        type='submit'
+                                        className='btn btn-primary btn-block mb-4'
+                                        style={{
+                                            display: 'inline-block',
+                                            padding: '10px 20px',
+                                            fontSize: '16px',
+                                            border: 'none',
+                                            cursor: 'pointer',
+                                            textAlign: 'center',
+                                            textDecoration: 'none',
+                                            borderRadius: '5px',
+                                            transition: 'background-color 0.3s ease',
+                                            backgroundColor: 'black'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.target.style.backgroundColor = 'lightblue';
+                                            e.target.style.color = 'black'; // Change text color on hover
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.target.style.backgroundColor = 'black';
+                                            e.target.style.color = 'white'; // Revert text color back to white
+                                        }}
+                                    >
+                                        Add Service
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </div>

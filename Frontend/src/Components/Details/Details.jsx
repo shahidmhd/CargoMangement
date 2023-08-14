@@ -44,7 +44,7 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
         setSelectedDate(date);
     };
 
-    
+
     const handleServiceChange = (index, serviceId) => {
         const selectedServiceId = serviceId;
         const selectedServiceData = servicedetails.find((service) => service._id === selectedServiceId);
@@ -125,6 +125,23 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
         settableRows(updatedRows);
     };
 
+    const handleAddRow = () => {
+        const newRow = {
+          id: tableRows.length + 1, // You can generate IDs based on your logic
+          // Add other properties for the new row
+          // For example:
+          name: '',
+          serviceName: '',
+          HSNCode: '',
+          weight: 0,
+          amount: 0,
+          total: 0,
+        };
+      
+        settableRows([...tableRows, newRow]);
+      };
+      
+
 
     const handlesave = async () => {
         const savedData = {
@@ -144,7 +161,6 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
         };
 
         console.log(savedData);
-        // You can perform further actions with the savedData, such as sending it to an API, etc.
         const response = await EditINVOICEdata(savedData);
         if (response.success) {
             toast.success('Invoice edited successfully!', {
@@ -261,6 +277,9 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
                                         <th scope="col" style={{ backgroundColor: "#79c8db", color: "white" }}>
                                             Action
                                         </th>
+                                        <th scope="col" style={{ backgroundColor: "#79c8db", color: "white" }}>
+                                            Action
+                                        </th>
 
                                     </tr>
                                 </MDBTableHead>
@@ -317,6 +336,16 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
                                                 >
                                                     <MDBIcon style={{ color: 'red' }} fas icon="trash-alt" />
                                                 </button>
+                                            </td>
+                                            <td>
+                                                <button
+                                                    className='btn'
+                                                    size="sm"
+                                                    onClick={handleAddRow}
+                                                >
+                                                    <MDBIcon style={{ color: 'green' }} fas icon="plus-circle" />
+                                                </button>
+
                                             </td>
                                         </tr>
                                     ))}

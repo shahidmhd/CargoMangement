@@ -115,8 +115,13 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
 
   const handleAmountChange = (event) => {
-    setAmount(event.target.value);
+    if (!selectedService) {
+      toast.error("select a service")
+    } else {
+      setAmount(event.target.value);
+    }
   };
+
 
 
 
@@ -130,7 +135,6 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
 
   const addTableRow = () => {
-    console.log(subtotal, "iiiiiiiiiiiiiiiii");
     if (!selectedService) {
       toast.error("Please select a service before adding a row", {
         hideProgressBar: true,
@@ -186,13 +190,10 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
 
   const handleEnterKeyPress = (event) => {
-    if (weight <= 0) {
-      toast.success("select  weight")
-    } else {
-      if (event.charCode === 13) {
-        addTableRow();
-      }
+    if (event.charCode === 13) {
+      addTableRow();
     }
+
 
   };
 
@@ -207,8 +208,16 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
     const selectedCompanyId = event.target.value;
     setSelectedCompanyId(selectedCompanyId); // Store the selected company _id
   };
+
+
+  const handledeletefirst = () => {
+    console.log("hiii");
+
+  };
+
+
+
   const handleRowDelete = (rowId) => {
-    console.log("deletedaaaaa");
     // Find the deleted row and get its serviceId
     const deletedRow = tableRows.find((row) => row.id === rowId);
     const deletedServiceId = deletedRow?.serviceId;
@@ -247,17 +256,16 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
   const handleSaveButtonClick = async () => {
 
-
-
-
-    if (!boxNo || boxNo.trim() === "") {
-      toast.error("Please enter a valid box number", {
+    if (!selectedCompanyId || selectedCompanyId.trim() === "") {
+      toast.error("Please select a Company", {
         hideProgressBar: true,
       });
       return;
     }
-    if (!selectedCompanyId || selectedCompanyId.trim() === "") {
-      toast.error("Please select a Company", {
+
+
+    if (!boxNo || boxNo.trim() === "") {
+      toast.error("Please enter a valid box number", {
         hideProgressBar: true,
       });
       return;
@@ -272,6 +280,13 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
     if (!airwayBillNo || airwayBillNo.trim() === "") {
       toast.error("Please enter a valid airway bill number", {
+        hideProgressBar: true,
+      });
+      return;
+    }
+
+    if (!selectedService && tableRows.length <= 0) {
+      toast.error("Please select a Service", {
         hideProgressBar: true,
       });
       return;
@@ -498,7 +513,7 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
                       <input type="number" value={amount} onChange={handleAmountChange} onKeyPress={handleEnterKeyPress} />
                     </td>
                     <td>{total}</td>
-                    <td><button className='btn' size="sm" >
+                    <td><button className='btn' size="sm" onClick={handledeletefirst} >
                       <MDBIcon style={{ color: 'red' }} fas icon="trash-alt" />
                     </button></td>
                   </tr>
