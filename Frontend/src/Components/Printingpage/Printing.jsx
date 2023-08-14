@@ -22,7 +22,7 @@ const Printing = ({ invoiceData }) => {
           <div className="container border p-3 mx-auto"  ref={componentRef} >
             <div className="row" >
               <div className="col-12 text-center mb-3 ">
-                <span className="text-default-d3" style={{ fontSize: "2em", fontWeight: "bold" }}>INDBX PRIVET LIMITED</span>
+                <span className="text-default-d3" style={{ fontSize: "2em", fontWeight: "bold" }}>INDBX PRIVATE LIMITED</span>
               </div>
 
               <div className="col-12 text-center">

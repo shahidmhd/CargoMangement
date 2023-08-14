@@ -145,6 +145,7 @@ import DeleteserviceModal from '../../Modal/DeleteServicemodal';
 
 
 const Servicecreation = ({ Service, render, setrender }) => {
+ 
   const [showModal, setShowModal] = useState(false)
   const [showeditModal, setShoweditModal] = useState(false);
   const [selectedservice, setSelectedservice] = useState(null);
@@ -179,6 +180,12 @@ const Servicecreation = ({ Service, render, setrender }) => {
   };
 
   const data = () => {
+    if (!Array.isArray(Service)) {
+      return {
+          columns: [],
+          rows: [],
+      };
+  }
     return {
       columns: [
         {

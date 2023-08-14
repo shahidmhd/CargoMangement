@@ -188,6 +188,12 @@ const Invoicetables = ({ invoices, render, setrender }) => {
 
 
   const data = () => {
+    if (!Array.isArray(invoices)) {
+      return {
+          columns: [],
+          rows: [],
+      };
+  }
     return {
       columns: [
         {

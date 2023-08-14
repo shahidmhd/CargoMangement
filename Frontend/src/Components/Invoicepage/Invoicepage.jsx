@@ -121,7 +121,11 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
 
 
   const handleweightchange = (e) => {
-    setWeight(Number(e.target.value))
+    if (!selectedService) {
+      toast.error("select a service")
+    } else {
+      setWeight(Number(e.target.value))
+    }
   }
 
 
@@ -252,6 +256,19 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
       });
       return;
     }
+    if (!selectedCompanyId || selectedCompanyId.trim() === "") {
+      toast.error("Please select a Company", {
+        hideProgressBar: true,
+      });
+      return;
+    }
+
+    if (!selectedDate) {
+      toast.error("Select Date", {
+        hideProgressBar: true,
+      });
+      return;
+    }
 
     if (!airwayBillNo || airwayBillNo.trim() === "") {
       toast.error("Please enter a valid airway bill number", {
@@ -318,7 +335,7 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
       serviceIds: allSelectedServiceIds,
     };
 
-    
+
     // Here you can save the data to your backend or do whatever you need with it
     const response = await AddINVOICEdata(dataToSave);
     if (response.success) {
@@ -342,7 +359,7 @@ const Invoicepage = ({ invoiceNumber, servicedetails, companydetails }) => {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <div style={{ backgroundColor: '#d6e3c5', height: '30%', width: '55em', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <h1>INDBX PRIVET LIMITED</h1>
+              <h1>INDBX PRIVATE LIMITED</h1>
             </div>
             <div className="p-3" style={{ display: 'flex', justifyContent: 'space-between' }}>
               <p>

@@ -135,6 +135,12 @@ const Companycreation = ({ Company, render, setrender }) => {
     };
 
     const data = () => {
+        if (!Array.isArray(Company)) {
+            return {
+                columns: [],
+                rows: [],
+            };
+        }
         return {
             columns: [
                 {

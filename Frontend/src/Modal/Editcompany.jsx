@@ -103,7 +103,7 @@ const Editcompany = ({ showeditModal, setShoweditModal, Company, render, setrend
                   control={control}
                   rules={{
                     required: 'Contact No is required',
-                    pattern: { value: /^[0-9]+$/, message: 'Invalid contact number' },
+                    pattern: { value: /^[0-9]{10}$/, message: 'Contact number must be exactly 10 digits' },
                   }}
                   render={({ field }) => (
                     <>
@@ -115,36 +115,36 @@ const Editcompany = ({ showeditModal, setShoweditModal, Company, render, setrend
               </div>
 
               <div className='w-100 text-center'>
-              <button
-                type='submit'
-                className='btn btn-primary btn-block mb-4'
-                style={{
-                  display: 'inline-block',
-                  padding: '10px 20px',
-                  fontSize: '16px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  textAlign: 'center',
-                  textDecoration: 'none',
-                  borderRadius: '5px',
-                  transition: 'background-color 0.3s ease',
-                  backgroundColor: 'black'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = 'lightblue';
-                  e.target.style.color = 'black'; // Change text color on hover
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = 'black';
-                  e.target.style.color = 'white'; // Revert text color back to white
-                }}
-              >
-                Edit company
-              </button>
+                <button
+                  type='submit'
+                  className='btn btn-primary btn-block mb-4'
+                  style={{
+                    display: 'inline-block',
+                    padding: '10px 20px',
+                    fontSize: '16px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    textAlign: 'center',
+                    textDecoration: 'none',
+                    borderRadius: '5px',
+                    transition: 'background-color 0.3s ease',
+                    backgroundColor: 'black'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = 'lightblue';
+                    e.target.style.color = 'black'; // Change text color on hover
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = 'black';
+                    e.target.style.color = 'white'; // Revert text color back to white
+                  }}
+                >
+                  Edit company
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-    </div>
+        </div>
       </div >
     </div >
   );
