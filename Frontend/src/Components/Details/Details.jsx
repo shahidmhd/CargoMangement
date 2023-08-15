@@ -128,8 +128,6 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
     const handleAddRow = () => {
         const newRow = {
           id: tableRows.length + 1, // You can generate IDs based on your logic
-          // Add other properties for the new row
-          // For example:
           name: '',
           serviceName: '',
           HSNCode: '',
@@ -144,6 +142,57 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
 
 
     const handlesave = async () => {
+          if (!selctedCompantId || selctedCompantId.trim() === "") {
+            toast.error("Please select a Company", {
+                hideProgressBar: true,
+            });
+            return;
+        }
+
+
+        if (!boxNo || boxNo.trim() === "") {
+            toast.error("Please enter a valid box number", {
+                hideProgressBar: true,
+            });
+            return;
+        }
+
+        if (!selectedDate) {
+            toast.error("Select Date", {
+                hideProgressBar: true,
+            });
+            return;
+        }
+
+        if (!Airwaybillno || Airwaybillno.trim() === "") {
+            toast.error("Please enter a valid airway bill number", {
+                hideProgressBar: true,
+            });
+            return;
+        }
+
+        if (!SelectedService && tableRows.length <= 0) {
+            toast.error("Please select a Service", {
+                hideProgressBar: true,
+            });
+            return;
+        }
+        if (invoiceData.totalWeight <= 0) {
+            toast.error("Please add weight", {
+                hideProgressBar: true,
+            });
+            return;
+        }
+
+        if (invoiceDatas.subtotal <= 0) {
+            toast.error("Please Select a Service", {
+                hideProgressBar: true,
+            });
+            return;
+        }
+        
+
+
         const savedData = {
             _id: invoiceData._id,
             CGST: invoiceDatas.CGST,
@@ -251,6 +300,17 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
                             </MDBTypography>
                         </MDBCol>
                     </MDBRow>
+                    {tableRows.length === 0 && (
+                        <div className="my-2 mx-1 d-flex justify-content-end">
+                            <button
+                                className='btn'
+                                size="sm"
+                                onClick={handleAddRow}
+                            >
+                                <MDBIcon style={{ color: 'green' }} fas icon="plus-circle" />
+                            </button>
+                        </div>
+                    )}
                     <MDBRow className="my-2 mx-1 justify-content-center">
                         <MDBCol lg="12" className="table-responsive">
                             <MDBTable striped borderless>

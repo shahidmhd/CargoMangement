@@ -12,6 +12,7 @@ import Detailpage from './Pages/Detailpage';
 import Loginpage from './Pages/Loginpage';
 import { useSelector } from 'react-redux'
 import Report from './Pages/Report';
+import Billing from './Pages/Billing';
 
 
 const App = () => {
@@ -30,7 +31,7 @@ const App = () => {
             element={token ? <Navigate to={'/'} /> : <Loginpage />}
           />
           <Route
-            path='/invoice'
+            path='/bill'
             element={token ? <Invoice /> : <Navigate to={'/login'} />}
           />
           <Route
@@ -56,6 +57,10 @@ const App = () => {
           <Route
             path='/Report'
             element={token ? <Report/> : <Navigate to={'/login'} />}
+          />
+           <Route
+            path='/invoice'
+            element={token ? <Billing/> : <Navigate to={'/login'} />}
           />
       
           <Route path="*" element={<Notfound />} />
