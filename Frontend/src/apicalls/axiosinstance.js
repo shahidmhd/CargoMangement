@@ -1,5 +1,5 @@
 import axios from 'axios'
-const bearerToken=localStorage.getItem("token")
+const bearerToken=localStorage.getItem("token")??""
 console.log(bearerToken,"tokenbearer");
 const instance = axios.create({
     baseURL: "http://localhost:3000",
@@ -10,7 +10,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   config => {
     // Add the Bearer token to the request headers
-    config.headers['authorization'] = `Bearer ${bearerToken}`;
+    config.headers['authorization'] = `Bearer ${localStorage.getItem("token")??""}`;
     return config;
   },
   error => {

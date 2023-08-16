@@ -33,7 +33,6 @@ const Changepassword = () => {
         console.log(data); // You can handle the form submission here
         try {
             const response = await changepassword(data)
-            console.log(response,"hhhh");
             if (response.success) {
                 toast.success(response.message)
                 navigate('/login')

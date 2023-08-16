@@ -27,8 +27,9 @@ const Login = () => {
                 toast.success(response.message)
                 // localStorage.setItem('token', response.data);
                 dispatch(setLogin({ userToken: response.data }))
-
                 navigate('/')
+                // window.location.href = '/';
+
             } else {
                 toast.error(response.message)
             }

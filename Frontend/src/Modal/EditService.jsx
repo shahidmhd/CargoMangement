@@ -80,18 +80,32 @@ const EditService = ({ showeditModal, setShoweditModal, Service, render, setrend
                 </div>
                 <div className='row mb-4'>
                   <div className='col'>
-                    <div className='form-outline'>
-                      <Controller
-                        name='Rate'
-                        control={control}
-                        rules={{ required: 'Rate is required' }}
-                        render={({ field }) => (
-                          <>
-                            <input {...field} type='text' className={`form-control ${errors.Rate ? 'is-invalid' : ''}`} placeholder='Rate' />
-                            {errors.Rate && <div className='invalid-feedback'>{errors.Rate.message}</div>}
-                          </>
-                        )}
-                      />
+                    <div className='col'>
+                      <div className='form-outline'>
+                        <Controller
+                          name='Rate'
+                          control={control}
+                          rules={{
+                            required: 'Rate is required',
+                            pattern: {
+                              value: /^[0-9]*$/, // Regular expression to allow only numbers
+                              message: 'Please enter a valid number'
+                            }
+                          }}
+                          render={({ field }) => (
+                            <>
+                              <input
+                                {...field}
+                                type='text'
+                                id='form6Example2'
+                                className={`form-control ${errors.Rate ? 'is-invalid' : ''}`}
+                                placeholder='Rate'
+                              />
+                              {errors.Rate && <div className='invalid-feedback'>{errors.Rate.message}</div>}
+                            </>
+                          )}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
