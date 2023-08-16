@@ -20,14 +20,23 @@ const Service = () => {
     getallService()
   }, [render])
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      {loadind ? '' : <Sidebar />}
-      {loadind ? (
-        <Loading />
-      ) : (
+    // <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    //   {loadind ? '' : <Sidebar />}
+    //   {loadind ? (
+    //     <Loading />
+    //   ) : (
+    //     <Servicecreation Service={service} render={render} setrender={setrender} />
+    //   )}
+    // </div>
+    <>
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+        {loadind ? <Loading /> : null}
         <Servicecreation Service={service} render={render} setrender={setrender} />
-      )}
+      </div>
     </div>
+  </>
   )
 }
 

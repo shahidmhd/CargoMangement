@@ -135,6 +135,7 @@ const Bill = ({ companydetails, servicedetails, invoiceNumber }) => {
         setinvoiceData(updatedInvoiceData);
 
         console.log(invoiceData, "shahid");
+
     }, [tableRows]);
 
 
@@ -180,7 +181,7 @@ const Bill = ({ companydetails, servicedetails, invoiceNumber }) => {
             });
             return;
         }
-        if(invoiceData.subtotal===0){
+        if (invoiceData.subtotal === 0) {
             toast.error("Please select a Service", {
                 hideProgressBar: true,
             });
@@ -223,7 +224,9 @@ const Bill = ({ companydetails, servicedetails, invoiceNumber }) => {
         setAirwaybillno('');
         settableRows([]);
         // ... (clear other states)
+
     };
+
 
 
     return (

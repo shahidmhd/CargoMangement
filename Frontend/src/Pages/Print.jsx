@@ -27,14 +27,23 @@ const Print = () => {
   }, [id]);
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
-      {isLoading ? '' : <Sidebar />}
-      {isLoading ? ( // Display loading indicator if isLoading is true
-       <Loading/>
-      ) : (
+    // <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+    //   {isLoading ? '' : <Sidebar />}
+    //   {isLoading ? ( // Display loading indicator if isLoading is true
+    //    <Loading/>
+    //   ) : (
+    //     <Printing invoiceData={invoiceData} />
+    //   )}
+    // </div>
+    <>
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+        {isLoading ? <Loading /> : null}
         <Printing invoiceData={invoiceData} />
-      )}
+      </div>
     </div>
+  </>
   );
 }
 

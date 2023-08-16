@@ -23,16 +23,26 @@ const Company = () => {
   }, [render])
 
   return (
+    // <>
+    //   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    //     {loading ? '' : <Sidebar />}
+    //     {loading ? (
+    //       <Loading />
+    //     ) : (
+    //       <Companycreation Company={company} render={render} setrender={setrender} />
+    //     )}
+    //   </div>
+    // </>
     <>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        {loading ? '' : <Sidebar />}
-        {loading ? (
-          <Loading />
-        ) : (
+      <div style={{ display: 'flex' }}>
+        <Sidebar />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+          {loading ? <Loading /> : null}
           <Companycreation Company={company} render={render} setrender={setrender} />
-        )}
+        </div>
       </div>
     </>
+
   )
 }
 
