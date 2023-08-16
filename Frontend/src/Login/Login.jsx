@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { LoginUser } from '../apicalls/User';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { setLogin } from '../Redux/Authslice';
@@ -26,7 +26,7 @@ const Login = () => {
             if (response.success) {
                 toast.success(response.message)
                 // localStorage.setItem('token', response.data);
-                dispatch(setLogin({userToken:response.data}))
+                dispatch(setLogin({ userToken: response.data }))
 
                 navigate('/')
             } else {
@@ -88,6 +88,9 @@ const Login = () => {
                                                 })}
                                             />
                                             {errors.password && <div className="invalid-feedback">{errors.password.message}</div>}
+                                            <div className="mt-3 text-end"> {/* Add the "text-end" class for right alignment */}
+                                                <Link className="px-5 text-decoration-none text-primary" to="/change-password">Change Password</Link>
+                                            </div>
                                         </div>
                                         <button className="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
                                     </form>

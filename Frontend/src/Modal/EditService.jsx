@@ -106,14 +106,27 @@ const EditService = ({ showeditModal, setShoweditModal, Service, render, setrend
                           type='text'
                           className={`form-control ${errors.GST ? 'is-invalid' : ''}`}
                           placeholder='GST%'
+                          pattern='[0-9]*' // Only allow numbers
                           onChange={(e) => {
                             field.onChange(e); // Trigger the default onChange function
                             updateCGSTAndSGST(e.target.value); // Update CGST and SGST based on GST
                           }}
                         />
-                        {errors.GST && <div className='invalid-feedback'>{errors.GST.message}</div>}
+                        {errors.GST && (
+                          <div className='invalid-feedback'>
+                            {errors.GST.type === 'pattern'
+                              ? 'Only numbers are allowed'
+                              : errors.GST.message}
+                          </div>
+                        )}
                       </>
                     )}
+                    rules={{
+                      pattern: {
+                        value: /^[0-9]*$/, // Regular expression for numbers only
+                        message: 'Only numbers are allowed',
+                      },
+                    }}
                   />
                 </div>
 

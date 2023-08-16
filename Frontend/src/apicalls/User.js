@@ -10,3 +10,12 @@ export const LoginUser = async (payload) => {
         return err.message;
     }
 }
+
+export const changepassword = async (payload) => {
+    try {
+        const response = await instance.post('/api/users/changepassword', payload);
+        return response.data
+    } catch (err) {
+        return err.message;
+    }
+}

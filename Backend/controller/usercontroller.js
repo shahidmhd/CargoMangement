@@ -27,6 +27,40 @@ export default {
                 message: err.message
             })
         }
+    },
+    changepassword: async (req, res) => {
+        try {
+            console.log(req.body);
+            const { currentPassword, newPassword, email } = req.body;
+            console.log(currentPassword, newPassword);
+            const user = await User.findOne({ email: email }).exec();
+            if (!user) {
+                console.log("hii");
+                return res.json({ success: false, message: 'User not found' });
+            }
+
+            console.log("faa");
+
+            // Compare the provided currentPassword with the hashed password in the database
+            const isValidPassword = await bcrypt.compare(currentPassword, user.password);
+
+            if (!isValidPassword) {
+                console.log("pass");
+                return res.json({ success: false, message: 'Your password is incorrect' });
+            }
+            console.log("out");
+            // Hash the new password
+            const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+            // Update the user's password in the database
+            user.password = hashedNewPassword;
+            await user.save();
+
+            return res.status(200).json({ success: true, message: 'Password changed successfully' });
+        } catch (err) {
+            console.error('Error changing password:', err);
+            return res.status(500).json({ success: false, message: 'An error occurred while changing the password' });
+        }
     }
 
 

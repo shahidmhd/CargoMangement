@@ -8,6 +8,7 @@ import userAuthMid from '../Middlewear/Authmiddlewear.js';
 
 
 router.post('/login',usercontroller.LoginUser)
+router.post('/changepassword',usercontroller.changepassword)
 
 router.post('/company',userAuthMid,Companycontroller.Addcompany)
 router.patch('/company/:id',userAuthMid,Companycontroller.EditCompany)

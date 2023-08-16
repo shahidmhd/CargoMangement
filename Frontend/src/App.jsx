@@ -13,6 +13,7 @@ import Loginpage from './Pages/Loginpage';
 import { useSelector } from 'react-redux'
 import Report from './Pages/Report';
 import Billing from './Pages/Billing';
+import Changepassword from './Components/Changepassword/Changepassword';
 
 
 const App = () => {
@@ -61,6 +62,10 @@ const App = () => {
            <Route
             path='/invoice'
             element={token ? <Billing/> : <Navigate to={'/login'} />}
+          />
+            <Route
+            path='/change-password'
+            element={<Changepassword/>}
           />
       
           <Route path="*" element={<Notfound />} />
