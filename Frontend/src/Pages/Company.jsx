@@ -4,6 +4,7 @@ import Sidebar from '../Components/Sidebar/Sidebar'
 import Companycreation from '../Components/CompanyCreation/Companycreation'
 import { getallcompanies } from '../apicalls/Company'
 import Loading from './Loading'
+import { toast } from 'react-toastify'
 
 
 const Company = () => {
@@ -11,16 +12,26 @@ const Company = () => {
   const [render, setrender] = useState(false)
   const [loading, setLoading] = useState(true);
 
-  const getallcompany = async () => {
-    setLoading(true);
-    const response = await getallcompanies()
-    setcompany(response.Data)
-    setLoading(false)
-
-  }
   useEffect(() => {
     getallcompany()
   }, [render])
+
+  const getallcompany = async () => {
+    try {
+      setLoading(true);
+      const response = await getallcompanies()
+      if (response.success) {
+        setcompany(response.Data)
+        setLoading(false)
+      } else {
+        toast.error(response.message)
+      }
+    } catch (err) {
+      toast.error("err.message")
+    }
+
+  }
+
 
   return (
     // <>
@@ -38,7 +49,7 @@ const Company = () => {
         <Sidebar />
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
           {loading ? <Loading /> : null}
-          <Companycreation Company={company} render={render} setrender={setrender} />
+         {!loading&& <Companycreation Company={company} render={render} setrender={setrender} />}
         </div>
       </div>
     </>

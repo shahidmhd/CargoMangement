@@ -30,14 +30,14 @@ const Invoicetable = () => {
     //   </div>
     // </>
     <>
-    <div style={{ display: 'flex' }}>
-      <Sidebar />
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-        {loading ? <Loading /> : null}
-        <Invoicetables render={render} setrender={setrender} invoices={invoices} />
+      <div style={{ display: 'flex' }}>
+        <Sidebar />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+          {loading ? <Loading /> : null}
+          {!loading && <Invoicetables render={render} setrender={setrender} invoices={invoices} />}
+        </div>
       </div>
-    </div>
-  </>
+    </>
   )
 }
 

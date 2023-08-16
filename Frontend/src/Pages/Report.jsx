@@ -111,10 +111,19 @@ const Report = () => {
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            {loading ? <Loading /> : <Sidebar />}
-            {loading ? null : <Reportpage invoiceData={invoiceData} />}
+        // <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        //     {loading ? <Loading /> : <Sidebar />}
+        //     {loading ? null : <Reportpage invoiceData={invoiceData} />}
+        // </div>
+        <>
+        <div style={{ display: 'flex' }}>
+          <Sidebar />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+            {loading ? <Loading /> : null}
+            {!loading&&<Reportpage invoiceData={invoiceData} />}
+          </div>
         </div>
+      </>
     );
 };
 

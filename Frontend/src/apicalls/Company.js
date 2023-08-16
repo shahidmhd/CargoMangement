@@ -14,7 +14,7 @@ export const getallcompanies = async () => {
         const response = await instance.get('/api/users/company');
         return response.data
     } catch (err) {
-        return err.message;
+        return err.response.data;
     }
 }
 
@@ -33,6 +33,6 @@ export const deletecompany = async (id) => {
         const response = await instance.delete(`/api/users/company/${id}`);
         return response.data
     } catch (err) {
-        return err.message;
+        return err.response.data;
     }
 }

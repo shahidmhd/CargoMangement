@@ -33,7 +33,7 @@ const Service = () => {
       <Sidebar />
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
         {loadind ? <Loading /> : null}
-        <Servicecreation Service={service} render={render} setrender={setrender} />
+       {!loadind&& <Servicecreation Service={service} render={render} setrender={setrender} />}
       </div>
     </div>
   </>

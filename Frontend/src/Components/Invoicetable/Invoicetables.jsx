@@ -159,9 +159,13 @@ const Invoicetables = ({ invoices, render, setrender }) => {
   const navigate = useNavigate()
   function formatDate(dateString) {
     const date = new Date(dateString);
-    const formattedDate = date.toLocaleDateString("en-US");
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Note: Month is zero-based
+    const year = date.getFullYear();
+    const formattedDate = `${day}/${month}/${year}`;
     return formattedDate;
   }
+
 
   const handleeditpage = (invoiceid) => {
     navigate(`/detail/${invoiceid}`)
@@ -176,24 +180,24 @@ const Invoicetables = ({ invoices, render, setrender }) => {
   };
 
 
-    const handledeletepage = async (item) => {
-     console.log(item);
-     const response = await deleteInvoice(item._id)
-     console.log(response);
-     if (response.success) {
-       toast.success("invoice deleted")
-       setrender(!render)
-     }
-   }
+  const handledeletepage = async (item) => {
+    console.log(item);
+    const response = await deleteInvoice(item._id)
+    console.log(response);
+    if (response.success) {
+      toast.success("invoice deleted")
+      setrender(!render)
+    }
+  }
 
 
   const data = () => {
     if (!Array.isArray(invoices)) {
       return {
-          columns: [],
-          rows: [],
+        columns: [],
+        rows: [],
       };
-  }
+    }
     return {
       columns: [
         {

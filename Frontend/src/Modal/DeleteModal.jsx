@@ -12,9 +12,7 @@ const DeleteModal = ({ showdeleteModal, setShowdeleteModal,id,render,setrender }
         setrender(!render)
     }else{
         toast.error(res.message)
-    }
-      
-       
+    }  
     }
     return (
         <>

@@ -1,28 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { CDBCard, CDBCardBody, CDBDataTable, CDBContainer } from 'cdbreact';
-import { Document, Page } from 'react-pdf';
-const Reportpage = ({ invoiceData }) => {
-  const generatePdf = () => {
-    const MyPdfDocument = () => (
-      <Document>
-        <Page>
-          <Text>PDF Content Here</Text> {/* Replace with your actual PDF content */}
-        </Page>
-      </Document>
-    );
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { PDFViewer } from '@react-pdf/renderer';
+import PdfDocument from './PdfDocument';
 
-    return (
-      <div style={{ display: 'none' }}>
-        <MyPdfDocument />
-      </div>
-    );
+const Reportpage = ({ invoiceData }) => {
+  console.log(invoiceData, "jjjj");
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate2, setSelectedDate2] = useState(new Date());
+
+  const [showPdf, setShowPdf] = useState(false);
+
+  const handlePdfClick = () => {
+    setShowPdf(true);
   };
   function formatDate(dateString) {
     const date = new Date(dateString);
-    const formattedDate = date.toLocaleDateString("en-US");
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Note: Month is zero-based
+    const year = date.getFullYear();
+    const formattedDate = `${day}/${month}/${year}`;
     return formattedDate;
   }
-  console.log(invoiceData, "jjjj");
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
+  const handleDateChange2 = (date) => {
+    setSelectedDate2(date);
+  };
+
 
   const [totals, setTotals] = useState({
     taxableValue: 0,
@@ -31,6 +40,8 @@ const Reportpage = ({ invoiceData }) => {
     cgst: 0,
     totalAmount: 0,
   });
+
+
 
   useEffect(() => {
     console.log(invoiceData, "first");
@@ -66,6 +77,7 @@ const Reportpage = ({ invoiceData }) => {
       });
     }
   }, [invoiceData]);
+
 
 
   const data = () => {
@@ -192,24 +204,40 @@ const Reportpage = ({ invoiceData }) => {
   return (
     <>
       <div className='container-fluid p-5' style={{ height: '100vh', overflowY: 'auto' }}>
-        {/* Invoice Heading */}
         <div className='mb-4'>
           <h1 className='text-center mb-3'>Manage Your Report</h1>
         </div>
         {/*  */}
         <div className='text-center mb-3'>
-          <button className='btn btn-large ms-2' onClick={() => {
-
-
-            const pdfBlob = new Blob([<MyPdfDocument />], { type: 'application/pdf' });
-            const pdfUrl = URL.createObjectURL(pdfBlob);
-            const printWindow = window.open(pdfUrl, '_blank');
-            printWindow.onload = () => {
-              printWindow.print();
-            };
-          }} style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }}>PDF</button>
-          <button className='btn btn-large ms-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }}>EXCEL</button>
-          <button className='btn btn-large ms-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }}>CSV</button>
+          <div className='row justify-content-center align-items-center'>
+            <div className='col-md-auto'>
+              <DatePicker
+                selected={selectedDate}
+                onChange={handleDateChange}
+                dateFormat='dd/MM/yyyy'
+                placeholderText='Select a date'
+                className='datepicker mx-2 narrow-datepicker'
+              />
+            </div>
+            <div className='col-md-auto'>
+              <DatePicker
+                selected={selectedDate2}
+                onChange={handleDateChange2}
+                dateFormat='dd/MM/yyyy'
+                placeholderText='Select a date'
+                className='datepicker mx-2 narrow-datepicker'
+              />
+            </div>
+            <div className='col-md-auto'>
+              <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }} onClick={handlePdfClick}>PDF</button>
+            </div>
+            <div className='col-md-auto'>
+              <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }}>EXCEL</button>
+            </div>
+            <div className='col-md-auto'>
+              <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }}>CSV</button>
+            </div>
+          </div>
         </div>
 
         <CDBContainer>
@@ -246,6 +274,11 @@ const Reportpage = ({ invoiceData }) => {
             </div>
           </div>
         </CDBContainer>
+        {showPdf && (
+          <PDFViewer style={{ width: '100%', height: '100vh' }}>
+            <PdfDocument data={data().rows} />
+          </PDFViewer>
+        )}
       </div>
     </>
   );

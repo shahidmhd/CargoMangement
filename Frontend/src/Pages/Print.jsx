@@ -40,7 +40,7 @@ const Print = () => {
       <Sidebar />
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
         {isLoading ? <Loading /> : null}
-        <Printing invoiceData={invoiceData} />
+        {!isLoading&&<Printing invoiceData={invoiceData} />}
       </div>
     </div>
   </>

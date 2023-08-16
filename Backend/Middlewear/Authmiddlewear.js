@@ -19,8 +19,8 @@ const userAuthMid = (req, res, next) => {
         req.userId = userId
         next()
     } catch (error) {
-        console.log(error.message);
-        throw new AppError('invalid token',403)
+        console.log(error.message,"jjjj");
+        throw new AppError('invalid token please login',403)
     }
 }
 
