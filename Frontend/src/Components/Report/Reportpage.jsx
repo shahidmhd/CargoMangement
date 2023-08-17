@@ -4,8 +4,9 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { PDFViewer } from '@react-pdf/renderer';
 import PdfDocument from './PdfDocument';
-import { CSVLink } from 'react-csv'; // Import CSVLink
+import { CSVLink } from 'react-csv';
 import { DownloadTableExcel } from 'react-export-table-to-excel';
+import { fetchcompanyinvoices, fetchserviceinvoices, searchdatas } from '../../apicalls/Invoice';
 
 
 
@@ -13,13 +14,17 @@ import { DownloadTableExcel } from 'react-export-table-to-excel';
 
 const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
   const tableRef = useRef(null);
-  console.log(companydetails, "com");
-  console.log(serviceDetails, "ser");
-  console.log(invoiceData, "jjjj");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedDate2, setSelectedDate2] = useState(new Date());
   const [showPdf, setShowPdf] = useState(false);
-
+  const [invoiceDatas, setinvoiceDatas] = useState(invoiceData)
+  const [searchedinvoices, setsearchedinvoices] = useState([])
+  const [companyInvoice, setcompanyInvoice] = useState([])
+  const [serviceInvoice, setserviceInvoice] = useState([])
+  console.log(invoiceDatas, "in");
+  console.log(searchedinvoices, "sear");
+  console.log(companyInvoice, "com");
+  console.log(serviceInvoice, "gg");
 
 
   const handlePdfClick = () => {
@@ -51,6 +56,38 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
   };
 
 
+
+  const filterDataByDate = async (startdate, enddate) => {
+    console.log(startdate, enddate);
+
+    const response = await searchdatas(startdate, enddate)
+    setinvoiceDatas(response.filteredInvoices)
+  }
+
+  
+  const [selectedCompany, setSelectedCompany] = useState('');
+  const [selectedService, setSelectedService] = useState('');
+
+  const handleCompanyChange = async (event) => {
+    setSelectedCompany(event.target.value);
+    const response = await fetchcompanyinvoices(event.target.value)
+    setinvoiceDatas(response.matchingInvoices)
+    console.log(response.matchingInvoices, "company matched datas");
+  };
+
+  const handleServiceChange = async (event) => {
+    setSelectedService(event.target.value);
+    const response = await fetchserviceinvoices(event.target.value)
+    setinvoiceDatas(response.matchingInvoices)
+    console.log(response.matchingInvoices, "service matched datas");
+  };
+
+
+  console.log(selectedCompany, "d");
+  console.log(selectedService, "g");
+
+
+
   const [totals, setTotals] = useState({
     taxableValue: 0,
     igst: 0,
@@ -60,20 +97,16 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
   });
 
 
-
-
-
-
   useEffect(() => {
-    console.log(invoiceData, "first");
-    if (invoiceData && invoiceData.length > 0) {
+    console.log(invoiceDatas, "first");
+    if (invoiceDatas && invoiceDatas.length > 0) {
       let totalTaxableValue = 0;
       let totalIGST = 0;
       let totalSGST = 0;
       let totalCGST = 0;
       let totalAmount = 0;
 
-      invoiceData.forEach((item) => {
+      invoiceDatas.forEach((item) => {
         item.tableRows.forEach((row) => {
           const taxableValue = row.weight * row.amount;
           const igst = (taxableValue * 0.18).toFixed(2);
@@ -97,11 +130,16 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
         totalAmount: totalAmount.toFixed(2),
       });
     }
-  }, [invoiceData]);
-
+  }, [invoiceDatas]);
 
 
   const data = () => {
+    if (!Array.isArray(invoiceDatas)) {
+      return {
+        columns: [],
+        rows: [],
+      };
+    }
     return {
       columns: [
         {
@@ -199,7 +237,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
           width: 100,
         },
       ],
-      rows: invoiceData?.flatMap((item, index) =>
+      rows: invoiceDatas?.flatMap((item, index) =>
         item.tableRows.map((row, rowIndex) => ({
           No: index + 1,
           InvoiceNo: item.invoiceNumber,
@@ -220,7 +258,6 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
         }))
       )
     }
-
   };
   return (
     <>
@@ -279,19 +316,27 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
             </div>
           </div>
           <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', alignItems: 'center' }}>
-            <select className="select" style={{ border: 'none', background: 'none', color: 'black', padding: '5px' }}>
+            <select className="select" style={{
+              border: 'none', background: 'none', color: 'black', padding: '5px'
+            }}
+              onChange={handleCompanyChange}
+              value={selectedCompany}
+            >
               <option value="">Select company</option>
               {companydetails?.map((company) => (
-                <option key={company.id} value={company.id}>
+                <option key={company._id} value={company._id}>
                   {company.companyname}
                 </option>
               ))}
             </select>
 
-            <select className="select" style={{ border: 'none', background: 'none', color: 'black', padding: '5px' }}>
+            <select className="select" style={{ border: 'none', background: 'none', color: 'black', padding: '5px' }}
+              onChange={handleServiceChange}
+              value={selectedService}
+            >
               <option value="">Select service</option>
               {serviceDetails?.map((service) => (
-                <option key={service.id} value={service.id}>
+                <option key={service._id} value={service.id}>
                   {service.servicename}
                 </option>
               ))}

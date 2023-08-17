@@ -26,4 +26,7 @@ router.get('/invoice',userAuthMid,Invoicecontroller.GetAllinvoice)
 router.get('/invoice/:id',userAuthMid,Invoicecontroller.GetSelectedinvoice)
 router.delete('/invoice/:id',userAuthMid,Invoicecontroller.Deleteinvoice)
 router.patch('/invoice/:id',userAuthMid,Invoicecontroller.EditINVOICE)
+router.post ('/searchinvoice',userAuthMid,Invoicecontroller.searchinvoice)
+router.post ('/searchcompanyinvoice',userAuthMid,Invoicecontroller.searchcompanyinvoice)
+router.post ('/searchserviceinvoice',userAuthMid,Invoicecontroller.searchserviceinvoice)
 export default router;

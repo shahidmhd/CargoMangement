@@ -3,7 +3,6 @@ import invoice from '../models/Invoicemodel.js'
 export default {
     AddINVOICE: async (req, res) => {
         try {
-            console.log(req.body);
             // Create a new Company instance with the extracted data
             const newservice = new invoice(req.body);
             // Save the new company to the database
@@ -14,7 +13,6 @@ export default {
                 message: "invoice added successfully.",
             });
         } catch (err) {
-            console.log(err, "error");
             // If an error occurs, respond with an error message
             res.status(500).json({
                 success: false,
@@ -81,46 +79,44 @@ export default {
         try {
             const { id } = req.params;
             const { invoiceNumber, airwayBillNo } = req.body;
-            console.log(id, "iddddddddddddddddddddddddddddddddddddddddddddddddd");
-            console.log(req.body);
 
             const Invoice = await invoice.findById(id);
             if (!Invoice) {
 
                 // If the company with the given ID is not found, throw an error
                 throw new Error("invoice not found.");
-            } 
+            }
 
-                // Check if the 'invoiceNumber' already exists for a different invoice
-                // const existingInvoiceNumber = await invoice.findOne({ invoiceNumber: invoiceNumber });
+            // Check if the 'invoiceNumber' already exists for a different invoice
+            // const existingInvoiceNumber = await invoice.findOne({ invoiceNumber: invoiceNumber });
 
-                // if (existingInvoiceNumber && id !== existingInvoiceNumber._id.toString()) {
-                //     // If the invoiceNumber already exists for a different invoice, throw an error
-                //     throw new
-                //         AppError('Invoice number already exists', 403);
-                // }
+            // if (existingInvoiceNumber && id !== existingInvoiceNumber._id.toString()) {
+            //     // If the invoiceNumber already exists for a different invoice, throw an error
+            //     throw new
+            //         AppError('Invoice number already exists', 403);
+            // }
 
-                // Check if the 'airwayBillNo' already exists for a different invoice
-                const existingAirwayBillNo = await invoice.findOne({ airwayBillNo: airwayBillNo });
+            // Check if the 'airwayBillNo' already exists for a different invoice
+            const existingAirwayBillNo = await invoice.findOne({ airwayBillNo: airwayBillNo });
 
-                if (existingAirwayBillNo && id !== existingAirwayBillNo._id.toString()) {
-                    // If the airwayBillNo already exists for a different invoice, throw an error
-                    throw new AppError('Airway bill number already exists', 403);
-                }
+            if (existingAirwayBillNo && id !== existingAirwayBillNo._id.toString()) {
+                // If the airwayBillNo already exists for a different invoice, throw an error
+                throw new AppError('Airway bill number already exists', 403);
+            }
 
-                // Update the invoice with the new data
-                await invoice.findByIdAndUpdate(
-                    { _id: id },
-                    { invoiceNumber, airwayBillNo,...req.body },
-                    { new: true }
-                );
+            // Update the invoice with the new data
+            await invoice.findByIdAndUpdate(
+                { _id: id },
+                { invoiceNumber, airwayBillNo, ...req.body },
+                { new: true }
+            );
 
-                res.status(200).json({
-                    success: true,
-                    message: "invoice added successfully.",
-                });
+            res.status(200).json({
+                success: true,
+                message: "invoice added successfully.",
+            });
 
-            
+
         } catch (err) {
             console.log(err, "error");
             // If an error occurs, respond with an error message
@@ -131,6 +127,72 @@ export default {
             });
         }
     },
+    searchinvoice: async (req, res) => {
+        try {
+            const { startdate, enddate } = req.body;
+            // Convert startdate and enddate to Date objects
+            const startDate = new Date(startdate);
+            const endDate = new Date(enddate);
+            startDate.setDate(startDate.getDate() - 1);
+
+            // Query the database for invoice data within the date range
+            const filteredInvoices = await invoice.find({
+                selectedDate: { $gte: startDate, $lte: endDate },
+            });
+
+            console.log(filteredInvoices);
+            res.json({
+                success: 'true',
+                message: 'data fetched successfully',
+                filteredInvoices
+            })
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'An error occurred while fetching invoice data.' });
+        }
+    },
+    searchcompanyinvoice: async (req, res) => {
+        try {
+            console.log(req.body, "gggss");
+            const { companyId } = req.body
+            console.log(companyId, "ghght");
+            // Query the database for invoices that match the selectedCompanyId
+            const matchingInvoices = await invoice.find({
+                selectedCompanyId: companyId,
+            }).sort({ createdAt: -1 }).populate('selectedCompanyId');;
+
+            console.log(matchingInvoices);
+
+            res.json({
+                success: 'true',
+                message: 'data fetched successfully',
+                matchingInvoices
+            })
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'An error occurred while fetching invoice data.' });
+        }
+    },
+    searchserviceinvoice: async (req, res) => {
+        try {
+            console.log(req.body, "gggss");
+            const { servicename } = req.body
+            console.log(servicename, "ghght")
+            // Query the database for invoices with matching serviceName within tableRows
+            const matchingInvoices = await invoice.find({
+                'tableRows.serviceName': servicename,
+            }).sort({ createdAt: -1 }).populate('selectedCompanyId');;
+            console.log(matchingInvoices, "jgdrt");
+            res.json({
+                success: 'true',
+                message: 'data fetched successfully',
+                matchingInvoices
+            })
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'An error occurred while fetching invoice data.' });
+        }
+    }
 
 
 }
