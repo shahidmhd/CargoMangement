@@ -138,7 +138,7 @@ export default {
             // Query the database for invoice data within the date range
             const filteredInvoices = await invoice.find({
                 selectedDate: { $gte: startDate, $lte: endDate },
-            });
+            }).sort({ createdAt: -1 }).populate('selectedCompanyId');;
 
             console.log(filteredInvoices);
             res.json({
@@ -159,7 +159,7 @@ export default {
             // Query the database for invoices that match the selectedCompanyId
             const matchingInvoices = await invoice.find({
                 selectedCompanyId: companyId,
-            }).sort({ createdAt: -1 }).populate('selectedCompanyId');;
+            }).sort({ createdAt: -1 }).populate('selectedCompanyId');
 
             console.log(matchingInvoices);
 

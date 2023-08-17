@@ -34,6 +34,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
 
 
 
+
   function formatDate(dateString) {
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, '0');
@@ -64,7 +65,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
     setinvoiceDatas(response.filteredInvoices)
   }
 
-  
+
   const [selectedCompany, setSelectedCompany] = useState('');
   const [selectedService, setSelectedService] = useState('');
 
@@ -254,7 +255,6 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
           SGST: ((row.weight * row.amount * 0.18) / 2).toFixed(2), // SGST is half of IGST
           CGST: ((row.weight * row.amount * 0.18) / 2).toFixed(2), // CGST is half of IGST
           Total: (row.weight * row.amount + row.weight * row.amount * 0.18).toFixed(2), // Taxablevalue + gst18
-
         }))
       )
     }
