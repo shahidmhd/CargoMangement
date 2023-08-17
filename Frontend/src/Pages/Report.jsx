@@ -120,7 +120,7 @@ const Report = () => {
           <Sidebar />
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
             {loading ? <Loading /> : null}
-            {!loading&&<Reportpage invoiceData={invoiceData} />}
+            {!loading&&<Reportpage invoiceData={invoiceData} companydetails={companydetails} serviceDetails={serviceDetails} />}
           </div>
         </div>
       </>

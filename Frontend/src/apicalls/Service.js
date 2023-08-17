@@ -15,7 +15,7 @@ export const getallServices = async () => {
         const response = await instance.get('/api/users/service');
         return response.data
     } catch (err) {
-        return err.message;
+        return err.response.data;
     }
 }
 

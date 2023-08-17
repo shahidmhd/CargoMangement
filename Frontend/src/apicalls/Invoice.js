@@ -17,7 +17,7 @@ export const getallinvoices = async () => {
         const response = await instance.get('/api/users/invoice');
         return response.data
     } catch (err) {
-        return err.message;
+        return err.response.data;
     }
 }
 

@@ -1,20 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { CDBCard, CDBCardBody, CDBDataTable, CDBContainer } from 'cdbreact';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { PDFViewer } from '@react-pdf/renderer';
 import PdfDocument from './PdfDocument';
+import { CSVLink } from 'react-csv'; // Import CSVLink
+import { DownloadTableExcel } from 'react-export-table-to-excel';
 
-const Reportpage = ({ invoiceData }) => {
+
+
+
+
+const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
+  const tableRef = useRef(null);
+  console.log(companydetails, "com");
+  console.log(serviceDetails, "ser");
   console.log(invoiceData, "jjjj");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedDate2, setSelectedDate2] = useState(new Date());
-
   const [showPdf, setShowPdf] = useState(false);
+
+
 
   const handlePdfClick = () => {
     setShowPdf(true);
   };
+
+
+
+
   function formatDate(dateString) {
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, '0');
@@ -24,9 +38,13 @@ const Reportpage = ({ invoiceData }) => {
     return formattedDate;
   }
 
+
+
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
+
+
 
   const handleDateChange2 = (date) => {
     setSelectedDate2(date);
@@ -40,6 +58,9 @@ const Reportpage = ({ invoiceData }) => {
     cgst: 0,
     totalAmount: 0,
   });
+
+
+
 
 
 
@@ -211,7 +232,7 @@ const Reportpage = ({ invoiceData }) => {
         <div className='text-center mb-3'>
           <div className='row justify-content-center align-items-center'>
             <div className='col-md-auto'>
-              <DatePicker
+              From:  <DatePicker
                 selected={selectedDate}
                 onChange={handleDateChange}
                 dateFormat='dd/MM/yyyy'
@@ -220,30 +241,71 @@ const Reportpage = ({ invoiceData }) => {
               />
             </div>
             <div className='col-md-auto'>
-              <DatePicker
+              To:     <DatePicker
                 selected={selectedDate2}
                 onChange={handleDateChange2}
                 dateFormat='dd/MM/yyyy'
                 placeholderText='Select a date'
                 className='datepicker mx-2 narrow-datepicker'
               />
+              <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }} onClick={() => filterDataByDate(selectedDate, selectedDate2)}>
+                Search
+              </button>
             </div>
             <div className='col-md-auto'>
               <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }} onClick={handlePdfClick}>PDF</button>
             </div>
             <div className='col-md-auto'>
-              <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }}>EXCEL</button>
+              <DownloadTableExcel
+                filename="users_table"
+                sheet="users"
+                currentTableRef={tableRef.current}
+              >
+                <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }}>Excel</button>
+              </DownloadTableExcel>
+
             </div>
             <div className='col-md-auto'>
-              <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }}>CSV</button>
+              <div>
+                <CSVLink
+                  data={data().rows} // Provide the data you want to export
+                  filename={'report.csv'} // Set the filename for the downloaded CSV file
+                  className='btn btn-large p-2'
+                  style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }}
+                >
+                  CSV
+                </CSVLink>
+              </div>
             </div>
           </div>
+          <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', alignItems: 'center' }}>
+            <select className="select" style={{ border: 'none', background: 'none', color: 'black', padding: '5px' }}>
+              <option value="">Select company</option>
+              {companydetails?.map((company) => (
+                <option key={company.id} value={company.id}>
+                  {company.companyname}
+                </option>
+              ))}
+            </select>
+
+            <select className="select" style={{ border: 'none', background: 'none', color: 'black', padding: '5px' }}>
+              <option value="">Select service</option>
+              {serviceDetails?.map((service) => (
+                <option key={service.id} value={service.id}>
+                  {service.servicename}
+                </option>
+              ))}
+            </select>
+
+          </div>
+
         </div>
 
         <CDBContainer>
           <CDBCard>
             <CDBCardBody>
               <CDBDataTable
+                ref={tableRef}
                 striped
                 bordered
                 hover
@@ -253,26 +315,26 @@ const Reportpage = ({ invoiceData }) => {
                 data={data()}
                 materialSearch={true}
               />
+              <div style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                flexWrap: 'wrap',
+                marginBottom: '20px',
+                marginRight: '20px'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-end',
+                }}>
+                  <h6 style={{ marginBottom: '10px', fontSize: '1rem' }}>IGST: {totals.igst}</h6>
+                  <h6 style={{ marginBottom: '10px', fontSize: '1rem' }}>SGST: {totals.sgst}</h6>
+                  <h6 style={{ marginBottom: '10px', fontSize: '1rem' }}>CGST: {totals.cgst}</h6>
+                  <h6 style={{ marginBottom: '10px', fontSize: '1.5rem' }}>Totalamount: {totals.totalAmount}</h6>
+                </div>
+              </div>
             </CDBCardBody>
           </CDBCard>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            flexWrap: 'wrap',
-            marginBottom: '20px',
-            marginRight: '20px'
-          }}>
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-end',
-            }}>
-              <h3 style={{ marginBottom: '10px', fontSize: '1.5rem' }}>IGST: {totals.igst}</h3>
-              <h3 style={{ marginBottom: '10px', fontSize: '1.5rem' }}>SGST: {totals.sgst}</h3>
-              <h3 style={{ marginBottom: '10px', fontSize: '1.5rem' }}>CGST: {totals.cgst}</h3>
-              <h3 style={{ marginBottom: '10px', fontSize: '1.5rem' }}>Totalamount: {totals.totalAmount}</h3>
-            </div>
-          </div>
         </CDBContainer>
         {showPdf && (
           <PDFViewer style={{ width: '100%', height: '100vh' }}>

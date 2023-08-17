@@ -11,7 +11,7 @@ export default {
                 if (!validaPassword) {
                     throw new Error("Invalid password !");
                 } else {
-                    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1m" });
+                    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "5d" });
                     res.json({
                         success: true,
                         message: "user logged in successfully",
@@ -43,7 +43,7 @@ export default {
 
             // Compare the provided currentPassword with the hashed password in the database
             const isValidPassword = await bcrypt.compare(currentPassword, user.password);
-
+            
             if (!isValidPassword) {
                 console.log("pass");
                 return res.json({ success: false, message: 'Your password is incorrect' });

@@ -31,7 +31,7 @@ const Invoice = () => {
       const newInvoiceNumber = `B2CO${formattedCounter}`;
       setInvoiceNumber(newInvoiceNumber);
     } else {
-      toast.error("invoices is not getting")
+      toast.error(response.message)
     }
 
 

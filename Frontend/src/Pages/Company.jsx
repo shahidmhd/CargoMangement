@@ -7,7 +7,6 @@ import Loading from './Loading'
 import { toast } from 'react-toastify'
 
 
-
 const Company = () => {
   const [company, setcompany] = useState([])
   const [render, setrender] = useState(false)
