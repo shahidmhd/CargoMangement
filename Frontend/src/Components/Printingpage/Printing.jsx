@@ -3,9 +3,18 @@ import { useReactToPrint } from 'react-to-print';
 
 const Printing = ({ invoiceData }) => {
   console.log(invoiceData);
+  // function formatDate(dateString) {
+  //   const date = new Date(dateString);
+  //   const formattedDate = date.toLocaleDateString("en-US");
+  //   return formattedDate;
+  // }
+
   function formatDate(dateString) {
     const date = new Date(dateString);
-    const formattedDate = date.toLocaleDateString("en-US");
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Note: Month is zero-based
+    const year = date.getFullYear();
+    const formattedDate = `${day}/${month}/${year}`;
     return formattedDate;
   }
 

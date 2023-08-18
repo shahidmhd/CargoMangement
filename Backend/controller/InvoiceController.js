@@ -130,17 +130,11 @@ export default {
     searchinvoice: async (req, res) => {
         try {
             const { startdate, enddate } = req.body;
-            // Convert startdate and enddate to Date objects
-            const startDate = new Date(startdate);
-            const endDate = new Date(enddate);
-            startDate.setDate(startDate.getDate() - 1);
-
-            // Query the database for invoice data within the date range
             const filteredInvoices = await invoice.find({
-                selectedDate: { $gte: startDate, $lte: endDate },
+                date: { $gte: startdate, $lte: enddate },
             }).sort({ createdAt: -1 }).populate('selectedCompanyId');;
 
-            console.log(filteredInvoices);
+            console.log(filteredInvoices,"yyyyy");
             res.json({
                 success: 'true',
                 message: 'data fetched successfully',
@@ -177,11 +171,13 @@ export default {
         try {
             console.log(req.body, "gggss");
             const { servicename } = req.body
-            console.log(servicename, "ghght")
+            console.log(servicename, "ghght");
+
+
             // Query the database for invoices with matching serviceName within tableRows
             const matchingInvoices = await invoice.find({
                 'tableRows.serviceName': servicename,
-            }).sort({ createdAt: -1 }).populate('selectedCompanyId');;
+            });
             console.log(matchingInvoices, "jgdrt");
             res.json({
                 success: 'true',

@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { PDFViewer } from '@react-pdf/renderer';
 import PdfDocument from './PdfDocument';
 import { CSVLink } from 'react-csv';
-import { DownloadTableExcel } from 'react-export-table-to-excel';
+// import { DownloadTableExcel } from 'react-export-table-to-excel';
 import { fetchcompanyinvoices, fetchserviceinvoices, searchdatas } from '../../apicalls/Invoice';
 
 
@@ -13,7 +13,9 @@ import { fetchcompanyinvoices, fetchserviceinvoices, searchdatas } from '../../a
 
 
 const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
-  const tableRef = useRef(null);
+  // const tableRef = useRef(null);
+
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedDate2, setSelectedDate2] = useState(new Date());
   const [showPdf, setShowPdf] = useState(false);
@@ -21,10 +23,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
   const [searchedinvoices, setsearchedinvoices] = useState([])
   const [companyInvoice, setcompanyInvoice] = useState([])
   const [serviceInvoice, setserviceInvoice] = useState([])
-  console.log(invoiceDatas, "in");
-  console.log(searchedinvoices, "sear");
-  console.log(companyInvoice, "com");
-  console.log(serviceInvoice, "gg");
+
 
 
   const handlePdfClick = () => {
@@ -47,6 +46,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
 
 
   const handleDateChange = (date) => {
+
     setSelectedDate(date);
   };
 
@@ -55,14 +55,29 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
   const handleDateChange2 = (date) => {
     setSelectedDate2(date);
   };
+  function formatDateToDDMMYYYY(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Note: Month is zero-based
+    const year = date.getFullYear();
+    const formattedDate = `${day}/${month}/${year}`;
+    return formattedDate;
+  }
+
 
 
 
   const filterDataByDate = async (startdate, enddate) => {
-    console.log(startdate, enddate);
+    const formattedStartDate = formatDateToDDMMYYYY(startdate);
+    const formattedEndDate = formatDateToDDMMYYYY(enddate);
 
-    const response = await searchdatas(startdate, enddate)
+    console.log("Start Date:", formattedStartDate); // Output: "19/08/2023"
+    console.log("End Date:", formattedEndDate);     // Output: "19/08/2023"
+console.log("daaa");
+    console.log(startdate, enddate);
+    const response = await searchdatas(formattedStartDate, formattedEndDate)
     setinvoiceDatas(response.filteredInvoices)
+    console.log(response.filteredInvoices, "gggg");
   }
 
 
@@ -82,12 +97,6 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
     setinvoiceDatas(response.matchingInvoices)
     console.log(response.matchingInvoices, "service matched datas");
   };
-
-
-  console.log(selectedCompany, "d");
-  console.log(selectedService, "g");
-
-
 
   const [totals, setTotals] = useState({
     taxableValue: 0,
@@ -141,6 +150,10 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
         rows: [],
       };
     }
+    const formattedTotalAmount = `Total: ${totals.totalAmount}`;
+    const formattedtotalIGST = `Total: ${totals.igst}`;
+    const formattedtotalSGST = `Total: ${totals.sgst}`;
+    const formattedtotalCGST = `Total: ${totals.cgst}`;
     return {
       columns: [
         {
@@ -238,7 +251,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
           width: 100,
         },
       ],
-      rows: invoiceDatas?.flatMap((item, index) =>
+      rows: [...invoiceDatas?.flatMap((item, index) =>
         item.tableRows.map((row, rowIndex) => ({
           No: index + 1,
           InvoiceNo: item.invoiceNumber,
@@ -256,7 +269,26 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
           CGST: ((row.weight * row.amount * 0.18) / 2).toFixed(2), // CGST is half of IGST
           Total: (row.weight * row.amount + row.weight * row.amount * 0.18).toFixed(2), // Taxablevalue + gst18
         }))
-      )
+      ),
+      // Add an additional row with empty values
+      {
+        No: '',
+        InvoiceNo: '',
+        InvoiceDate: '',
+        BoxNo: '',
+        Airwaybill: '',
+        ServiceName: '',
+        CompanyName: '',
+        HSNCode: '',
+        weight: '',
+        unitvalue: '',
+        Taxablevalue: '',
+        IGST: formattedtotalIGST,
+        SGST: formattedtotalSGST,
+        CGST: formattedtotalCGST,
+        Total: formattedTotalAmount,
+      },
+      ]
     }
   };
   return (
@@ -293,13 +325,24 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
               <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }} onClick={handlePdfClick}>PDF</button>
             </div>
             <div className='col-md-auto'>
-              <DownloadTableExcel
+              {/* <DownloadTableExcel
                 filename="users_table"
                 sheet="users"
-                currentTableRef={tableRef.current}
+                tablePayload={data().rows} // Make sure this is the correct data format
               >
-                <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }}>Excel</button>
-              </DownloadTableExcel>
+                <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }}>
+                  Excel
+                </button>
+              </DownloadTableExcel> */}
+              <CSVLink
+                data={data().rows} // Provide the data you want to export
+                filename={'report.xls'} // Set the filename for the downloaded CSV file
+                className='btn btn-large p-2'
+                style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }}
+              >
+                Excel
+              </CSVLink>
+
 
             </div>
             <div className='col-md-auto'>
@@ -350,7 +393,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
           <CDBCard>
             <CDBCardBody>
               <CDBDataTable
-                ref={tableRef}
+                // ref={tableRef}
                 striped
                 bordered
                 hover
@@ -383,7 +426,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
         </CDBContainer>
         {showPdf && (
           <PDFViewer style={{ width: '100%', height: '100vh' }}>
-            <PdfDocument data={data().rows} />
+            <PdfDocument data={invoiceDatas} />
           </PDFViewer>
         )}
       </div>

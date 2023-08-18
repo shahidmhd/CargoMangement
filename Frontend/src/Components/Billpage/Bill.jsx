@@ -28,6 +28,7 @@ const Bill = ({ companydetails, servicedetails, invoiceNumber }) => {
     const navigate = useNavigate()
 
     const handleDateChange = (date) => {
+        console.log(date,"ggggggdate");
         setSelectedDate(date);
     };
     const handleEnterKeyPress = (e) => {
@@ -55,7 +56,15 @@ const Bill = ({ companydetails, servicedetails, invoiceNumber }) => {
     };
 
 
-
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Note: Month is zero-based
+        const year = date.getFullYear();
+        const formattedDate = `${day}/${month}/${year}`;
+        return formattedDate;
+      }
+    
 
     const handleamountChange = (index, newamount) => {
         const updatedTableRows = [...tableRows];
@@ -191,7 +200,8 @@ const Bill = ({ companydetails, servicedetails, invoiceNumber }) => {
 
 
         const dataToSave = {
-            selectedDate,
+            selectedDate:selectedDate,
+            date:formatDate(selectedDate),
             selectedCompanyId: selctedCompantId,
             invoiceNumber,
             boxNo,

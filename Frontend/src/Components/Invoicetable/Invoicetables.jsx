@@ -157,12 +157,21 @@ import { deleteInvoice, getselectedinvioce } from '../../apicalls/Invoice';
 import { toast } from 'react-toastify';
 const Invoicetables = ({ invoices, render, setrender }) => {
   const navigate = useNavigate()
+  // function formatDate(dateString) {
+  //   console.log(dateString,"date ");
+  //   const date = new Date(dateString);
+  //   const formattedDate = date.toLocaleDateString("en-US");
+  //   return formattedDate;
+  // }
   function formatDate(dateString) {
+    console.log(dateString, "date ");
     const date = new Date(dateString);
+
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Note: Month is zero-based
     const year = date.getFullYear();
-    const formattedDate = `${day}/${month}/${year}`;
+
+    const formattedDate = `${day}/${month}/ ${year}`;
     return formattedDate;
   }
 
