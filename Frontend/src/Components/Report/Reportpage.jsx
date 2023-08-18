@@ -73,7 +73,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
 
     console.log("Start Date:", formattedStartDate); // Output: "19/08/2023"
     console.log("End Date:", formattedEndDate);     // Output: "19/08/2023"
-console.log("daaa");
+    console.log("daaa");
     console.log(startdate, enddate);
     const response = await searchdatas(formattedStartDate, formattedEndDate)
     setinvoiceDatas(response.filteredInvoices)
@@ -93,6 +93,32 @@ console.log("daaa");
 
   const handleServiceChange = async (event) => {
     setSelectedService(event.target.value);
+    // console.log(event.target.value, "selected service");
+    // console.log(invoiceDatas, "service invoice datas");
+    // // Find the selected service in the tableRows array
+    // console.log(invoiceDatas.tableRows, "ffffff");
+    // invoiceDatas.forEach(invoiceData => {
+    //   if (invoiceData.tableRows) {
+    //     // Find the selected service in the tableRows array of the current invoice data
+    //     const selectedService = invoiceData.tableRows.find(row => row.serviceName === event.target.value);
+
+    //     if (selectedService) {
+    //       console.log(invoiceData.tableRows.push(selectedService), "hhhhhhtablerows");
+    //       console.log("Selected Service:", selectedService);
+    //       // Remove all existing services from the array
+    //       invoiceData.tableRows.length = 0;
+
+    //       // Push the selected service to the array
+    //       invoiceData.tableRows.push(selectedService);
+
+    //       console.log("Updated tableRows:", invoiceData);
+    //       console.log("Selected Service:", selectedService);
+    //       // setinvoiceDatas(invoiceData)
+    //     } else {
+    //       console.log("Selected service not found in the invoice tableRows.");
+    //     }
+    //   }
+    // });
     const response = await fetchserviceinvoices(event.target.value)
     setinvoiceDatas(response.matchingInvoices)
     console.log(response.matchingInvoices, "service matched datas");

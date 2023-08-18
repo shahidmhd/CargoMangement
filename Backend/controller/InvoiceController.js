@@ -177,7 +177,7 @@ export default {
             // Query the database for invoices with matching serviceName within tableRows
             const matchingInvoices = await invoice.find({
                 'tableRows.serviceName': servicename,
-            });
+            }).sort({ createdAt: -1 }).populate('selectedCompanyId');;
             console.log(matchingInvoices, "jgdrt");
             res.json({
                 success: 'true',
