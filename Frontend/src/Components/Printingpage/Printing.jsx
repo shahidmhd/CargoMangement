@@ -28,7 +28,7 @@ const Printing = ({ invoiceData }) => {
     <div className="page-content container pt-5">
       <div className="row justify-content-center">
         <div className="col-12 col-lg-8" >
-          <div className="container border p-3 mx-auto"  ref={componentRef} >
+          <div className="container border p-3 mx-auto" ref={componentRef} >
             <div className="row" >
               <div className="col-12 text-center mb-3 ">
                 <span className="text-default-d3" style={{ fontSize: "2em", fontWeight: "bold" }}>INDBX PRIVATE LIMITED</span>
@@ -46,7 +46,8 @@ const Printing = ({ invoiceData }) => {
                 <div>
                   <div>
                     <span className="font-weight-bold">Company Name :</span>
-                    {invoiceData?.selectedCompanyId.companyname}
+                    {invoiceData?.selectedCompanyId?.companyname ? invoiceData.selectedCompanyId.companyname : ''}
+
                   </div>
 
                   <div><span className="font-weight-bold">Box No:</span> {invoiceData?.boxNo}</div>

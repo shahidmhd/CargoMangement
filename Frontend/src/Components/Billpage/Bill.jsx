@@ -399,7 +399,7 @@ const Bill = ({ companydetails, servicedetails, invoiceNumber }) => {
                                             <td>
                                                 <input
                                                     type="number"
-                                                    value={row.weight?row.weight:''}
+                                                    value={row.weight ? row.weight : ''}
                                                     onChange={(e) => handleWeightChange(index, e.target.value)}
                                                     onKeyPress={handleEnterKeyPress}
                                                 />
@@ -407,7 +407,7 @@ const Bill = ({ companydetails, servicedetails, invoiceNumber }) => {
                                             <td>
                                                 <input
                                                     type="number"
-                                                    value={row.amount?row.amount:''}
+                                                    value={row.amount ? row.amount : ''}
                                                     onChange={(e) => handleamountChange(index, e.target.value)}
                                                     onKeyPress={handleEnterKeyPress}
                                                 />

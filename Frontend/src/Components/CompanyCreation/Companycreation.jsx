@@ -227,6 +227,7 @@ const Companycreation = ({ Company, render, setrender }) => {
                     <CDBCard>
                         <CDBCardBody>
                             <CDBDataTable
+                                responsive
                                 striped
                                 bordered
                                 hover

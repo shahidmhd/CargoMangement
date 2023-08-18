@@ -221,80 +221,85 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
     return (
         <MDBContainer className="py-5">
             <MDBCard style={{ border: '3px solid black' }}>
-                <div
-                    style={{ backgroundColor: "#fff", height: "12em", display: "flex", border: '2px solid black' }}
-                    className="w-100"
-                >
-                    <div style={{ backgroundColor: '#79c8db', height: '100%', width: '10em', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div className="d-flex flex-column flex-md-row" style={{ backgroundColor: "#fff", border: '2px solid black' }}>
+                    {/* <div style={{ backgroundColor: '#79c8db', height: '100%', width: '10em', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         {/* hii */}
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <div style={{ backgroundColor: '#d6e3c5', height: '30%', width: '55em', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {/* </div> */}
+                    <div className="flex-grow-1 d-flex flex-column">
+                        <div className="text-center text-white p-3" style={{ backgroundColor: '#79c8db' }}>
                             <h1>INDBX PRIVET LIMITED</h1>
                         </div>
-                        <div className="p-3" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <div>
+                        <div className="p-3 d-flex flex-column-reverse flex-md-row justify-content-between">
+                            <div className="mb-3 mb-md-0">
                                 <p>
                                     KP 14/432, CHULLIKKAPARAMBA,<br />
                                     <span style={{ fontWeight: 300 }}>CHERUVADI, Kozhikode, Kerala, 673661</span>
                                 </p>
                                 <p>GSTIN:32AAGCI3195M1ZA</p>
                             </div>
-                            <p className='date-input'>
+                            <div className="date-input mt-3 mt-md-0">
                                 <DatePicker selected={selectedDate} onChange={handleDateChange} dateFormat="dd/MM/yyyy" placeholderText="Select a date" className='datepicker' /><br />
                                 <b> Invoice NO:{invoiceData?.invoiceNumber}</b>
-                            </p>
+                            </div>
                         </div>
                     </div>
 
-                    <div className='.hide-on-print' style={{ backgroundColor: '#79c8db', height: '30%', width: '16em', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    </div>
+                    {/* <div className='.hide-on-print' style={{ backgroundColor: '#79c8db', height: '30%', width: '16em', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    </div> */}
                 </div>
                 <MDBCardBody>
-                    <MDBRow>
+                    <MDBRow className="justify-content-center">
                         <MDBCol xl="8">
                             <MDBTypography listUnStyled>
-                                <div style={{ display: "flex", alignItems: "center" }}>
-                                    <div style={{ display: "flex", paddingLeft: "10%", paddingBottom: "3%" }}>
-                                        <li className="text-muted">
-                                            {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA",paddingLeft:"20%"}} /> */}
-                                            <span className="fw-bold ms-1"></span>Company
-                                            <select
-                                                className="select"
-                                                style={{ border: 'none', background: 'none', color: 'black', padding: '5px' }}
-                                                value={selctedCompantId}
-                                                onChange={handleCompanyChange}
-                                            >
-                                                <option value={invoiceData?.selectedCompanyId._id}>{invoiceData?.selectedCompanyId.companyname}</option>
-                                                {companydetails &&
-                                                    companydetails.map((item) => (
-                                                        <option key={item._id} value={item._id}>
-                                                            {item.companyname}
-                                                        </option>
-                                                    ))}
-                                            </select>
-                                        </li>
-                                        <li className="text-muted" style={{ paddingLeft: "5%" }}>
-                                            {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA",paddingLeft:"20%"}} /> */}
-                                            <span className="fw-bold ms-1"></span>Box No:<input type='number' onChange={(e) => setBoxno(e.target.value)} value={boxNo} style={{ width: "100px" }} ></input>
-                                        </li>
-                                        <li className="text-muted" style={{ paddingLeft: "5%" }}>
-                                            {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA",paddingLeft:"20%"}} /> */}
-                                            <span className="fw-bold ms-1"></span>Total weight:<div
-                                                style={{
-                                                    width: "100px",
-                                                    height: "30px",
-                                                    border: "1px solid #000",
-                                                    display: "inline-block",
-                                                    padding: "5px"
-                                                }}
-                                            >{invoiceDatas?.totalWeight}</div>
-                                        </li>
-                                        <li className="text-muted" style={{ paddingLeft: "5%" }}>
-                                            {/* <MDBIcon fas icon="circle" style={{ color: "#84B0CA", paddingLeft:"20%" }} /> */}
-                                            <span className="fw-bold ms-1"></span>AirwayBill N.O:<input type='number' onChange={(e) => setAirwaybillno(e.target.value)} value={Airwaybillno} style={{ width: "100px" }}
-                                            ></input>
-                                        </li>
+                                <div className="d-md-flex flex-md-row flex-column justify-content-between">
+                                    <div className="d-flex flex-column mb-3 me-md-3">
+                                        <span className="text-muted fw-bold">Company</span>
+                                        <select
+                                            className="select form-select mt-1"
+                                            value={selctedCompantId}
+                                            onChange={handleCompanyChange}
+                                        >
+                                            <option value="">Select company</option>
+                                            {companydetails &&
+                                                companydetails.map((item, index) => (
+                                                    <option key={index} value={item._id}>
+                                                        {item.companyname}
+                                                    </option>
+                                                ))}
+                                        </select>
+                                    </div>
+                                    <div className="d-flex flex-column mb-3 me-md-3">
+                                        <span className="text-muted fw-bold">Box No:</span>
+                                        <input
+                                            type="number"
+                                            onChange={(e) => setBoxno(e.target.value)}
+                                            value={boxNo}
+                                            className="form-control mt-1"
+                                            style={{ width: "80px" }} // Adjust the width as needed
+                                        />
+                                    </div>
+                                    <div className="d-flex flex-column mb-3 me-md-3">
+                                        <span className="text-muted fw-bold">Total weight:</span>
+                                        <div
+                                            className="border p-1 mt-1 form-control"
+                                            style={{
+                                                width: "80px", // Adjust the width as needed
+                                                height: "30px",
+                                                lineHeight: "1.5",
+                                            }}
+                                        >
+                                            {invoiceData?.totalWeight}
+                                        </div>
+                                    </div>
+                                    <div className="d-flex flex-column mb-3">
+                                        <span className="text-muted fw-bold">AirwayBill N.O:</span>
+                                        <input
+                                            type="number"
+                                            onChange={(e) => setAirwaybillno(e.target.value)}
+                                            value={Airwaybillno}
+                                            className="form-control mt-1"
+                                            style={{ width: "80px" }} // Adjust the width as needed
+                                        />
                                     </div>
                                 </div>
                             </MDBTypography>
@@ -441,12 +446,13 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
                     </MDBRow>
                     <hr style={{ border: '3px solid black' }} />
                     {/* ... (rest of the JSX) */}
-                    <MDBRow>
-                        <MDBCol xl="10">
+                      <MDBRow className="justify-content-center">
+                        <MDBCol xl="10" className="text-center mb-3 mb-md-0">
                             <p>Thank you for your purchase</p>
                         </MDBCol>
-                        <MDBCol xl="2">
-                            <button className="text-capitalize btn"
+                        <MDBCol xl="2" className="d-flex justify-content-center">
+                            <button
+                                className="text-capitalize btn"
                                 style={{ backgroundColor: "#60bdf3", color: 'white' }}
                                 onClick={handlesave}
                             >
