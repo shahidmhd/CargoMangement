@@ -18,7 +18,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedDate2, setSelectedDate2] = useState(new Date());
-  const [showPdf, setShowPdf] = useState(false);
+  // const [showPdf, setShowPdf] = useState(false);
   const [invoiceDatas, setinvoiceDatas] = useState(invoiceData)
   const [searchedinvoices, setsearchedinvoices] = useState([])
   const [companyInvoice, setcompanyInvoice] = useState([])
@@ -26,9 +26,9 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
 
 
 
-  const handlePdfClick = () => {
-    setShowPdf(true);
-  };
+  // const handlePdfClick = () => {
+  //   setShowPdf(true);
+  // };
 
 
 
@@ -98,32 +98,32 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
     console.log(invoiceDatas, "service invoice datas")
 
     // Find the current invoiceData object
-    const currentInvoiceData = invoiceDatas.find(invoiceData => {
-      return invoiceData.tableRows && invoiceData.tableRows.some(row => row.serviceName === event.target.value);
-    });
+    // const currentInvoiceData = invoiceDatas.find(invoiceData => {
+    //   return invoiceData.tableRows && invoiceData.tableRows.some(row => row.serviceName === event.target.value);
+    // });
 
-    if (currentInvoiceData) {
-      // Filter and get the matching tableRow from the current invoiceData
-      const selectedTableRow = currentInvoiceData.tableRows.find(row => row.serviceName === event.target.value);
+    // if (currentInvoiceData) {
+    //   // Filter and get the matching tableRow from the current invoiceData
+    //   const selectedTableRow = currentInvoiceData.tableRows.find(row => row.serviceName === event.target.value);
 
-      if (selectedTableRow) {
-        // Push the selected tableRow to an array
-        const matchedTableRows = [];
-        matchedTableRows.push(selectedTableRow);
+    //   if (selectedTableRow) {
+    //     // Push the selected tableRow to an array
+    //     const matchedTableRows = [];
+    //     matchedTableRows.push(selectedTableRow);
 
-        console.log("Matched TableRows:", matchedTableRows);
-        console.log(currentInvoiceData, "llllll");
-        // setinvoiceDatas(invoiceDatas); // If you want to update the state
-      } else {
-        console.log("No matching tableRow found in the current invoiceData.");
-      }
-    } else {
-      console.log("No matching invoice data found.");
-    }
+    //     console.log("Matched TableRows:", matchedTableRows);
+    //     console.log(currentInvoiceData, "llllll");
+    //     // setinvoiceDatas(invoiceDatas); // If you want to update the state
+    //   } else {
+    //     console.log("No matching tableRow found in the current invoiceData.");
+    //   }
+    // } else {
+    //   console.log("No matching invoice data found.");
+    // }
   
-  // const response = await fetchserviceinvoices(event.target.value)
-  // setinvoiceDatas(response.matchingInvoices)
-  // console.log(response.matchingInvoices, "service matched datas");
+  const response = await fetchserviceinvoices(event.target.value)
+  setinvoiceDatas(response.matchingInvoices)
+  console.log(response.matchingInvoices, "service matched datas");
 };
 
 const [totals, setTotals] = useState({
@@ -177,10 +177,10 @@ const data = () => {
       rows: [],
     };
   }
-  const formattedTotalAmount = `Total: ${totals.totalAmount}`;
-  const formattedtotalIGST = `Total: ${totals.igst}`;
-  const formattedtotalSGST = `Total: ${totals.sgst}`;
-  const formattedtotalCGST = `Total: ${totals.cgst}`;
+  const formattedTotalAmount = `${totals.totalAmount}`;
+  const formattedtotalIGST = ` ${totals.igst}`;
+  const formattedtotalSGST = ` ${totals.sgst}`;
+  const formattedtotalCGST = `${totals.cgst}`;
   return {
     columns: [
       {
@@ -309,7 +309,7 @@ const data = () => {
       HSNCode: '',
       weight: '',
       unitvalue: '',
-      Taxablevalue: '',
+      Taxablevalue: 'Total:',
       IGST: formattedtotalIGST,
       SGST: formattedtotalSGST,
       CGST: formattedtotalCGST,
@@ -349,7 +349,7 @@ return (
             </button>
           </div>
           <div className='col-md-auto'>
-            <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }} onClick={handlePdfClick}>PDF</button>
+            <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }} >PDF</button>
           </div>
           <div className='col-md-auto'>
             {/* <DownloadTableExcel
@@ -429,6 +429,7 @@ return (
               pagesAmount={4}
               data={data()}
               materialSearch={true}
+              className="custom-datatable" // Add a custom class name to the table
             />
             <div style={{
               display: 'flex',
@@ -451,13 +452,15 @@ return (
           </CDBCardBody>
         </CDBCard>
       </CDBContainer>
-      {showPdf && (
+      {/* {showPdf && (
         <PDFViewer style={{ width: '100%', height: '100vh' }}>
           <PdfDocument data={invoiceDatas} />
         </PDFViewer>
-      )}
+      )} */}
     </div>
+    
   </>
+  
 );
 };
 

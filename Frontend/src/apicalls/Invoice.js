@@ -53,7 +53,7 @@ export const EditINVOICEdata = async (payload) => {
         const response = await instance.patch(`/api/users/invoice/${Invoiceid}`, payloadWithoutId);
         return response.data
     } catch (err) {
-        return err.message;
+        return err.response.data;
     }
 }
 

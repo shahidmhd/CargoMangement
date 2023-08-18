@@ -1,5 +1,5 @@
 import invoice from '../models/Invoicemodel.js'
-
+import AppError from '../utils/AppError.js';
 export default {
     AddINVOICE: async (req, res) => {
         try {
@@ -77,6 +77,7 @@ export default {
     },
     EditINVOICE: async (req, res) => {
         try {
+            console.log(req.body);
             const { id } = req.params;
             const { invoiceNumber, airwayBillNo } = req.body;
 
@@ -100,6 +101,7 @@ export default {
             const existingAirwayBillNo = await invoice.findOne({ airwayBillNo: airwayBillNo });
 
             if (existingAirwayBillNo && id !== existingAirwayBillNo._id.toString()) {
+                console.log("hiii");
                 // If the airwayBillNo already exists for a different invoice, throw an error
                 throw new AppError('Airway bill number already exists', 403);
             }

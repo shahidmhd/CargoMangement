@@ -34,6 +34,14 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
     const [tableRows, settableRows] = useState(invoiceData?.tableRows)
     const navigate = useNavigate()
 
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Note: Month is zero-based
+        const year = date.getFullYear();
+        const formattedDate = `${day}/${month}/${year}`;
+        return formattedDate;
+    }
 
     const handleCompanyChange = (e) => {
         const selectedCompanyId = e.target.value;
@@ -142,6 +150,9 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
 
 
     const handlesave = async () => {
+        try{
+
+       
         if (!selctedCompantId || selctedCompantId.trim() === "") {
             toast.error("Please select a Company", {
                 hideProgressBar: true,
@@ -203,20 +214,26 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
             invoiceNumber: invoiceData.invoiceNumber,
             selectedCompanyId: selctedCompantId,
             selectedDate: selectedDate,
+            date: formatDate(selectedDate),
             subtotal: invoiceDatas.subtotal,
             tableRows: tableRows,
             totalAmount: invoiceDatas.totalAmount,
             totalWeight: invoiceDatas.totalWeight
         };
 
-        console.log(savedData);
+        console.log(savedData,"shahid");
         const response = await EditINVOICEdata(savedData);
         if (response.success) {
             toast.success('Invoice edited successfully!', {
                 hideProgressBar: true,
             });
             navigate('/table')
+        }else{
+         toast.error(response.error)
         }
+    }catch(err){
+        console.log(err);
+    }
     }
     return (
         <MDBContainer className="py-5">
@@ -379,7 +396,7 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
                                             <td>
                                                 <input
                                                     type="number"
-                                                    value={row.weight}
+                                                    value={row.weight?row.weight:''}
                                                     onChange={(e) => handleWeightChange(index, e.target.value)}
 
                                                 />
@@ -387,7 +404,7 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
                                             <td>
                                                 <input
                                                     type="number"
-                                                    value={row.amount}
+                                                    value={row.amount?row.amount:''}
                                                     onChange={(e) => handleamountChange(index, e.target.value)}
 
                                                 />
