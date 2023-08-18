@@ -70,14 +70,10 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
   const filterDataByDate = async (startdate, enddate) => {
     const formattedStartDate = formatDateToDDMMYYYY(startdate);
     const formattedEndDate = formatDateToDDMMYYYY(enddate);
-
-    console.log("Start Date:", formattedStartDate); // Output: "19/08/2023"
-    console.log("End Date:", formattedEndDate);     // Output: "19/08/2023"
-    console.log("daaa");
     console.log(startdate, enddate);
     const response = await searchdatas(formattedStartDate, formattedEndDate)
     setinvoiceDatas(response.filteredInvoices)
-    console.log(response.filteredInvoices, "gggg");
+
   }
 
 
@@ -87,271 +83,276 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
   const handleCompanyChange = async (event) => {
     setSelectedCompany(event.target.value);
     const response = await fetchcompanyinvoices(event.target.value)
-    setinvoiceDatas(response.matchingInvoices)
-    console.log(response.matchingInvoices, "company matched datas");
+    if (response.success) {
+      setinvoiceDatas(response.matchingInvoices)
+      console.log(response.matchingInvoices, "company matched datas");
+    } else {
+      setinvoiceDatas(invoiceData)
+    }
+
   };
 
   const handleServiceChange = async (event) => {
     setSelectedService(event.target.value);
-    // console.log(event.target.value, "selected service");
-    // console.log(invoiceDatas, "service invoice datas");
-    // // Find the selected service in the tableRows array
-    // console.log(invoiceDatas.tableRows, "ffffff");
-    // invoiceDatas.forEach(invoiceData => {
-    //   if (invoiceData.tableRows) {
-    //     // Find the selected service in the tableRows array of the current invoice data
-    //     const selectedService = invoiceData.tableRows.find(row => row.serviceName === event.target.value);
+    console.log(event.target.value, "selected service")
+    console.log(invoiceDatas, "service invoice datas")
 
-    //     if (selectedService) {
-    //       console.log(invoiceData.tableRows.push(selectedService), "hhhhhhtablerows");
-    //       console.log("Selected Service:", selectedService);
-    //       // Remove all existing services from the array
-    //       invoiceData.tableRows.length = 0;
+    // Find the current invoiceData object
+    const currentInvoiceData = invoiceDatas.find(invoiceData => {
+      return invoiceData.tableRows && invoiceData.tableRows.some(row => row.serviceName === event.target.value);
+    });
 
-    //       // Push the selected service to the array
-    //       invoiceData.tableRows.push(selectedService);
+    if (currentInvoiceData) {
+      // Filter and get the matching tableRow from the current invoiceData
+      const selectedTableRow = currentInvoiceData.tableRows.find(row => row.serviceName === event.target.value);
 
-    //       console.log("Updated tableRows:", invoiceData);
-    //       console.log("Selected Service:", selectedService);
-    //       // setinvoiceDatas(invoiceData)
-    //     } else {
-    //       console.log("Selected service not found in the invoice tableRows.");
-    //     }
-    //   }
-    // });
-    const response = await fetchserviceinvoices(event.target.value)
-    setinvoiceDatas(response.matchingInvoices)
-    console.log(response.matchingInvoices, "service matched datas");
-  };
+      if (selectedTableRow) {
+        // Push the selected tableRow to an array
+        const matchedTableRows = [];
+        matchedTableRows.push(selectedTableRow);
 
-  const [totals, setTotals] = useState({
-    taxableValue: 0,
-    igst: 0,
-    sgst: 0,
-    cgst: 0,
-    totalAmount: 0,
-  });
-
-
-  useEffect(() => {
-    console.log(invoiceDatas, "first");
-    if (invoiceDatas && invoiceDatas.length > 0) {
-      let totalTaxableValue = 0;
-      let totalIGST = 0;
-      let totalSGST = 0;
-      let totalCGST = 0;
-      let totalAmount = 0;
-
-      invoiceDatas.forEach((item) => {
-        item.tableRows.forEach((row) => {
-          const taxableValue = row.weight * row.amount;
-          const igst = (taxableValue * 0.18).toFixed(2);
-          const sgst = (taxableValue * 0.09).toFixed(2); // SGST is half of IGST
-          const cgst = (taxableValue * 0.09).toFixed(2); // CGST is half of IGST
-          const rowTotal = (taxableValue + parseFloat(igst)).toFixed(2);
-
-          totalTaxableValue += taxableValue;
-          totalIGST += parseFloat(igst);
-          totalSGST += parseFloat(sgst);
-          totalCGST += parseFloat(cgst);
-          totalAmount += parseFloat(rowTotal);
-        });
-      });
-
-      setTotals({
-        taxableValue: totalTaxableValue.toFixed(2),
-        igst: totalIGST.toFixed(2),
-        sgst: totalSGST.toFixed(2),
-        cgst: totalCGST.toFixed(2),
-        totalAmount: totalAmount.toFixed(2),
-      });
+        console.log("Matched TableRows:", matchedTableRows);
+        console.log(currentInvoiceData, "llllll");
+        // setinvoiceDatas(invoiceDatas); // If you want to update the state
+      } else {
+        console.log("No matching tableRow found in the current invoiceData.");
+      }
+    } else {
+      console.log("No matching invoice data found.");
     }
-  }, [invoiceDatas]);
+  
+  // const response = await fetchserviceinvoices(event.target.value)
+  // setinvoiceDatas(response.matchingInvoices)
+  // console.log(response.matchingInvoices, "service matched datas");
+};
+
+const [totals, setTotals] = useState({
+  taxableValue: 0,
+  igst: 0,
+  sgst: 0,
+  cgst: 0,
+  totalAmount: 0,
+});
 
 
-  const data = () => {
-    if (!Array.isArray(invoiceDatas)) {
-      return {
-        columns: [],
-        rows: [],
-      };
-    }
-    const formattedTotalAmount = `Total: ${totals.totalAmount}`;
-    const formattedtotalIGST = `Total: ${totals.igst}`;
-    const formattedtotalSGST = `Total: ${totals.sgst}`;
-    const formattedtotalCGST = `Total: ${totals.cgst}`;
+useEffect(() => {
+  if (invoiceDatas && invoiceDatas.length > 0) {
+    let totalTaxableValue = 0;
+    let totalIGST = 0;
+    let totalSGST = 0;
+    let totalCGST = 0;
+    let totalAmount = 0;
+
+    invoiceDatas.forEach((item) => {
+      item.tableRows.forEach((row) => {
+        const taxableValue = row.weight * row.amount;
+        const igst = (taxableValue * 0.18).toFixed(2);
+        const sgst = (taxableValue * 0.09).toFixed(2); // SGST is half of IGST
+        const cgst = (taxableValue * 0.09).toFixed(2); // CGST is half of IGST
+        const rowTotal = (taxableValue + parseFloat(igst)).toFixed(2);
+
+        totalTaxableValue += taxableValue;
+        totalIGST += parseFloat(igst);
+        totalSGST += parseFloat(sgst);
+        totalCGST += parseFloat(cgst);
+        totalAmount += parseFloat(rowTotal);
+      });
+    });
+
+    setTotals({
+      taxableValue: totalTaxableValue.toFixed(2),
+      igst: totalIGST.toFixed(2),
+      sgst: totalSGST.toFixed(2),
+      cgst: totalCGST.toFixed(2),
+      totalAmount: totalAmount.toFixed(2),
+    });
+  }
+}, [invoiceDatas]);
+
+
+const data = () => {
+  if (!Array.isArray(invoiceDatas)) {
     return {
-      columns: [
-        {
-          label: 'No',
-          field: 'No',
-          width: 50,
-          attributes: {
-            'aria-controls': 'DataTable',
-            'aria-label': 'No',
-          },
-        },
-        {
-          label: 'Invoice No',
-          field: 'InvoiceNo',
-          width: 150,
-          attributes: {
-            'aria-controls': 'DataTable',
-            'aria-label': 'Invoice No',
-          },
-        },
-        {
-          label: 'InvoiceDate',
-          field: 'InvoiceDate',
-          width: 100,
-        },
-        {
-          label: 'Box No',
-          field: 'BoxNo',
-          width: 100,
-        },
-        {
-          label: 'Airway Bill',
-          field: 'Airwaybill',
-          sort: 'asc',
-          width: 100,
-        },
-        {
-          label: 'Service Name',
-          field: 'ServiceName',
-          sort: 'disabled',
-          width: 100,
-        },
-        {
-          label: 'Company Name',
-          field: 'CompanyName',
-          sort: 'disabled',
-          width: 100,
-        },
-        {
-          label: 'HSN Code',
-          field: 'HSNCode',
-          sort: 'disabled',
-          width: 100,
-        },
-        {
-          label: 'Weight',
-          field: 'weight',
-          sort: 'disabled',
-          width: 100,
-        },
-        {
-          label: 'Unit Value',
-          field: 'unitvalue',
-          sort: 'disabled',
-          width: 100,
-        },
-        {
-          label: 'Taxable Value',
-          field: 'Taxablevalue',
-          sort: 'disabled',
-          width: 100,
-        },
-        {
-          label: 'IGST',
-          field: 'IGST',
-          sort: 'disabled',
-          width: 100,
-        },
-        {
-          label: 'SGST',
-          field: 'SGST',
-          sort: 'disabled',
-          width: 100,
-        },
-        {
-          label: 'CGST',
-          field: 'CGST',
-          sort: 'disabled',
-          width: 100,
-        },
-        {
-          label: 'Total',
-          field: 'Total',
-          sort: 'disabled',
-          width: 100,
-        },
-      ],
-      rows: [...invoiceDatas?.flatMap((item, index) =>
-        item.tableRows.map((row, rowIndex) => ({
-          No: index + 1,
-          InvoiceNo: item.invoiceNumber,
-          InvoiceDate: formatDate(item.selectedDate),
-          BoxNo: item.boxNo,
-          Airwaybill: item.airwayBillNo,
-          ServiceName: row.serviceName,
-          CompanyName: item.selectedCompanyId.companyname,
-          HSNCode: row.HSNCode,
-          weight: row.weight,
-          unitvalue: row.amount,
-          Taxablevalue: row.weight * row.amount,
-          IGST: (row.weight * row.amount * 0.18).toFixed(2),
-          SGST: ((row.weight * row.amount * 0.18) / 2).toFixed(2), // SGST is half of IGST
-          CGST: ((row.weight * row.amount * 0.18) / 2).toFixed(2), // CGST is half of IGST
-          Total: (row.weight * row.amount + row.weight * row.amount * 0.18).toFixed(2), // Taxablevalue + gst18
-        }))
-      ),
-      // Add an additional row with empty values
+      columns: [],
+      rows: [],
+    };
+  }
+  const formattedTotalAmount = `Total: ${totals.totalAmount}`;
+  const formattedtotalIGST = `Total: ${totals.igst}`;
+  const formattedtotalSGST = `Total: ${totals.sgst}`;
+  const formattedtotalCGST = `Total: ${totals.cgst}`;
+  return {
+    columns: [
       {
-        No: '',
-        InvoiceNo: '',
-        InvoiceDate: '',
-        BoxNo: '',
-        Airwaybill: '',
-        ServiceName: '',
-        CompanyName: '',
-        HSNCode: '',
-        weight: '',
-        unitvalue: '',
-        Taxablevalue: '',
-        IGST: formattedtotalIGST,
-        SGST: formattedtotalSGST,
-        CGST: formattedtotalCGST,
-        Total: formattedTotalAmount,
+        label: 'No',
+        field: 'No',
+        width: 50,
+        attributes: {
+          'aria-controls': 'DataTable',
+          'aria-label': 'No',
+        },
       },
-      ]
-    }
-  };
-  return (
-    <>
-      <div className='container-fluid p-5' style={{ height: '100vh', overflowY: 'auto' }}>
-        <div className='mb-4'>
-          <h1 className='text-center mb-3'>Manage Your Report</h1>
-        </div>
-        {/*  */}
-        <div className='text-center mb-3'>
-          <div className='row justify-content-center align-items-center'>
-            <div className='col-md-auto'>
-              From:  <DatePicker
-                selected={selectedDate}
-                onChange={handleDateChange}
-                dateFormat='dd/MM/yyyy'
-                placeholderText='Select a date'
-                className='datepicker mx-2 narrow-datepicker'
-              />
-            </div>
-            <div className='col-md-auto'>
-              To:     <DatePicker
-                selected={selectedDate2}
-                onChange={handleDateChange2}
-                dateFormat='dd/MM/yyyy'
-                placeholderText='Select a date'
-                className='datepicker mx-2 narrow-datepicker'
-              />
-              <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }} onClick={() => filterDataByDate(selectedDate, selectedDate2)}>
-                Search
-              </button>
-            </div>
-            <div className='col-md-auto'>
-              <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }} onClick={handlePdfClick}>PDF</button>
-            </div>
-            <div className='col-md-auto'>
-              {/* <DownloadTableExcel
+      {
+        label: 'Invoice No',
+        field: 'InvoiceNo',
+        width: 150,
+        attributes: {
+          'aria-controls': 'DataTable',
+          'aria-label': 'Invoice No',
+        },
+      },
+      {
+        label: 'InvoiceDate',
+        field: 'InvoiceDate',
+        width: 100,
+      },
+      {
+        label: 'Box No',
+        field: 'BoxNo',
+        width: 100,
+      },
+      {
+        label: 'Airway Bill',
+        field: 'Airwaybill',
+        sort: 'asc',
+        width: 100,
+      },
+      {
+        label: 'Service Name',
+        field: 'ServiceName',
+        sort: 'disabled',
+        width: 100,
+      },
+      {
+        label: 'Company Name',
+        field: 'CompanyName',
+        sort: 'disabled',
+        width: 100,
+      },
+      {
+        label: 'HSN Code',
+        field: 'HSNCode',
+        sort: 'disabled',
+        width: 100,
+      },
+      {
+        label: 'Weight',
+        field: 'weight',
+        sort: 'disabled',
+        width: 100,
+      },
+      {
+        label: 'Unit Value',
+        field: 'unitvalue',
+        sort: 'disabled',
+        width: 100,
+      },
+      {
+        label: 'Taxable Value',
+        field: 'Taxablevalue',
+        sort: 'disabled',
+        width: 100,
+      },
+      {
+        label: 'IGST',
+        field: 'IGST',
+        sort: 'disabled',
+        width: 100,
+      },
+      {
+        label: 'SGST',
+        field: 'SGST',
+        sort: 'disabled',
+        width: 100,
+      },
+      {
+        label: 'CGST',
+        field: 'CGST',
+        sort: 'disabled',
+        width: 100,
+      },
+      {
+        label: 'Total',
+        field: 'Total',
+        sort: 'disabled',
+        width: 100,
+      },
+    ],
+    rows: [...invoiceDatas?.flatMap((item, index) =>
+      item.tableRows.map((row, rowIndex) => ({
+        No: index + 1,
+        InvoiceNo: item.invoiceNumber,
+        InvoiceDate: formatDate(item.selectedDate),
+        BoxNo: item.boxNo,
+        Airwaybill: item.airwayBillNo,
+        ServiceName: row.serviceName,
+        CompanyName: item.selectedCompanyId?.companyname || 'Company Deleted',
+        HSNCode: row.HSNCode,
+        weight: row.weight,
+        unitvalue: row.amount,
+        Taxablevalue: row.weight * row.amount,
+        IGST: (row.weight * row.amount * 0.18).toFixed(2),
+        SGST: ((row.weight * row.amount * 0.18) / 2).toFixed(2), // SGST is half of IGST
+        CGST: ((row.weight * row.amount * 0.18) / 2).toFixed(2), // CGST is half of IGST
+        Total: (row.weight * row.amount + row.weight * row.amount * 0.18).toFixed(2), // Taxablevalue + gst18
+      }))
+    ),
+    // Add an additional row with empty values
+    {
+      No: '',
+      InvoiceNo: '',
+      InvoiceDate: '',
+      BoxNo: '',
+      Airwaybill: '',
+      ServiceName: '',
+      CompanyName: '',
+      HSNCode: '',
+      weight: '',
+      unitvalue: '',
+      Taxablevalue: '',
+      IGST: formattedtotalIGST,
+      SGST: formattedtotalSGST,
+      CGST: formattedtotalCGST,
+      Total: formattedTotalAmount,
+    },
+    ]
+  }
+};
+return (
+  <>
+    <div className='container-fluid p-5' style={{ height: '100vh', overflowY: 'auto' }}>
+      <div className='mb-4'>
+        <h1 className='text-center mb-3'>Manage Your Report</h1>
+      </div>
+      {/*  */}
+      <div className='text-center mb-3'>
+        <div className='row justify-content-center align-items-center'>
+          <div className='col-md-auto'>
+            From:  <DatePicker
+              selected={selectedDate}
+              onChange={handleDateChange}
+              dateFormat='dd/MM/yyyy'
+              placeholderText='Select a date'
+              className='datepicker mx-2 narrow-datepicker'
+            />
+          </div>
+          <div className='col-md-auto'>
+            To:     <DatePicker
+              selected={selectedDate2}
+              onChange={handleDateChange2}
+              dateFormat='dd/MM/yyyy'
+              placeholderText='Select a date'
+              className='datepicker mx-2 narrow-datepicker'
+            />
+            <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }} onClick={() => filterDataByDate(selectedDate, selectedDate2)}>
+              Search
+            </button>
+          </div>
+          <div className='col-md-auto'>
+            <button className='btn btn-large p-2' style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }} onClick={handlePdfClick}>PDF</button>
+          </div>
+          <div className='col-md-auto'>
+            {/* <DownloadTableExcel
                 filename="users_table"
                 sheet="users"
                 tablePayload={data().rows} // Make sure this is the correct data format
@@ -360,104 +361,104 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
                   Excel
                 </button>
               </DownloadTableExcel> */}
+            <CSVLink
+              data={data().rows} // Provide the data you want to export
+              filename={'report.xls'} // Set the filename for the downloaded CSV file
+              className='btn btn-large p-2'
+              style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }}
+            >
+              Excel
+            </CSVLink>
+
+
+          </div>
+          <div className='col-md-auto'>
+            <div>
               <CSVLink
                 data={data().rows} // Provide the data you want to export
-                filename={'report.xls'} // Set the filename for the downloaded CSV file
+                filename={'report.csv'} // Set the filename for the downloaded CSV file
                 className='btn btn-large p-2'
                 style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }}
               >
-                Excel
+                CSV
               </CSVLink>
-
-
-            </div>
-            <div className='col-md-auto'>
-              <div>
-                <CSVLink
-                  data={data().rows} // Provide the data you want to export
-                  filename={'report.csv'} // Set the filename for the downloaded CSV file
-                  className='btn btn-large p-2'
-                  style={{ backgroundColor: 'black', color: 'white', cursor: 'pointer' }}
-                >
-                  CSV
-                </CSVLink>
-              </div>
             </div>
           </div>
-          <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', alignItems: 'center' }}>
-            <select className="select" style={{
-              border: 'none', background: 'none', color: 'black', padding: '5px'
-            }}
-              onChange={handleCompanyChange}
-              value={selectedCompany}
-            >
-              <option value="">Select company</option>
-              {companydetails?.map((company) => (
-                <option key={company._id} value={company._id}>
-                  {company.companyname}
-                </option>
-              ))}
-            </select>
+        </div>
+        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', alignItems: 'center' }}>
+          <select className="select" style={{
+            border: 'none', background: 'none', color: 'black', padding: '5px'
+          }}
+            onChange={handleCompanyChange}
+            value={selectedCompany}
+          >
+            <option value="">Select company</option>
+            {companydetails?.map((company) => (
+              <option key={company._id} value={company._id}>
+                {company.companyname}
+              </option>
+            ))}
+          </select>
 
-            <select className="select" style={{ border: 'none', background: 'none', color: 'black', padding: '5px' }}
-              onChange={handleServiceChange}
-              value={selectedService}
-            >
-              <option value="">Select service</option>
-              {serviceDetails?.map((service) => (
-                <option key={service._id} value={service.id}>
-                  {service.servicename}
-                </option>
-              ))}
-            </select>
-
-          </div>
+          <select className="select" style={{ border: 'none', background: 'none', color: 'black', padding: '5px' }}
+            onChange={handleServiceChange}
+            value={selectedService}
+          >
+            <option value="">Select service</option>
+            {serviceDetails?.map((service) => (
+              <option key={service._id} value={service.id}>
+                {service.servicename}
+              </option>
+            ))}
+          </select>
 
         </div>
 
-        <CDBContainer>
-          <CDBCard>
-            <CDBCardBody>
-              <CDBDataTable
-                // ref={tableRef}
-                striped
-                bordered
-                hover
-                entriesOptions={[5, 20, 25]}
-                entries={5}
-                pagesAmount={4}
-                data={data()}
-                materialSearch={true}
-              />
+      </div>
+
+      <CDBContainer>
+        <CDBCard>
+          <CDBCardBody>
+            <CDBDataTable
+              // ref={tableRef}
+              striped
+              bordered
+              hover
+              entriesOptions={[5, 20, 25]}
+              entries={5}
+              pagesAmount={4}
+              data={data()}
+              materialSearch={true}
+            />
+            <div style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              flexWrap: 'wrap',
+              marginBottom: '20px',
+              marginRight: '20px'
+            }}>
               <div style={{
                 display: 'flex',
-                justifyContent: 'flex-end',
-                flexWrap: 'wrap',
-                marginBottom: '20px',
-                marginRight: '20px'
+                flexDirection: 'column',
+                alignItems: 'flex-end',
               }}>
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-end',
-                }}>
-                  <h6 style={{ marginBottom: '10px', fontSize: '1rem' }}>IGST: {totals.igst}</h6>
-                  <h6 style={{ marginBottom: '10px', fontSize: '1rem' }}>SGST: {totals.sgst}</h6>
-                  <h6 style={{ marginBottom: '10px', fontSize: '1rem' }}>CGST: {totals.cgst}</h6>
-                  <h6 style={{ marginBottom: '10px', fontSize: '1.5rem' }}>Totalamount: {totals.totalAmount}</h6>
-                </div>
+                <h6 style={{ marginBottom: '10px', fontSize: '1rem' }}>IGST: {totals.igst}</h6>
+                <h6 style={{ marginBottom: '10px', fontSize: '1rem' }}>SGST: {totals.sgst}</h6>
+                <h6 style={{ marginBottom: '10px', fontSize: '1rem' }}>CGST: {totals.cgst}</h6>
+                <h6 style={{ marginBottom: '10px', fontSize: '1.5rem' }}>Totalamount: {totals.totalAmount}</h6>
               </div>
-            </CDBCardBody>
-          </CDBCard>
-        </CDBContainer>
-        {showPdf && (
-          <PDFViewer style={{ width: '100%', height: '100vh' }}>
-            <PdfDocument data={invoiceDatas} />
-          </PDFViewer>
-        )}
-      </div>
-    </>
-  );
+            </div>
+          </CDBCardBody>
+        </CDBCard>
+      </CDBContainer>
+      {showPdf && (
+        <PDFViewer style={{ width: '100%', height: '100vh' }}>
+          <PdfDocument data={invoiceDatas} />
+        </PDFViewer>
+      )}
+    </div>
+  </>
+);
 };
 
 export default Reportpage;

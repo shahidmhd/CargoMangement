@@ -24,7 +24,7 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
     const [selectedDate, setSelectedDate] = useState(
         invoiceData?.selectedDate ? parseISO(invoiceData.selectedDate) : new Date()
     );
-    const [selctedCompantId, setselectedCompanyId] = useState(invoiceData?.selectedCompanyId._id || '');
+    const [selctedCompantId, setselectedCompanyId] = useState(invoiceData?.selectedCompanyId?._id || '');
     const [boxNo, setBoxno] = useState(invoiceData?.boxNo)
     const [Airwaybillno, setAirwaybillno] = useState(invoiceData?.airwayBillNo)
     const [SelectedService, setSelectedService] = useState(null)
@@ -127,22 +127,22 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
 
     const handleAddRow = () => {
         const newRow = {
-          id: tableRows.length + 1, // You can generate IDs based on your logic
-          name: '',
-          serviceName: '',
-          HSNCode: '',
-          weight: 0,
-          amount: 0,
-          total: 0,
+            id: tableRows.length + 1, // You can generate IDs based on your logic
+            name: '',
+            serviceName: '',
+            HSNCode: '',
+            weight: 0,
+            amount: 0,
+            total: 0,
         };
-      
+
         settableRows([...tableRows, newRow]);
-      };
-      
+    };
+
 
 
     const handlesave = async () => {
-          if (!selctedCompantId || selctedCompantId.trim() === "") {
+        if (!selctedCompantId || selctedCompantId.trim() === "") {
             toast.error("Please select a Company", {
                 hideProgressBar: true,
             });
@@ -190,7 +190,7 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
             });
             return;
         }
-        
+
 
 
         const savedData = {

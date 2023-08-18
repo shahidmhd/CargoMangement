@@ -48,10 +48,15 @@ const Billing = () => {
   }, []);
   return (
     <>
-    <div style={{display:'flex'}}>
-        <Sidebar/>
-      <Bill  invoiceNumber={invoiceNumber} companydetails={companydetails} servicedetails={servicedetails}/>
-    </div>
+   <div style={{ display: 'flex' }}>
+  <div style={{ flex: '0 0 auto' }}>
+    <Sidebar />
+  </div>
+  <div style={{ flex: '1', overflowY: 'scroll' }}>
+    <Bill invoiceNumber={invoiceNumber} companydetails={companydetails} servicedetails={servicedetails} />
+  </div>
+</div>
+
     </>
   )
 }
