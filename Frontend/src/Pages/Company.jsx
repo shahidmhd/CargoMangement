@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../Components/Sidebar/Sidebar'
 import Companycreation from '../Components/CompanyCreation/Companycreation'
-import { getallcompanies } from '../apicalls/Company'
+import { getallcompanies, getnotdeletedallcompanies } from '../apicalls/Company'
 import Loading from './Loading'
 import { toast } from 'react-toastify'
 
@@ -19,7 +19,7 @@ const Company = () => {
   const getallcompany = async () => {
     try {
       setLoading(true);
-      const response = await getallcompanies()
+      const response = await getnotdeletedallcompanies()
       if (response.success) {
         setcompany(response.Data)
         setLoading(false)

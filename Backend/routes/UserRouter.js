@@ -14,6 +14,7 @@ router.post('/company',userAuthMid,Companycontroller.Addcompany)
 router.patch('/company/:id',userAuthMid,Companycontroller.EditCompany)
 router.delete('/company/:id',userAuthMid,Companycontroller.DeleteCompany)
 router.get('/company',userAuthMid,Companycontroller.GetAllcompany)
+router.get('/currentcompany',userAuthMid,Companycontroller.Getnotdeleted)
 
 
 router.post('/service',userAuthMid,ServiceController.AddService)

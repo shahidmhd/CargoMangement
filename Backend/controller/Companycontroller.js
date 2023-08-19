@@ -4,7 +4,9 @@ export default {
     Addcompany: async (req, res) => {
         try {
             // Extract the company data from the request body
+
             const companyData = req.body;
+            companyData.isdeleted = false
 
             // Check if the contactNo already exists in the database
             const existingCompany = await Company.findOne({ contactNo: companyData.contactNo });
@@ -58,7 +60,7 @@ export default {
             // Update the company with the new data
             await Company.findByIdAndUpdate(
                 { _id: id },
-                { companyname, location, person, contactNo },
+                { companyname, location, person, contactNo, isdeleted: false },
                 { new: true }
             );
 
@@ -77,7 +79,15 @@ export default {
     DeleteCompany: async (req, res) => {
         try {
             const { id } = req.params
-            await Company.findByIdAndDelete({ _id: id });
+
+            const updatedCompany = await Company.findByIdAndUpdate(id, { isdeleted: true }, { new: true });
+            if (!updatedCompany) {
+                return res.json({
+                    success: false,
+                    message: "Company not found",
+                });
+            }
+
             res.json({
                 success: true,
                 message: "company deleted successfully",
@@ -107,7 +117,25 @@ export default {
                 message: err.message
             })
         }
-    }
-
+    },
+    Getnotdeleted: async (req, res) => {
+        try {
+            const response = await Company.find({ isdeleted: false }).sort({ createdAt: -1 });
+            if (response) {
+                res.json({
+                    success: true,
+                    message: "getting all company",
+                    Data: response
+                })
+            } else {
+                throw new Error(" company not found !!");
+            }
+        } catch (err) {
+            res.json({
+                success: false,
+                message: err.message
+            })
+        }
+    },
 
 }

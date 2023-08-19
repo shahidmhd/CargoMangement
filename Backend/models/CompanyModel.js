@@ -19,6 +19,10 @@ const Companychema=new mongoose.Schema({
     contactNo: {
         type:Number,
         required: true
+    },
+    isdeleted:{
+        type:Boolean,
+        required: true
     }
 },{
     timestamps:true

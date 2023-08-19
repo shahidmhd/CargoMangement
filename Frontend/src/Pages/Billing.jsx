@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Bill from '../Components/Billpage/Bill'
 import Sidebar from '../Components/Sidebar/Sidebar'
-import { getallcompanies } from '../apicalls/Company';
+import { getallcompanies, getnotdeletedallcompanies } from '../apicalls/Company';
 import { getallServices } from '../apicalls/Service';
 import { getallinvoices } from '../apicalls/Invoice';
 import { toast } from 'react-toastify';
@@ -15,7 +15,7 @@ const Billing = () => {
 
 
   const getCompanyData = async () => {
-    const response = await getallcompanies();
+    const response = await getnotdeletedallcompanies();
     setCompanydetails(response.Data);
   };
 

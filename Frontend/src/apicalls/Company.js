@@ -17,6 +17,14 @@ export const getallcompanies = async () => {
         return err.response.data;
     }
 }
+export const getnotdeletedallcompanies = async () => {
+    try {
+        const response = await instance.get('/api/users/currentcompany');
+        return response.data
+    } catch (err) {
+        return err.response.data;
+    }
+}
 
 export const editcompany = async (payload) => {
     try {
