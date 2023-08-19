@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Addservicedata } from '../apicalls/Service';
+import { toast } from 'react-toastify';
 
 const Addservice = ({ showModal, setShowModal, render, setrender }) => {
     const {
@@ -13,24 +14,20 @@ const Addservice = ({ showModal, setShowModal, render, setrender }) => {
     const [gstValue, setGstValue] = useState('');
 
     const onSubmit = async (data) => {
-        // data.GST=gstValue
-        // Convert numeric fields to numbers
         data.GST = parseFloat(gstValue);
         data.SGST = parseFloat(data.SGST);
         data.CGST = parseFloat(data.CGST);
-        // data.UOM = parseInt(data.UOM, 10);
         data.Rate = parseFloat(data.Rate);
         const response = await Addservicedata(data)
-        console.log(response, "oji");
         if (response.success) {
             setShowModal(false)
             setrender(!render)
-
+            toast.success(response.message)
+        } else {
+            toast.error("please fill all the field")
         }
-
     };
 
-    // Update CGST and SGST values based on GST value
     const handleGSTChange = (event) => {
         const value = event.target.value;
         setGstValue(value);
@@ -138,7 +135,7 @@ const Addservice = ({ showModal, setShowModal, render, setrender }) => {
                                                     className={`form-control ${errors.GST ? 'is-invalid' : ''}`}
                                                     placeholder='GST%'
                                                     onChange={handleGSTChange}
-                                                    value={gstValue}                                                  
+                                                    value={gstValue}
                                                     pattern='[0-9]*' // Use a regular expression pattern to allow only numbers
                                                 />
 
@@ -147,8 +144,7 @@ const Addservice = ({ showModal, setShowModal, render, setrender }) => {
                                         )}
                                     />
                                 </div>
-
-
+                                
                                 <div className='row mb-4'>
                                     <div className='col'>
                                         <div className='form-outline'>

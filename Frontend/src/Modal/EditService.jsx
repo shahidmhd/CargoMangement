@@ -140,9 +140,11 @@ const EditService = ({ showeditModal, setShoweditModal, Service, render, setrend
                         value: /^[0-9]*$/, // Regular expression for numbers only
                         message: 'Only numbers are allowed',
                       },
+                      required: 'GST is required', // Add a required rule
                     }}
                   />
                 </div>
+
 
                 <div className='row mb-4'>
                   <div className='col'>

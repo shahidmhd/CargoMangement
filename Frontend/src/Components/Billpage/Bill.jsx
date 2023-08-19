@@ -28,7 +28,6 @@ const Bill = ({ companydetails, servicedetails, invoiceNumber }) => {
     const navigate = useNavigate()
 
     const handleDateChange = (date) => {
-        console.log(date, "ggggggdate");
         setSelectedDate(date);
     };
     const handleEnterKeyPress = (e) => {
@@ -143,8 +142,6 @@ const Bill = ({ companydetails, servicedetails, invoiceNumber }) => {
 
         setinvoiceData(updatedInvoiceData);
 
-        console.log(invoiceData, "shahid");
-
     }, [tableRows]);
 
 
@@ -216,7 +213,6 @@ const Bill = ({ companydetails, servicedetails, invoiceNumber }) => {
         };
 
         // Use 'dataToSave' to save or process the data as needed
-        console.log(dataToSave, "ggggggggggggggggggggggggg");
         // Here you can save the data to your backend or do whatever you need with it
         const response = await AddINVOICEdata(dataToSave);
         if (response.success) {
@@ -224,6 +220,8 @@ const Bill = ({ companydetails, servicedetails, invoiceNumber }) => {
                 hideProgressBar: true,
             });
             navigate('/table')
+        }else{
+            toast.error("invoice No added ")
         }
         // Add your logic to save the data or perform other actions
 

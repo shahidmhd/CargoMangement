@@ -3,10 +3,9 @@ import instance from "./axiosinstance";
 export const Addservicedata = async (payload) => {
     try {
         const response = await instance.post('/api/users/service', payload);
-        console.log(response,"vjj");
         return response.data
     } catch (err) {
-        return err.message;
+        return err.response.data;
     }
 }
 
