@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { useState } from 'react';
 
 const Billing = () => {
-    const [invoiceNumber, setInvoiceNumber] = useState('');
+  const [invoiceNumber, setInvoiceNumber] = useState('');
   const [companydetails, setCompanydetails] = useState([]);
   const [servicedetails, setServicedetails] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -47,14 +47,14 @@ const Billing = () => {
   }, []);
   return (
     <>
-   <div style={{ display: 'flex' }}>
-  <div style={{ flex: '0 0 auto' }}>
-    <Sidebar />
-  </div>
-  <div style={{ flex: '1', overflowY: 'scroll' }}>
-    <Bill invoiceNumber={invoiceNumber} companydetails={companydetails} servicedetails={servicedetails} />
-  </div>
-</div>
+      <div style={{ display: 'flex' }}>
+        <div style={{ flex: '0 0 auto' }}>
+          <Sidebar />
+        </div>
+        <div style={{ flex: '1', overflowY: 'scroll' }}>
+          <Bill invoiceNumber={invoiceNumber} companydetails={companydetails} servicedetails={servicedetails} />
+        </div>
+      </div>
 
     </>
   )

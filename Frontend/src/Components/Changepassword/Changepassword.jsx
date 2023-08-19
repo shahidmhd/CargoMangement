@@ -49,7 +49,7 @@ const Changepassword = () => {
 
 
     return (
-        <section className="vh-100 gradient-custom" style={{ backgroundImage: `url('https://www.emotrans-global.com/wp-content/uploads/2023/01/01-cargo-vs-freight.jpg')`, backgroundSize: 'cover' }}>
+        <section className="vh-100 gradient-custom" style={{ backgroundImage: `url(../public/01-cargo-vs-freight.jpg)`, backgroundSize: 'cover' }}>
             <div className="container py-5 h-100">
                 <div className="row d-flex justify-content-center align-items-center h-100">
                     <div className="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -75,7 +75,7 @@ const Changepassword = () => {
                                             />
                                             {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
                                         </div>
-                                        <div className="form-outline form-white mb-4">
+                                        {/* <div className="form-outline form-white mb-4">
                                             <input
                                                 placeholder="Enter current password"
                                                 type="password"
@@ -91,7 +91,7 @@ const Changepassword = () => {
                                                 })}
                                             />
                                             {errors.currentPassword && <div className="invalid-feedback">{errors.currentPassword.message}</div>}
-                                        </div>
+                                        </div> */}
                                         <div className="form-outline form-white mb-4">
                                             <input
                                                 placeholder="Enter new password"

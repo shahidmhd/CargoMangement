@@ -19,8 +19,6 @@ import { EditINVOICEdata } from '../../apicalls/Invoice';
 import { toast } from 'react-toastify';
 
 const Details = ({ companydetails, servicedetails, invoiceData }) => {
-    console.log(servicedetails, "servicedetails");
-    console.log(invoiceData, "invoicedata");
     const [selectedDate, setSelectedDate] = useState(
         invoiceData?.selectedDate ? parseISO(invoiceData.selectedDate) : new Date()
     );

@@ -43,11 +43,6 @@ const Detailpage = () => {
 
 
   return (
-    // <div style={{ display: 'flex' }}>
-
-    //   <Sidebar />
-    //   {invoiceData && <Details companydetails={companydetails} servicedetails={servicedetails} invoiceData={invoiceData}  />}
-    // </div>
     <>
       <div style={{ display: 'flex' }}>
         <div style={{ flex: '0 0 auto' }}>

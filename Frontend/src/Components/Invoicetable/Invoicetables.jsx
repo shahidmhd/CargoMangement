@@ -164,9 +164,7 @@ const Invoicetables = ({ invoices, render, setrender }) => {
   //   return formattedDate;
   // }
   function formatDate(dateString) {
-    console.log(dateString, "date ");
     const date = new Date(dateString);
-
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Note: Month is zero-based
     const year = date.getFullYear();
@@ -190,9 +188,7 @@ const Invoicetables = ({ invoices, render, setrender }) => {
 
 
   const handledeletepage = async (item) => {
-    console.log(item);
     const response = await deleteInvoice(item._id)
-    console.log(response);
     if (response.success) {
       toast.success("invoice deleted")
       setrender(!render)

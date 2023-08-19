@@ -12,7 +12,7 @@ const Homepage = () => {
           justifyContent: 'center',
           alignItems: 'center',
           minHeight: '100vh',
-          backgroundImage: 'url("https://t4.ftcdn.net/jpg/04/48/93/89/360_F_448938910_WRtijsyMlLN5zN8kkkfsY8CKoMoXlQwv.jpg")', // Replace with the actual path to your image
+          backgroundImage: 'url(../public/cargo.jpg)', // Replace with the actual path to your image
           backgroundSize: 'cover', // This ensures the image covers the entire container
         }}
       >

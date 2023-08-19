@@ -7,7 +7,7 @@ export const LoginUser = async (payload) => {
         const response = await instance.post('/api/users/login', payload);
         return response.data
     } catch (err) {
-        return err.message;
+        return err.response.data;
     }
 }
 

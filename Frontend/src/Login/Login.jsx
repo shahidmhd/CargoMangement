@@ -20,21 +20,18 @@ const Login = () => {
     } = useForm();
 
     const onSubmit = async (data) => {
-        console.log(data); // You can handle the form submission here
         try {
             const response = await LoginUser(data)
             if (response.success) {
                 toast.success(response.message)
-                // localStorage.setItem('token', response.data);
                 dispatch(setLogin({ userToken: response.data }))
                 navigate('/')
-                // window.location.href = '/';
 
             } else {
                 toast.error(response.message)
             }
         } catch (err) {
-            console.log(err);
+           toast.error(err)
         }
     };
 
@@ -47,7 +44,7 @@ const Login = () => {
     };
 
     return (
-        <section className="vh-100 gradient-custom" style={{ backgroundImage: `url('https://www.emotrans-global.com/wp-content/uploads/2023/01/01-cargo-vs-freight.jpg')`, backgroundSize: 'cover' }}>
+        <section className="vh-100 gradient-custom" style={{ backgroundImage: `url(../public/01-cargo-vs-freight.jpg)`, backgroundSize: 'cover' }}>
             <div className="container py-5 h-100">
                 <div className="row d-flex justify-content-center align-items-center h-100">
                     <div className="col-12 col-md-8 col-lg-6 col-xl-5">

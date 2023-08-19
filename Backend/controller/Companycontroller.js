@@ -41,7 +41,6 @@ export default {
     EditCompany: async (req, res) => {
         try {
             const { id } = req.params;
-            console.log(req.body);
             const { companyname, location, person, contactNo } = req.body;
 
             // Find the company with the given ID

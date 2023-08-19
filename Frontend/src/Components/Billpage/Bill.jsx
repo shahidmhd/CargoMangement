@@ -41,9 +41,6 @@ const Bill = ({ companydetails, servicedetails, invoiceNumber }) => {
         const selectedCompanyId = e.target.value;
         setselectedCompanyId(selectedCompanyId);
     };
-    console.log(servicedetails, "servicedetails");
-    console.log(companydetails, "companydetails");
-
     const handleWeightChange = (index, newWeight) => {
         const updatedTableRows = [...tableRows];
         updatedTableRows[index].weight = Number(newWeight);
@@ -94,8 +91,6 @@ const Bill = ({ companydetails, servicedetails, invoiceNumber }) => {
     const handleServiceChange = (index, serviceId) => {
         const selectedServiceId = serviceId;
         const selectedServiceData = servicedetails.find((service) => service._id === selectedServiceId);
-        console.log(selectedServiceData, "selected data");
-
         if (selectedServiceData) {
             const updatedTableRows = [...tableRows]; // Clone the tableRows array
             updatedTableRows[index] = {

@@ -105,7 +105,6 @@ export default {
     },
     EditINVOICE: async (req, res) => {
         try {
-            console.log(req.body);
             const { id } = req.params;
             const { invoiceNumber, airwayBillNo } = req.body;
 
@@ -129,7 +128,6 @@ export default {
             const existingAirwayBillNo = await invoice.findOne({ airwayBillNo: airwayBillNo });
 
             if (existingAirwayBillNo && id !== existingAirwayBillNo._id.toString()) {
-                console.log("hiii");
                 // If the airwayBillNo already exists for a different invoice, throw an error
                 throw new AppError('Airway bill number already exists', 403);
             }
@@ -148,7 +146,6 @@ export default {
 
 
         } catch (err) {
-            console.log(err, "error");
             // If an error occurs, respond with an error message
             res.status(500).json({
                 success: false,
@@ -162,31 +159,24 @@ export default {
             const { startdate, enddate } = req.body;
             const filteredInvoices = await invoice.find({
                 date: { $gte: startdate, $lte: enddate },
+                isdeleted: false
             }).sort({ createdAt: -1 }).populate('selectedCompanyId');;
-
-            console.log(filteredInvoices, "yyyyy");
             res.json({
                 success: 'true',
                 message: 'data fetched successfully',
                 filteredInvoices
             })
         } catch (error) {
-            console.error(error);
             res.status(500).json({ error: 'An error occurred while fetching invoice data.' });
         }
     },
     searchcompanyinvoice: async (req, res) => {
         try {
-            console.log(req.body, "gggss");
             const { companyId } = req.body
-            console.log(companyId, "ghght");
             // Query the database for invoices that match the selectedCompanyId
             const matchingInvoices = await invoice.find({
                 selectedCompanyId: companyId,
             }).sort({ createdAt: -1 }).populate('selectedCompanyId');
-
-            console.log(matchingInvoices);
-
             res.json({
                 success: 'true',
                 message: 'data fetched successfully',
@@ -199,16 +189,11 @@ export default {
     },
     searchserviceinvoice: async (req, res) => {
         try {
-            console.log(req.body, "gggss");
             const { servicename } = req.body
-            console.log(servicename, "ghght");
-
-
             // Query the database for invoices with matching serviceName within tableRows
             const matchingInvoices = await invoice.find({
                 'tableRows.serviceName': servicename,
             }).sort({ createdAt: -1 }).populate('selectedCompanyId');;
-            console.log(matchingInvoices, "jgdrt");
             res.json({
                 success: 'true',
                 message: 'data fetched successfully',

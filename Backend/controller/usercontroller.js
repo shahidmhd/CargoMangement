@@ -30,26 +30,20 @@ export default {
     },
     changepassword: async (req, res) => {
         try {
-            console.log(req.body);
-            const { currentPassword, newPassword, email } = req.body;
-            console.log(currentPassword, newPassword);
+            const {newPassword, email } = req.body;
+            console.log(email,newPassword);
             const user = await User.findOne({ email: email }).exec();
             if (!user) {
-                console.log("hii");
                 return res.json({ success: false, message: 'User not found' });
             }
 
-            console.log("faa");
+            // // Compare the provided currentPassword with the hashed password in the database
+            // const isValidPassword = await bcrypt.compare(currentPassword, user.password);
 
-            // Compare the provided currentPassword with the hashed password in the database
-            const isValidPassword = await bcrypt.compare(currentPassword, user.password);
-            
-            if (!isValidPassword) {
-                console.log("pass");
-                return res.json({ success: false, message: 'Your password is incorrect' });
-            }
-            console.log("out");
-            // Hash the new password
+            // if (!isValidPassword) {
+            //     return res.json({ success: false, message: 'Your password is incorrect' });
+            // }
+            // // Hash the new password
             const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
             // Update the user's password in the database

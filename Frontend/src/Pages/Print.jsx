@@ -3,7 +3,6 @@ import Sidebar from '../Components/Sidebar/Sidebar';
 import Printing from '../Components/Printingpage/Printing';
 import { useParams } from 'react-router-dom';
 import { getselectedinvioce } from '../apicalls/Invoice';
-import Skeleton from 'react-loading-skeleton';
 import Loading from './Loading';
 
 const Print = () => {
@@ -27,14 +26,6 @@ const Print = () => {
   }, [id]);
 
   return (
-    // <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
-    //   {isLoading ? '' : <Sidebar />}
-    //   {isLoading ? ( // Display loading indicator if isLoading is true
-    //    <Loading/>
-    //   ) : (
-    //     <Printing invoiceData={invoiceData} />
-    //   )}
-    // </div>
     <>
     <div style={{ display: 'flex' }}>
       <Sidebar />

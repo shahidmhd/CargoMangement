@@ -13,32 +13,20 @@ const Service = () => {
       setloading(true)
       const response = await getallServices()
       if (response.success) {
-        console.log(response.Data, "fnrej");
         setservice(response.Data)
         setloading(false)
       }else{
         toast.error(response.message)
       }
     } catch (err) {
-      console.log(err),"service error";
+      console.log(err)
 
     }
-
-
-
   }
   useEffect(() => {
     getallService()
   }, [render])
   return (
-    // <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-    //   {loadind ? '' : <Sidebar />}
-    //   {loadind ? (
-    //     <Loading />
-    //   ) : (
-    //     <Servicecreation Service={service} render={render} setrender={setrender} />
-    //   )}
-    // </div>
     <>
       <div style={{ display: 'flex' }}>
         <Sidebar />
