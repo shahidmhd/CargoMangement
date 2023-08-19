@@ -21,6 +21,15 @@ export const getallinvoices = async () => {
     }
 }
 
+export const getnotdeletedinvoices = async () => {
+    try {
+        const response = await instance.get('/api/users/currentinvoice');
+        return response.data
+    } catch (err) {
+        return err.response.data;
+    }
+}
+
 export const getselectedinvioce = async (invoiceid) => {
     try {
         const response = await instance.get(`/api/users/invoice/${invoiceid}`);;

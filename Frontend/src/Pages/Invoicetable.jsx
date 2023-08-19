@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../Components/Sidebar/Sidebar'
 import Invoicetables from '../Components/Invoicetable/Invoicetables'
-import { getallinvoices } from '../apicalls/Invoice'
+import { getallinvoices, getnotdeletedinvoices } from '../apicalls/Invoice'
 import Loading from './Loading'
 
 const Invoicetable = () => {
@@ -11,7 +11,7 @@ const Invoicetable = () => {
   const [loading, setloading] = useState(true)
   const getallinvoice = async () => {
     setloading(true)
-    const response = await getallinvoices()
+    const response = await getnotdeletedinvoices()
     setallinvoices(response.Data)
     setloading(false)
   }

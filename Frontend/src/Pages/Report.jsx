@@ -72,7 +72,7 @@ import Sidebar from '../Components/Sidebar/Sidebar';
 import Loading from './Loading';
 import { getallcompanies } from '../apicalls/Company';
 import { getallServices } from '../apicalls/Service';
-import { getallinvoices } from '../apicalls/Invoice';
+import { getallinvoices, getnotdeletedinvoices } from '../apicalls/Invoice';
 
 const Report = () => {
     const [loading, setLoading] = useState(true); // Use setLoading instead of setIsLoading
@@ -106,7 +106,7 @@ const Report = () => {
     };
 
     const fetchInvoiceData = async () => {
-        const response = await getallinvoices();
+        const response = await getnotdeletedinvoices();
         setInvoiceData(response.Data);
     };
 

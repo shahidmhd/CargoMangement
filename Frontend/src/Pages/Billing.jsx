@@ -43,7 +43,6 @@ const Billing = () => {
       await Promise.all([getCompanyData(), getServiceData(), getallInvoices()]);
       setLoading(false);
     }
-
     fetchData();
   }, []);
   return (

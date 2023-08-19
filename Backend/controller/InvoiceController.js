@@ -4,7 +4,9 @@ export default {
     AddINVOICE: async (req, res) => {
         try {
             // Create a new Company instance with the extracted data
-            const newservice = new invoice(req.body);
+            const invoiceData = req.body;
+            invoiceData.isdeleted = false
+            const newservice = new invoice(invoiceData);
             // Save the new company to the database
             await newservice.save();
 
@@ -24,6 +26,25 @@ export default {
     GetAllinvoice: async (req, res) => {
         try {
             const response = await invoice.find().sort({ createdAt: -1 }).populate('selectedCompanyId');
+            if (response) {
+                res.json({
+                    success: true,
+                    message: "getting all invoice",
+                    Data: response
+                })
+            } else {
+                throw new Error(" invoice not found !!");
+            }
+        } catch (err) {
+            res.json({
+                success: false,
+                message: err.message
+            })
+        }
+    },
+    Getnotdeletedinvoice: async (req, res) => {
+        try {
+            const response = await invoice.find({ isdeleted: false }).sort({ createdAt: -1 }).populate('selectedCompanyId');
             if (response) {
                 res.json({
                     success: true,
@@ -63,7 +84,14 @@ export default {
     Deleteinvoice: async (req, res) => {
         try {
             const { id } = req.params
-            await invoice.findByIdAndDelete({ _id: id });
+            // await invoice.findByIdAndDelete({ _id: id });
+            const updatedInvoice = await invoice.findByIdAndUpdate(id, { isdeleted: true }, { new: true });
+            if (!updatedInvoice) {
+                return res.json({
+                    success: false,
+                    message: "invoice not found",
+                });
+            }
             res.json({
                 success: true,
                 message: "invoice deleted successfully",
@@ -136,7 +164,7 @@ export default {
                 date: { $gte: startdate, $lte: enddate },
             }).sort({ createdAt: -1 }).populate('selectedCompanyId');;
 
-            console.log(filteredInvoices,"yyyyy");
+            console.log(filteredInvoices, "yyyyy");
             res.json({
                 success: 'true',
                 message: 'data fetched successfully',
