@@ -6,8 +6,11 @@ import { getallServices } from '../apicalls/Service';
 import { getallinvoices } from '../apicalls/Invoice';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setLogout } from '../Redux/Authslice';
 
 const Billing = () => {
+  const dispatch =useDispatch()
   const [invoiceNumber, setInvoiceNumber] = useState('');
   const [companydetails, setCompanydetails] = useState([]);
   const [servicedetails, setServicedetails] = useState([]);
@@ -32,7 +35,11 @@ const Billing = () => {
       const newInvoiceNumber = `B2C${formattedCounter}`;
       setInvoiceNumber(newInvoiceNumber);
     } else {
-      toast.error("invoices is not getting")
+      if(response.message==="invalid token please login"){
+        toast.error(response.message)
+        dispatch(setLogout())
+      }
+      //  toast.error("invoices is not getting")
     }
 
   }

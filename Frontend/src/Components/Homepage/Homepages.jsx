@@ -12,7 +12,7 @@ const Homepage = () => {
           justifyContent: 'center',
           alignItems: 'center',
           minHeight: '100vh',
-          backgroundImage: 'url(../public/cargo.jpg)', // Replace with the actual path to your image
+          backgroundImage: 'url(cargo.jpg)', // Replace with the actual path to your image
           backgroundSize: 'cover', // This ensures the image covers the entire container
         }}
       >

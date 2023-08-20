@@ -4,7 +4,10 @@ import Servicecreation from '../Components/ServiceCreation/Servicecreation'
 import { getallServices } from '../apicalls/Service'
 import Loading from './Loading'
 import { toast } from 'react-toastify'
+import { useDispatch } from 'react-redux'
+import { setLogout } from '../Redux/Authslice'
 const Service = () => {
+  const dispatch=useDispatch()
   const [service, setservice] = useState([])
   const [render, setrender] = useState(false)
   const [loadind, setloading] = useState(true)
@@ -16,7 +19,10 @@ const Service = () => {
         setservice(response.Data)
         setloading(false)
       }else{
-        toast.error(response.message)
+        if(response.message==="invalid token please login"){
+          toast.error(response.message)
+          dispatch(setLogout())
+        }
       }
     } catch (err) {
       console.log(err)

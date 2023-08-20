@@ -24,14 +24,15 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
   const [serviceInvoice, setserviceInvoice] = useState([])
 
 
-
-  // const handlePdfClick = () => {
-  //   setShowPdf(true);
-  // };
-
-
-
-
+  const handlePdfDownload = () => {
+    const pdfBlob = new Blob([<PdfDocument data={data().rows} />], { type: 'application/pdf' });
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    const a = document.createElement('a');
+    a.href = pdfUrl;
+    a.download = 'report.pdf';
+    a.click();
+  };
+  
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -91,47 +92,48 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
 
   const handleServiceChange = async (event) => {
     setSelectedService(event.target.value);
-    // console.log(event.target.value, "selected service")
-    // console.log(invoiceDatas, "service invoice datas")
+    console.log(event.target.value, "selected service")
+    console.log(invoiceDatas, "service invoice datas")
 
-    // // Find the current invoiceData object
-    // const currentInvoiceData = invoiceDatas.find(invoiceData => {
-    //   return invoiceData.tableRows && invoiceData.tableRows.some(row => row.serviceName === event.target.value);
-    // });
+    // Find the current invoiceData object
+    const currentInvoiceData = invoiceDatas.find(invoiceData => {
+      return invoiceData.tableRows && invoiceData.tableRows.some(row => row.serviceName === event.target.value);
+    });
 
-    // if (currentInvoiceData) {
-    //   // Filter and get the matching tableRow from the current invoiceData
-    //   const selectedTableRow = currentInvoiceData.tableRows.find(row => row.serviceName === event.target.value);
 
-    //   if (selectedTableRow) {
-    //     // Initialize an array to collect matched tableRows
-    //     const matchedTableRows = [];
+    if (currentInvoiceData) {
+      // Filter and get the matching tableRow from the current invoiceData
+      const selectedTableRow = currentInvoiceData.tableRows.find(row => row.serviceName === event.target.value);
 
-    //     // Loop through each invoiceData object
-    //     invoiceDatas.forEach(invoiceData => {
-    //       // Check if the invoiceData has tableRows
-    //       if (invoiceData.tableRows) {
-    //         // Filter and get the matching tableRows from the current invoiceData
-    //         const matchedRows = invoiceData.tableRows.filter(row => row.serviceName === event.target.value);
+      if (selectedTableRow) {
+        // Initialize an array to collect matched tableRows
+        const matchedTableRows = [];
 
-    //         // Push the matched tableRows to the array
-    //         matchedTableRows.push(...matchedRows);
-    //       }
-    //     });
-    //     console.log(matchedTableRows,"gggggggggggggggggggggg");
-    //     currentInvoiceData.tableRows = matchedTableRows;
-    //     // currentInvoiceData.tableRows.push(matchedTableRows)
-    //     console.log(currentInvoiceData,"jjjjjjjjjjjjjjjjjjjjjjjjjjjj");
-    //   } else {
-    //     console.log("No matching tableRow found in the current invoiceData.");
-    //   }
-    // } else {
-    //   console.log("No matching invoice data found.");
-    // }
+        // Loop through each invoiceData object
+        invoiceDatas.forEach(invoiceData => {
+          // Check if the invoiceData has tableRows
+          if (invoiceData.tableRows) {
+            // Filter and get the matching tableRows from the current invoiceData
+            const matchedRows = invoiceData.tableRows.filter(row => row.serviceName === event.target.value);
 
-    const response = await fetchserviceinvoices(event.target.value)
-    setinvoiceDatas(response.matchingInvoices)
-    console.log(response.matchingInvoices, "service matched datas");
+            // Push the matched tableRows to the array
+            matchedTableRows.push(...matchedRows);
+          }
+        });
+        console.log(matchedTableRows, "gggggggggggggggggggggg");
+        currentInvoiceData.tableRows = matchedTableRows;
+        // currentInvoiceData.tableRows.push(matchedTableRows)
+        console.log(currentInvoiceData, "jjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+      } else {
+        console.log("No matching tableRow found in the current invoiceData.");
+      }
+    } else {
+      console.log("No matching invoice data found.");
+    }
+
+    // const response = await fetchserviceinvoices(event.target.value)
+    // setinvoiceDatas(response.matchingInvoices)
+    // console.log(response.matchingInvoices, "service matched datas");
   };
 
   const [totals, setTotals] = useState({
@@ -385,8 +387,11 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
                 </CSVLink>
               </div>
               <div className='col-md-auto mb-2'>
-                <button className='btn btn-sm btn-dark' disabled>
-                  PDF
+                <button
+                  className='btn btn-sm btn-dark'
+                  onClick={handlePdfDownload}
+                >
+                  Download PDF
                 </button>
               </div>
             </div>
@@ -423,33 +428,27 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
         </div>
 
         <div className='custom-datatable-container'> {/* Add a container for the table */}
-    <CDBContainer>
-      <CDBCard>
-        <CDBCardBody>
-          <div className='custom-datatable-scrollable'> {/* Add a scrollable wrapper */}
-            <CDBDataTable
-              striped
-              bordered
-              hover
-              entriesOptions={[5, 20, 25]}
-              entries={5}
-              pagesAmount={4}
-              data={data()}
-              materialSearch={true}
-              className="custom-datatable" // Add a custom class name to the table
-            />
-          </div>
-        </CDBCardBody>
-      </CDBCard>
-    </CDBContainer>
-  </div>
-</div>
-        {/* {showPdf && (
-        <PDFViewer style={{ width: '100%', height: '100vh' }}>
-          <PdfDocument data={invoiceDatas} />
-        </PDFViewer>
-      )} */}
-    
+          <CDBContainer>
+            <CDBCard>
+              <CDBCardBody>
+                <div className='custom-datatable-scrollable'> {/* Add a scrollable wrapper */}
+                  <CDBDataTable
+                    striped
+                    bordered
+                    hover
+                    entriesOptions={[5, 20, 25]}
+                    entries={5}
+                    pagesAmount={4}
+                    data={data()}
+                    materialSearch={true}
+                    className="custom-datatable" // Add a custom class name to the table
+                  />
+                </div>
+              </CDBCardBody>
+            </CDBCard>
+          </CDBContainer>
+        </div>
+      </div>
 
     </>
 

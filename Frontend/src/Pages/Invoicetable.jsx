@@ -4,16 +4,28 @@ import Sidebar from '../Components/Sidebar/Sidebar'
 import Invoicetables from '../Components/Invoicetable/Invoicetables'
 import { getallinvoices, getnotdeletedinvoices } from '../apicalls/Invoice'
 import Loading from './Loading'
+import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
+import { setLogout } from '../Redux/Authslice'
 
 const Invoicetable = () => {
+  const dispatch=useDispatch()
   const [invoices, setallinvoices] = useState([])
   const [render, setrender] = useState(false)
   const [loading, setloading] = useState(true)
   const getallinvoice = async () => {
     setloading(true)
     const response = await getnotdeletedinvoices()
-    setallinvoices(response.Data)
-    setloading(false)
+    if(response.success){
+      setallinvoices(response.Data)
+      setloading(false)
+    }else{
+      if(response.message==="invalid token please login"){
+        toast.error(response.message)
+        dispatch(setLogout())
+      }
+    }
+
   }
   useEffect(() => {
     getallinvoice()

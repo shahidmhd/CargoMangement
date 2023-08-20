@@ -5,9 +5,12 @@ import Companycreation from '../Components/CompanyCreation/Companycreation'
 import { getallcompanies, getnotdeletedallcompanies } from '../apicalls/Company'
 import Loading from './Loading'
 import { toast } from 'react-toastify'
+import { useDispatch } from 'react-redux'
+import { setLogout } from '../Redux/Authslice'
 
 
 const Company = () => {
+  const dispatch=useDispatch()
   const [company, setcompany] = useState([])
   const [render, setrender] = useState(false)
   const [loading, setLoading] = useState(true);
@@ -24,7 +27,11 @@ const Company = () => {
         setcompany(response.Data)
         setLoading(false)
       } else {
-        toast.error(response.message)
+        if(response.message==="invalid token please login"){
+          toast.error(response.message)
+          dispatch(setLogout())
+        }
+        // toast.error(response.message)
 
 
       }

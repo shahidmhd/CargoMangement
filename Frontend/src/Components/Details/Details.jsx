@@ -242,7 +242,7 @@ const Details = ({ companydetails, servicedetails, invoiceData }) => {
                     {/* </div> */}
                     <div className="flex-grow-1 d-flex flex-column">
                         <div className="text-center text-white p-3" style={{ backgroundColor: '#79c8db' }}>
-                            <h1>INDBX PRIVET LIMITED</h1>
+                            <h1>INDBX PRIVATE LIMITED</h1>
                         </div>
                         <div className="p-3 d-flex flex-column-reverse flex-md-row justify-content-between">
                             <div className="mb-3 mb-md-0">

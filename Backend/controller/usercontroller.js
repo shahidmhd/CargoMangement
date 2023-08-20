@@ -11,7 +11,7 @@ export default {
                 if (!validaPassword) {
                     throw new Error("Invalid password !");
                 } else {
-                    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "5d" });
+                    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "20m" });
                     res.json({
                         success: true,
                         message: "user logged in successfully",
