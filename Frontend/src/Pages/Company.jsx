@@ -43,16 +43,6 @@ const Company = () => {
 
 
   return (
-    // <>
-    //   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-    //     {loading ? '' : <Sidebar />}
-    //     {loading ? (
-    //       <Loading />
-    //     ) : (
-    //       <Companycreation Company={company} render={render} setrender={setrender} />
-    //     )}
-    //   </div>
-    // </>
     <>
       <div style={{ display: 'flex' }}>
         <Sidebar />

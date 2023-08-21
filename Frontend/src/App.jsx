@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import Company from './Pages/Company';
 import Service from './Pages/Service';
-import Invoice from './Pages/Invoice';
 // import Login from './Login/Login';
 import Home from './Pages/Home';
 import Notfound from './Pages/Notfound';
@@ -30,10 +29,6 @@ const App = () => {
           <Route
             path='/login'
             element={token ? <Navigate to={'/'} /> : <Loginpage />}
-          />
-          <Route
-            path='/bill'
-            element={token ? <Invoice /> : <Navigate to={'/login'} />}
           />
           <Route
             path='/company'

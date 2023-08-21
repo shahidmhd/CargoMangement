@@ -2,34 +2,36 @@ import React from 'react';
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
 const PdfDocument = ({ data }) => {
-    console.log(data,"datas");
   return (
     <Document>
       <Page style={styles.page}>
         <Text style={styles.title}>Invoice Report</Text>
-        {data.map((invoice, index) => (
+        {data?.map((invoice, index) => (
           <View key={index} style={styles.invoice}>
-            <Text>Invoice Number: {invoice.invoiceNumber}</Text>
-            <Text>Invoice Date: {invoice.selectedDate}</Text>
-            <Text>Company Name: {invoice.selectedCompanyId.companyname}</Text>
-            <Text>Airway Bill: {invoice.airwayBillNo}</Text>
-            <Text>Box Number: {invoice.boxNo}</Text>
-            {/* Render other invoice details */}
-            {invoice.tableRows.map((row, rowIndex) => (
+            {/* Render invoice details */}
+            <Text>Invoice Number: {invoice.InvoiceNo}</Text>
+            <Text>Invoice Date: {invoice.InvoiceDate}</Text>
+            <Text>Company Name: {invoice.CompanyName}</Text>
+            <Text>Airway Bill: {invoice.Airwaybill}</Text>
+            <Text>Box Number: {invoice.BoxNo}</Text>
+
+            {/* Render tableRows */}
+            {invoice.tableRows?.map((row, rowIndex) => (
               <View key={rowIndex} style={styles.row}>
-                <Text>Service Name: {row.serviceName}</Text>
+                <Text>Service Name: {row.ServiceName}</Text>
                 <Text>HSN Code: {row.HSNCode}</Text>
                 <Text>Weight: {row.weight}</Text>
-                <Text>Amount: {row.amount}</Text>
-                {/* Add more row details if needed */}
+                <Text>Amount: {row.unitvalue}</Text>
+                {/* Render more row details if needed */}
               </View>
             ))}
-            <Text>Subtotal: {invoice.subtotal}</Text>
-            <Text>Total Weight: {invoice.totalWeight}</Text>
-            <Text>IGST: {invoice.gst18}</Text>
+
+            <Text>Subtotal: {invoice.Taxablevalue}</Text>
+            <Text>Total Weight: {invoice.weight}</Text>
+            <Text>IGST: {invoice.IGST}</Text>
             <Text>CGST: {invoice.CGST}</Text>
             <Text>SGST: {invoice.SGST}</Text>
-            <Text>Total Amount: {invoice.totalAmount}</Text>
+            <Text>Total Amount: {invoice.Total}</Text>
           </View>
         ))}
       </Page>
@@ -49,6 +51,11 @@ const styles = StyleSheet.create({
   invoice: {
     marginBottom: 10,
     padding: 10,
+    border: '1 solid #ccc',
+  },
+  row: {
+    marginBottom: 5,
+    padding: 5,
     border: '1 solid #ccc',
   },
 });

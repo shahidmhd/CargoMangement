@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CDBCard, CDBCardBody, CDBDataTable, CDBContainer } from 'cdbreact';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { PDFViewer } from '@react-pdf/renderer';
+// import { PDFViewer } from '@react-pdf/renderer';
+import ReactDOMServer from 'react-dom/server';
 import PdfDocument from './PdfDocument';
 import { CSVLink } from 'react-csv';
-// import { DownloadTableExcel } from 'react-export-table-to-excel';
 import { fetchcompanyinvoices, fetchserviceinvoices, searchdatas } from '../../apicalls/Invoice';
 import './Report.css'
 
@@ -19,20 +19,18 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedDate2, setSelectedDate2] = useState(new Date());
   const [invoiceDatas, setinvoiceDatas] = useState(invoiceData)
-  const [searchedinvoices, setsearchedinvoices] = useState([])
-  const [companyInvoice, setcompanyInvoice] = useState([])
-  const [serviceInvoice, setserviceInvoice] = useState([])
-
+  const [filterinvoiceDatas, setfilterinvoiceDatas] = useState(invoiceDatas)
 
   const handlePdfDownload = () => {
-    const pdfBlob = new Blob([<PdfDocument data={data().rows} />], { type: 'application/pdf' });
+    const pdfString = ReactDOMServer.renderToString(<PdfDocument data={data().rows} />);
+    const pdfBlob = new Blob([pdfString], { type: 'application/pdf' });
     const pdfUrl = URL.createObjectURL(pdfBlob);
     const a = document.createElement('a');
     a.href = pdfUrl;
     a.download = 'report.pdf';
     a.click();
   };
-  
+
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -44,9 +42,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
   }
 
 
-
   const handleDateChange = (date) => {
-
     setSelectedDate(date);
   };
 
@@ -71,8 +67,13 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
     const formattedStartDate = formatDateToDDMMYYYY(startdate);
     const formattedEndDate = formatDateToDDMMYYYY(enddate);
     const response = await searchdatas(formattedStartDate, formattedEndDate)
-    setinvoiceDatas(response.filteredInvoices)
-
+    if (response && response.filteredInvoices && response.filteredInvoices.length > 0) {
+      setfilterinvoiceDatas(response.filteredInvoices);
+    } else {
+      setfilterinvoiceDatas([]); // Set an empty array if no data is available
+    }
+    // setinvoiceDatas(response.filteredInvoices)
+    // setfilterinvoiceDatas(response.filteredInvoices)
   }
 
 
@@ -84,57 +85,40 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
     const response = await fetchcompanyinvoices(event.target.value)
     if (response.success) {
       setinvoiceDatas(response.matchingInvoices)
+      setfilterinvoiceDatas(response.matchingInvoices)
     } else {
       setinvoiceDatas(invoiceData)
+      setfilterinvoiceDatas(invoiceData)
     }
 
   };
 
   const handleServiceChange = async (event) => {
     setSelectedService(event.target.value);
-    console.log(event.target.value, "selected service")
-    console.log(invoiceDatas, "service invoice datas")
 
-    // Find the current invoiceData object
-    const currentInvoiceData = invoiceDatas.find(invoiceData => {
-      return invoiceData.tableRows && invoiceData.tableRows.some(row => row.serviceName === event.target.value);
+    const updatedInvoiceDatas = invoiceDatas.map(invoiceData => {
+      if (invoiceData.tableRows) {
+        const matchedRows = invoiceData.tableRows.filter(row => row.serviceName === event.target.value);
+        return {
+          ...invoiceData,
+          tableRows: matchedRows,
+        };
+      }
+      return invoiceData;
     });
 
+    setfilterinvoiceDatas(updatedInvoiceDatas);
 
-    if (currentInvoiceData) {
-      // Filter and get the matching tableRow from the current invoiceData
-      const selectedTableRow = currentInvoiceData.tableRows.find(row => row.serviceName === event.target.value);
 
-      if (selectedTableRow) {
-        // Initialize an array to collect matched tableRows
-        const matchedTableRows = [];
 
-        // Loop through each invoiceData object
-        invoiceDatas.forEach(invoiceData => {
-          // Check if the invoiceData has tableRows
-          if (invoiceData.tableRows) {
-            // Filter and get the matching tableRows from the current invoiceData
-            const matchedRows = invoiceData.tableRows.filter(row => row.serviceName === event.target.value);
-
-            // Push the matched tableRows to the array
-            matchedTableRows.push(...matchedRows);
-          }
-        });
-        console.log(matchedTableRows, "gggggggggggggggggggggg");
-        currentInvoiceData.tableRows = matchedTableRows;
-        // currentInvoiceData.tableRows.push(matchedTableRows)
-        console.log(currentInvoiceData, "jjjjjjjjjjjjjjjjjjjjjjjjjjjj");
-      } else {
-        console.log("No matching tableRow found in the current invoiceData.");
-      }
-    } else {
-      console.log("No matching invoice data found.");
-    }
 
     // const response = await fetchserviceinvoices(event.target.value)
     // setinvoiceDatas(response.matchingInvoices)
     // console.log(response.matchingInvoices, "service matched datas");
   };
+
+
+
 
   const [totals, setTotals] = useState({
     taxableValue: 0,
@@ -146,14 +130,14 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
 
 
   useEffect(() => {
-    if (invoiceDatas && invoiceDatas.length > 0) {
+    if (filterinvoiceDatas && filterinvoiceDatas.length > 0) {
       let totalTaxableValue = 0;
       let totalIGST = 0;
       let totalSGST = 0;
       let totalCGST = 0;
       let totalAmount = 0;
 
-      invoiceDatas.forEach((item) => {
+      filterinvoiceDatas.forEach((item) => {
         item.tableRows.forEach((row) => {
           const taxableValue = row.weight * row.amount;
           const igst = (taxableValue * 0.18).toFixed(2);
@@ -177,7 +161,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
         totalAmount: totalAmount.toFixed(2),
       });
     }
-  }, [invoiceDatas]);
+  }, [filterinvoiceDatas]);
 
 
   const data = () => {
@@ -288,7 +272,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
           width: 100,
         },
       ],
-      rows: [...invoiceDatas?.flatMap((item, index) =>
+      rows: [...filterinvoiceDatas?.flatMap((item, index) =>
         item.tableRows.map((row, rowIndex) => ({
           No: index + 1,
           InvoiceNo: item.invoiceNumber,
@@ -391,7 +375,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
                   className='btn btn-sm btn-dark'
                   onClick={handlePdfDownload}
                 >
-                  Download PDF
+                  PDF
                 </button>
               </div>
             </div>
@@ -440,7 +424,6 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
                     entries={5}
                     pagesAmount={4}
                     data={data()}
-                    materialSearch={true}
                     className="custom-datatable" // Add a custom class name to the table
                   />
                 </div>
