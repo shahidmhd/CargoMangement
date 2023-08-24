@@ -13,10 +13,78 @@ import { useSelector } from 'react-redux'
 import Report from './Pages/Report';
 import Billing from './Pages/Billing';
 import Changepassword from './Components/Changepassword/Changepassword';
+import { useDispatch } from 'react-redux';
+import { setLogout } from './Redux/Authslice';
+import jwtDecode from 'jwt-decode';
+
 
 
 const App = () => {
+  const [isActive, setIsActive] = useState(true);
+  const dispatch = useDispatch();
+  let inactivityInterval;
+  
+  useEffect(() => {
+    const handleActivity = () => {
+      setIsActive(true);
+  
+      // Clear the inactivity interval when there's activity
+      clearInterval(inactivityInterval);
+  
+      // Restart the inactivity interval
+      inactivityInterval = setInterval(() => {
+        handleInactivity();
+      }, 21 * 60 * 1000); // 30 seconds in milliseconds
+    };
+  
+    const handleInactivity = () => {
+      setIsActive(false);
+      dispatch(setLogout());
+    };
+  
+    // Add event listeners to track user activity
+    window.addEventListener('mousemove', handleActivity);
+    window.addEventListener('keydown', handleActivity);
+  
+    // Start the inactivity interval
+    inactivityInterval = setInterval(() => {
+      handleInactivity();
+    }, 21 * 60 * 1000); // 30 seconds in milliseconds
+  
+    // Clean up by removing event listeners and clearing the interval
+    return () => {
+      window.removeEventListener('mousemove', handleActivity);
+      window.removeEventListener('keydown', handleActivity);
+      clearInterval(inactivityInterval);
+    };
+  }, [dispatch]);
+  
   const token = useSelector((state) => state.Authslice.token);
+  // Function to check if a token has expired
+const isTokenExpired = (token) => {
+  try {
+    const decodedToken = jwtDecode(token);
+    if (!decodedToken.exp) {
+      return true; // Token does not have an expiration time
+    }
+
+    const currentTime = Date.now() / 1000; // Convert to seconds
+    return decodedToken.exp < currentTime; // Compare expiration time
+  } catch (error) {
+    return true; // Error occurred while decoding the token
+  }
+};
+
+// Usage
+const hasTokenExpired = isTokenExpired(token);
+
+if (hasTokenExpired) {
+  console.log('Token has expired.');
+  dispatch(setLogout());
+}
+ else {
+  console.log('Token is still valid.');
+}
 
   return (
     <>
