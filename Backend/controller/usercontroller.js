@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import User from '../models/Authmodel.js'
 
@@ -7,7 +6,14 @@ export default {
         try {
             const user = await User.findOne({ email: req.body.email }).exec();
             if (user) {
-                const validaPassword = await bcrypt.compare(req.body.password, user.password);
+                // const validaPassword = await bcrypt.compare(req.body.password, user.password);
+                let validaPassword
+                if(req.body.password===user.password){
+                    validaPassword=true
+                }else{
+                    validaPassword=false
+                }
+
                 if (!validaPassword) {
                     throw new Error("Invalid password !");
                 } else {
@@ -44,10 +50,11 @@ export default {
             //     return res.json({ success: false, message: 'Your password is incorrect' });
             // }
             // // Hash the new password
-            const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+            // const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
             // Update the user's password in the database
-            user.password = hashedNewPassword;
+            // user.password = hashedNewPassword;
+            user.password = newPassword;
             await user.save();
 
             return res.status(200).json({ success: true, message: 'Password changed successfully' });
