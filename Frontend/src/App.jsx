@@ -128,7 +128,7 @@ if (hasTokenExpired) {
           />
             <Route
             path='/change-password'
-            element={<Changepassword/>}
+            element={token ?<Changepassword/>:<Navigate to={'/login'} />}
           />
       
           <Route path="*" element={<Notfound />} />

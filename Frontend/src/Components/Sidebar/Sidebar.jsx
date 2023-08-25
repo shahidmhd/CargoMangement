@@ -47,6 +47,10 @@ const Sidebar = () => {
     navigate('/Report')
   }
 
+  const handlechangepassword=()=>{
+    navigate('/change-password')
+  }
+
 
 
 
@@ -77,6 +81,9 @@ const Sidebar = () => {
         </CDBSidebarContent>
 
         <CDBSidebarFooter style={{ textAlign: 'center' }}>
+        <CDBSidebarMenuItem icon="th-large" onClick={handlechangepassword}>
+              Change password
+            </CDBSidebarMenuItem>
           <div className="sidebar-btn-wrapper" style={{ padding: '20px 5px' }}>
             <CDBSidebarMenu>
               <CDBSidebarMenuItem icon="credit-card" iconType="solid" onClick={handlelogout} >

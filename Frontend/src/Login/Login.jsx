@@ -86,9 +86,9 @@ const Login = () => {
                                                 })}
                                             />
                                             {errors.password && <div className="invalid-feedback">{errors.password.message}</div>}
-                                            <div className="mt-3 text-end"> {/* Add the "text-end" class for right alignment */}
+                                            {/* <div className="mt-3 text-end">
                                                 <Link className="px-5 text-decoration-none text-primary" to="/change-password">Change Password</Link>
-                                            </div>
+                                            </div> */}
                                         </div>
                                         <button className="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
                                     </form>

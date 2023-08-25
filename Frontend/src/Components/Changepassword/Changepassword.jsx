@@ -109,7 +109,7 @@ const Changepassword = () => {
                                             />
                                             {errors.newPassword && <div className="invalid-feedback">{errors.newPassword.message}</div>}
                                             <div className="mt-3 text-end">
-                                                <Link className="px-5 text-decoration-none text-primary" to="/login">Back to Login</Link>
+                                                <Link className="px-5 text-decoration-none text-primary" to="/">Back to Home</Link>
                                             </div>
                                         </div>
                                         <button className="btn btn-outline-light btn-lg px-5" type="submit">Change</button>
