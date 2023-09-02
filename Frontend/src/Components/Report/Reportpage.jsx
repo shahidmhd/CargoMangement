@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { CDBCard, CDBCardBody, CDBDataTable, CDBContainer } from 'cdbreact';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-// import { PDFViewer } from '@react-pdf/renderer';
-import ReactDOMServer from 'react-dom/server';
-import PdfDocument from './PdfDocument';
+
 import { CSVLink } from 'react-csv';
 import { fetchcompanyinvoices, fetchserviceinvoices, searchdatas } from '../../apicalls/Invoice';
 import './Report.css'
 
-
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 
 const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
@@ -21,16 +20,89 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
   const [invoiceDatas, setinvoiceDatas] = useState(invoiceData)
   const [filterinvoiceDatas, setfilterinvoiceDatas] = useState(invoiceDatas)
 
-  const handlePdfDownload = () => {
-    const pdfString = ReactDOMServer.renderToString(<PdfDocument data={data().rows} />);
-    const pdfBlob = new Blob([pdfString], { type: 'application/pdf' });
-    const pdfUrl = URL.createObjectURL(pdfBlob);
-    const a = document.createElement('a');
-    a.href = pdfUrl;
-    a.download = 'report.pdf';
-    a.click();
-  };
+  // const handlePdfDownload = () => {
+  //   const pdfString = ReactDOMServer.renderToString(<PdfDocument data={data().rows} />);
+  //   const pdfBlob = new Blob([pdfString], { type: 'application/pdf' });
+  //   const pdfUrl = URL.createObjectURL(pdfBlob);
+  //   const a = document.createElement('a');
+  //   a.href = pdfUrl;
+  //   a.download = 'report.pdf';
+  //   a.click();
+  // };
 
+  const handlePdfDownload = () => {
+      // Define your heading text
+      const headingText = `Invoice Report - ${selectedDate.toLocaleDateString()} to ${selectedDate2.toLocaleDateString()}`;
+    // Define your table headers
+    const headers = [
+      'Invoice No',
+      'Invoice Date',
+      'Box No',
+      'Airway Bill',
+      'Service Name',
+      'Company Name',
+      'HSN Code',
+      'Weight',
+      'Unit Value',
+      'Taxable Value',
+      'IGST',
+      'SGST',
+      'CGST',
+      'Total',
+    ];
+  
+    // Assuming data is a function that returns your data
+    const dataRows = data().rows;
+  
+    // Extract the rows from your data object
+    const rows = dataRows.map(item => [
+      item.InvoiceNo,
+      item.InvoiceDate,
+      item.BoxNo,
+      item.Airwaybill,
+      item.ServiceName,
+      item.CompanyName,
+      item.HSNCode,
+      item.weight,
+      item.unitvalue,
+      item.Taxablevalue,
+      item.IGST,
+      item.SGST,
+      item.CGST,
+      item.Total,
+    ]);
+  
+    const doc = new jsPDF();
+  
+    // Calculate column widths for 100%
+    const tableWidth = doc.internal.pageSize.width - 20; // Subtracting 20 to account for margins
+    const cellWidth = tableWidth / headers.length;
+
+    // Add the heading text to the PDF
+  doc.text(headingText, 20, 10); // Adjust the position (x, y) as needed
+
+  
+    // Add content to the PDF using autoTable
+    // Generate the table with 100% width and smaller font size for headers
+    doc.autoTable({
+      head: [headers],
+      body: rows,
+      theme: 'plain', // Use 'plain' theme to avoid styling that may override the width
+      columnStyles: { 0: { cellWidth } }, // Apply the calculated column width to all columns
+      headStyles: {
+        fontSize: 5, // Adjust the font size as needed
+        fillColor: [200, 200, 200], // Optional background color for headers
+      },
+      bodyStyles: {
+        fontSize: 4, // Adjust the body font size as needed
+      },
+      startY: 20 + doc.getTextDimensions(headingText).h, // Start the table below the heading
+    });
+  
+    // Save or download the PDF
+    doc.save('report.pdf');
+  };
+  
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -70,7 +142,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
     if (response && response.filteredInvoices && response.filteredInvoices.length > 0) {
       setfilterinvoiceDatas(response.filteredInvoices);
     } else {
-      setfilterinvoiceDatas([]); // Set an empty array if no data is available
+      setfilterinvoiceDatas([]);
     }
     // setinvoiceDatas(response.filteredInvoices)
     // setfilterinvoiceDatas(response.filteredInvoices)
@@ -160,6 +232,15 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
         cgst: totalCGST.toFixed(2),
         totalAmount: totalAmount.toFixed(2),
       });
+    }else{
+      setTotals({
+        taxableValue: 0.00,
+        igst:0.00,
+        sgst:0.00,
+        cgst:0.00,
+        totalAmount:0.00,
+      });
+
     }
   }, [filterinvoiceDatas]);
 
@@ -177,15 +258,15 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
     const formattedtotalCGST = `${totals.cgst}`;
     return {
       columns: [
-        {
-          label: 'No',
-          field: 'No',
-          width: 50,
-          attributes: {
-            'aria-controls': 'DataTable',
-            'aria-label': 'No',
-          },
-        },
+        // {
+        //   label: 'No',
+        //   field: 'No',
+        //   width: 50,
+        //   attributes: {
+        //     'aria-controls': 'DataTable',
+        //     'aria-label': 'No',
+        //   },
+        // },
         {
           label: 'Invoice No',
           field: 'InvoiceNo',
@@ -274,7 +355,7 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
       ],
       rows: [...filterinvoiceDatas?.flatMap((item, index) =>
         item.tableRows.map((row, rowIndex) => ({
-          No: index + 1,
+          // No: index + 1,
           InvoiceNo: item.invoiceNumber,
           InvoiceDate: formatDate(item.selectedDate),
           BoxNo: item.boxNo,

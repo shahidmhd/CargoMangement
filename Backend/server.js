@@ -31,7 +31,6 @@ app.use(morgan('dev'))
 app.use(express.urlencoded({ extended: true }))
 
 
-
 app.use('/api/users', UserRouters)
 app.use(errorHandlingMidlleware)
 
