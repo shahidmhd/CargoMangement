@@ -97,7 +97,7 @@ const Printing = ({ invoiceData }) => {
                   {/* Add more rows here */}
                 </tbody>
               </table>
-              <div style={{ paddingLeft: "20em" }}>
+              <div style={{ paddingLeft: "35em" }}>
                 <div className="row my-2">
                   <div className="col-7 text-right">SubTotal</div>
                   <div className="col-5">₹{invoiceData?.subtotal}</div>
@@ -121,9 +121,9 @@ const Printing = ({ invoiceData }) => {
               </div>
             </div>
 
-            <hr />
+            {/* <hr /> */}
 
-            <div className="d-flex justify-content-between align-items-center mt-3">
+            {/* <div className="d-flex justify-content-between align-items-center mt-3">
               <span className="text-secondary-d1 text-105">Thank you for your purchase</span>
               <button
                 className="btn btn-primary mt-3"
@@ -131,8 +131,17 @@ const Printing = ({ invoiceData }) => {
               >
                 Print
               </button>
-            </div>
+            </div> */}
           </div>
+          <div className="d-flex justify-content-between align-items-center mt-3">
+              <span className="text-secondary-d1 text-105"></span>
+              <button
+                className="btn btn-primary mt-3"
+                onClick={handlePrint}
+              >
+                Print
+              </button>
+            </div>
         </div>
       </div>
     </div>

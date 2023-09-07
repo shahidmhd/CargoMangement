@@ -509,10 +509,12 @@ const Reportpage = ({ invoiceData, companydetails, serviceDetails }) => {
                   />
                 </div>
               </CDBCardBody>
+            
             </CDBCard>
           </CDBContainer>
         </div>
       </div>
+
 
     </>
 
